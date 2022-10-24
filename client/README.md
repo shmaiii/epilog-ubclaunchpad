@@ -17,5 +17,5 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Setup
 
-1. `cd client``
+1. `cd client`
 2. start the flutter with `flutter run`
