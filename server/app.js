@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import {router} from './routing/entries.js'
 
 const app = express();
 app.use(express.json());
@@ -14,5 +15,4 @@ app.get('/ping', (req, res) => {
     console.log("pong");
     res.status(200).send("pong");
 });
-
-app.use('entries', require('./routing/entries'))
+app.use('/entries', router)
