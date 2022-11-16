@@ -140,14 +140,12 @@ class _ExpandableFabState extends State<ExpandableFab>
 
 @immutable
 class ActionButton extends StatelessWidget {
-  const ActionButton({
-    super.key,
-    this.onPressed,
-    required this.icon,
-  });
+  const ActionButton(
+      {super.key, this.onPressed, required this.icon, this.buttonText});
 
   final VoidCallback? onPressed;
   final IconData icon;
+  final String? buttonText;
 
   @override
   Widget build(BuildContext context) {
@@ -160,8 +158,8 @@ class ActionButton extends StatelessWidget {
             child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(children: [
-                  const Text("Add a Seizure Log",
-                      style: TextStyle(
+                  Text(buttonText ?? "",
+                      style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       )),
