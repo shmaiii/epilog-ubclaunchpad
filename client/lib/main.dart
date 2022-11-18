@@ -1,8 +1,23 @@
+//import 'dart:js';
+
+import 'package:client/pages/entries.dart';
+import 'package:client/pages/home.dart';
+import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(MaterialApp(
+  initialRoute: '/',
+  routes: {
+    '/': (context) => Entries(),
+    '/home': (context) => Home(),
+    '/entries': (context) => Entries(),
+  }
+));
+
+
+// void main() {
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
