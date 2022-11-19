@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'main.dart';
+import 'NavBar.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({super.key});

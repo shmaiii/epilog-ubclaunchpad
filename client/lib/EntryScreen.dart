@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'main.dart';
+import 'NavBar.dart';
 
 class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});

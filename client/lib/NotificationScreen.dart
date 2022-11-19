@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'main.dart';
+import 'NavBar.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
