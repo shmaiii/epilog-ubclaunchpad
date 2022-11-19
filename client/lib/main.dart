@@ -7,6 +7,7 @@ import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'RecordScreen.dart';
 
+// Global text style for demo the pages
 const TextStyle demotextstyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -39,10 +40,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// Home Page widget, it is the center of controlling all pages, doesn't mean any actual "screen" here
+// Stateful widget since the contents might change
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
+  // This widget is the home page of our application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
 
@@ -57,11 +60,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+// Home page state that actually do the state changes
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  // static const TextStyle optionStyle =
-  //     TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  // List of screens for the naviagation bar to choose from, contents are in other files
   final _screens = [
     const HomeScreen(),
     const EntryScreen(),
@@ -70,46 +73,30 @@ class _HomePageState extends State<HomePage> {
     const ProfileScreen(),
   ];
 
-  // static const List<Widget> _widgetOptions = <Widget>[
-  //   Text(
-  //     'Home',
-  //     style: optionStyle,
-  //   ),
-  //   Text(
-  //     'Entries',
-  //     style: optionStyle,
-  //   ),
-  //   Text(
-  //     'Recordings',
-  //     style: optionStyle,
-  //   ),
-  //   Text(
-  //     'Notifications',
-  //     style: optionStyle,
-  //   ),
-  //   Text(
-  //     'Profile',
-  //     style: optionStyle,
-  //   ),
-  // ];
-
+  // Helper function for change the states
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  // Widget for the global layouts, including appBar, demo title, and the navigation bar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Appbar at the top of the page
       appBar: AppBar(
         title: const Center(
           child: Text('Seizure Tracker'),
         )
       ),
+
+      // Body content at the middle of the page
       body: Center(
         child: _screens[_selectedIndex],
       ),
+
+      // Navigation bar at the bottom of the page
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -145,8 +132,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Color.fromARGB(255, 233, 233, 233),
         selectedFontSize: 13.5,
         unselectedFontSize: 13.5,
-        // showSelectedLabels: true,
-        // showUnselectedLabels: false,
       ),
     );
   }
