@@ -89,3 +89,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  
+  # Imported font for filled list icon
+  fonts:
+        - family: List_alt_filled
+          fonts:
+            - asset: fonts/List_alt_filled.ttf
