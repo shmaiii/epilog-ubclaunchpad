@@ -1,19 +1,10 @@
-import 'package:client/list_alt_filled_icons.dart';
 import 'package:flutter/material.dart';
-
+import 'package:client/list_alt_filled_icons.dart';
 import 'EntryScreen.dart';
 import 'HomeScreen.dart';
 import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'RecordScreen.dart';
-
-// Global text style for demo the pages
-const TextStyle demotextstyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-
-void main() {
-  runApp(const MyApp());
-}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -86,10 +77,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       // Appbar at the top of the page
       appBar: AppBar(
-        title: const Center(
-          child: Text('Seizure Tracker'),
-        )
-      ),
+          title: const Center(
+        child: Text('Seizure Tracker'),
+      )),
 
       // Body content at the middle of the page
       body: Center(

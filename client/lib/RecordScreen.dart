@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'NavBar.dart';
+import 'main.dart';
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({super.key});
@@ -14,7 +14,10 @@ class _RecordState extends State<RecordScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Record', style: demotextstyle,),
+        child: Text(
+          'Record',
+          style: demotextstyle,
+        ),
       ),
     );
   }

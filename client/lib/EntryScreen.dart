@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'NavBar.dart';
+import 'main.dart';
 
 class EntryScreen extends StatefulWidget {
   const EntryScreen({super.key});
@@ -14,7 +14,10 @@ class _EntryState extends State<EntryScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Entry', style: demotextstyle,),
+        child: Text(
+          'Entry',
+          style: demotextstyle,
+        ),
       ),
     );
   }

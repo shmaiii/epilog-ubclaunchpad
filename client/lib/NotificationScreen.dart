@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'NavBar.dart';
+import 'main.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -14,7 +14,10 @@ class _NotificationState extends State<NotificationScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('Notification', style: demotextstyle,),
+        child: Text(
+          'Notification',
+          style: demotextstyle,
+        ),
       ),
     );
   }
