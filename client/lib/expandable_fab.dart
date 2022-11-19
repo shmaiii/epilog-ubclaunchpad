@@ -154,7 +154,7 @@ class ActionButton extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
             borderRadius: BorderRadius.circular(50),
-            onTap: (() => {}),
+            onTap: (onPressed),
             child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(children: [
