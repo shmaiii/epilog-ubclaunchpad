@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+
+final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
+
+class MultipleButton extends StatelessWidget {
+  const MultipleButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Center(
+          child: Container(
+            height: 600.0,
+            padding: const EdgeInsets.symmetric(vertical: 50.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  buttonWidget("Button 1", context, "/first"),
+                  buttonWidget("Button 2", context, "/second"),
+                  buttonWidget("Button 3", context, "/third"),
+                ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buttonWidget(String label, BuildContext context, String pathName) {
+    return ButtonTheme(
+      minWidth: 200.0,
+      height: 80.0,
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushNamed(context, pathName);
+        },
+        child: Text(label),
+      ),
+    );
+  }
+}
