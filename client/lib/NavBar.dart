@@ -76,10 +76,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Appbar at the top of the page
-      appBar: AppBar(
-          title: const Center(
-        child: Text('Seizure Tracker'),
-      )),
+      // appBar: AppBar(
+      //     title: const Center(
+      //   child: Text('Seizure Tracker'),
+      // )),
 
       // Body content at the middle of the page
       body: Center(
