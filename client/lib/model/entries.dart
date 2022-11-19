@@ -10,15 +10,16 @@ class EntriesModel {
   factory EntriesModel.fromJson(Map<String, dynamic> json) {
     return EntriesModel(title: json['title']);
   }
-
+  //url: 'https://jsonplaceholder.typicode.com/todos',
   static Resource<List<EntriesModel>> get all {
     return Resource(
-        url: 'https://jsonplaceholder.typicode.com/todos',
+        url: 'http://localhost:8080/entries/all',
         parse: (response) {
           final result = json.decode(response.body);
           print(result);
-          Iterable list = result;
-          return list.map((model) => EntriesModel.fromJson(model)).toList();
+          Iterable list = result['entry_list'];
+          print(list);
+          return list.map((model) => EntriesModel.fromJson(model['info'])).toList();
         }
       );
   }

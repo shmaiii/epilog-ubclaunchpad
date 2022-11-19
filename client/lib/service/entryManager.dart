@@ -12,9 +12,8 @@ class Resource<T> {
 
 class EntryManager {
   Future<List<EntriesModel>> load<T>(Resource<List<EntriesModel>> resource) async {
-      print("connection url: ");
-      print(Uri.parse(resource.url));
       final response = await http.get(Uri.parse(resource.url));
+      print(response);
       if(response.statusCode == 200) {
         return resource.parse(response);
       } else {

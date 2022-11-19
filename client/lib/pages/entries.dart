@@ -1,8 +1,8 @@
 //import 'dart:html';
+import 'package:client/pages/entryEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-import '../model/entries.dart';
 import '../model/entries.dart';
 import '../service/entryManager.dart';
 
@@ -39,6 +39,10 @@ class EntriesState extends State<Entries> {
               child: Card(
                 child: ListTile(
                   onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    debugPrint("Clicked");
+                    return entryEdit(entry: _entryModels[index]);
+                  }));
                   },
                   title: Text(_entryModels[index].title),
                 ),
