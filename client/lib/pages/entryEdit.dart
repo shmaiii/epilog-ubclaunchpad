@@ -26,8 +26,8 @@ class _editState extends State<entryEdit> {
             padding:
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
             child: Column( 
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
                   entry.title,
@@ -47,15 +47,15 @@ class _editState extends State<entryEdit> {
                   // Create a grid with 2 columns. If you change the scrollDirection to
                   // horizontal, this produces 2 rows.
                   crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
+                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 0,
                   children: <Widget>[
                     Text("Duration: "),
-                    Text("..."),
+                    Text("${entry.duration} minutes"),
                     Text("Activities: "),
                     Text("...: "),
                     Text("Category: "),
-                    Text("...: "),
+                    Text(entry.category),
                     Text("Type: "),
                     Text("...: "),
                     Text("Before Effect: "),
@@ -63,17 +63,19 @@ class _editState extends State<entryEdit> {
                     Text("After Effect: "),
                     Text("...: "),
                     Text("Symptoms: "),
-                    Text("...: "),
+                    Text(entry.symptoms),
                     Text("Check ups: "),
                     Text("...: "),
                   ]          
                 ),
                 ),
-                // Expanded(
-                //   child: FittedBox(
-                //     child: FlutterLogo(),
-                //   ),
-                // ),
+                TextButton(
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                  ),
+                  onPressed: () { },
+                  child: Text('TextButton'),
+                )
               ],
           )
           
