@@ -47,11 +47,19 @@ class _editState extends State<entryEdit> {
                   // Create a grid with 2 columns. If you change the scrollDirection to
                   // horizontal, this produces 2 rows.
                   crossAxisCount: 2,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 0,
+                  crossAxisSpacing: 0.0,
+                  mainAxisSpacing: 0.0,
                   children: <Widget>[
-                    Text("Duration: "),
-                    Text("${entry.duration} minutes"),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child:const Text("Duration: ",
+                          style: TextStyle(fontSize: 20)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("${entry.duration} minutes",
+                          style: const TextStyle(fontSize: 20)),
+                    ),               
                     Text("Activities: "),
                     Text("...: "),
                     Text("Category: "),
