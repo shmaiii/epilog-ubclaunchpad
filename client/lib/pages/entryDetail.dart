@@ -21,77 +21,104 @@ class _editState extends State<entryDetail> {
     return Scaffold(
       appBar: AppBar(
           title: Text(entry.title),
+          actions: [
+            editButton(context)
+          ],
         ),
-        body: Form(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
-            child: Column( 
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  entry.title,
-                  textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),                        
-                ),
-                const Text(
+        body: (
+          mainColumn(context)
+        )
+        // body: Form(
+        //   child: Padding(
+        //     padding:
+        //         const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
+        //     child: mainColumn(context)
+        //   ))
+          );
+          }
+
+  Column mainColumn(BuildContext context) {
+    return Column( 
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.all(20),
+                child: const Text(
                   'Seizure Information',
                   textAlign: TextAlign.center,
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),                        
-                ),
-                Expanded
-                (child: GridView.count(
-                  // Create a grid with 2 columns. If you change the scrollDirection to
-                  // horizontal, this produces 2 rows.
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0.0,
-                  mainAxisSpacing: 0.0,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child:const Text("Duration: ",
-                          style: TextStyle(fontSize: 20)),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text("${entry.duration} minutes",
-                          style: const TextStyle(fontSize: 20)),
-                    ),               
-                    Text("Activities: "),
-                    Text("...: "),
-                    Text("Category: "),
-                    Text(entry.category),
-                    Text("Type: "),
-                    Text("...: "),
-                    Text("Before Effect: "),
-                    Text("...: "),
-                    Text("After Effect: "),
-                    Text("...: "),
-                    Text("Symptoms: "),
-                    Text(entry.symptoms),
-                    Text("Check ups: "),
-                    Text("...: "),
-                  ]          
-                ),
-                ),
-                TextButton(
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                   ),
-                  onPressed: () { 
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    debugPrint("Clicked");
-                    return entryEdit(entry: this.entry );
-                    }));
-                  },
-                  child: Text('Edit'),
-                )
-              ],
-          )
-          )));
-          }}
+              ),
+              Expanded
+              (
+                child: gridViewContent(),
+              ),
+            ],
+        );
+  }
+
+  TextButton editButton(BuildContext context) {
+    return TextButton(
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+              ),
+              onPressed: () { 
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                debugPrint("Clicked");
+                return entryEdit(entry: this.entry );
+                }));
+              },
+              child: Text('Edit'),
+            );
+  }
+
+  GridView gridViewContent() {
+    final double itemWidth = 9;
+    final double itemHeight = itemWidth / 3;
+    return GridView.count(
+                // Create a grid with 2 columns. If you change the scrollDirection to
+                // horizontal, this produces 2 rows.
+                crossAxisCount: 2,
+                // crossAxisSpacing: 0.0,
+                // mainAxisSpacing: 0.0,
+                childAspectRatio: (itemWidth / itemHeight),
+                children: <Widget>[
+                  gridChildrenContainerKey("Duration: "),
+                  gridChildrenContainerValue("${entry.duration} minutes"),               
+                  gridChildrenContainerKey("Activities"),
+                  gridChildrenContainerValue("..."),
+                  gridChildrenContainerKey("Category: "),
+                  gridChildrenContainerValue(entry.category),
+                  gridChildrenContainerKey("Type"),
+                  gridChildrenContainerValue("..."),
+                  gridChildrenContainerKey("Before Effect: "),
+                  gridChildrenContainerValue("..."),
+                  gridChildrenContainerKey("After Effect: "),
+                  gridChildrenContainerValue("..."),
+                  gridChildrenContainerKey("Symptoms: "),
+                  gridChildrenContainerValue(entry.symptoms),
+                  gridChildrenContainerKey("Check ups: "),
+                  gridChildrenContainerValue("..."),
+                ]          
+              );
+  }
+
+  Container gridChildrenContainerKey(text) {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      child: Text(text,
+          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+    );
+  }
+
+  Container gridChildrenContainerValue(text) {
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      child: Text(text,
+          style: const TextStyle(fontSize: 15)),
+    );
+  }
+}
           

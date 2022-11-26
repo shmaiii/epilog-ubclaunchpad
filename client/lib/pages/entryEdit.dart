@@ -43,11 +43,11 @@ class _EntryEditFormState extends State<EntryEditForm> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   const Text(
-                    'Edit The Entry',
+                    'Seizure Information',
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                   ),
                   _FormTextInput(
                     label: "Title",
