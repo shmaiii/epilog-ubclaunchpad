@@ -93,30 +93,44 @@ class _FormTextInput extends StatelessWidget {
 
   final String label;
   final String hintText;
+  final double itemWidth = 9;
+  final double itemHeight = 3;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.only(top: 30),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-                hintText: hintText,
-                enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 4.0)),
-                focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 4.0))),
-            validator: (String? value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
+        child: 
+        //Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded (
+          child: GridView.count(
+            crossAxisCount: 2,
+            childAspectRatio: (itemWidth / itemHeight),
+            shrinkWrap: true,
+            children: [
+            Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                  hintText: hintText,
+                  enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 4.0)),
+                  focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black, width: 4.0))),
+              validator: (String? value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            )
+            
+            ]
           )
-        ]));
+          )
+    );
+        // ]));
   }
 }
