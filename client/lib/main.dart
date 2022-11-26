@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'ProfileScreen.dart';
 import 'ProfileSettingsPage.dart';
 import 'MultipleButton.dart';
+import 'NavBar.dart';
+
+// Global text style for demo the pages
+const TextStyle demotextstyle =
+    TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
 void main() {
   runApp(MaterialApp(
