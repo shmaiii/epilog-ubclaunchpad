@@ -46,6 +46,7 @@ class _RecordingPageState extends State<RecordingPage> {
     if (videoFile == null) return;
     setState(() {
       videos.add(videoFile.path);
+      print(videoFile.path);
     });
 
   }
