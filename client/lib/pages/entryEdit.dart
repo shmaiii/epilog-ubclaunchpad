@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 import '../model/entries.dart';
@@ -31,9 +33,11 @@ class _EntryEditFormState extends State<EntryEditForm> {
   EntriesModel entry;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   _EntryEditFormState({required this.entry});
-
+  
   @override
   Widget build(BuildContext context) {
+    var seizureKeyList = ["Title", "Duration", "Category", "Symptoms"];
+    var seizureValueList = [entry.title,"${entry.duration} minutes", entry.category, entry.symptoms];
     return Form(
         key: _formKey,
         child: Padding(
@@ -49,22 +53,23 @@ class _EntryEditFormState extends State<EntryEditForm> {
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                   ),
-                  _FormTextInput(
-                    label: "Title",
-                    hintText: entry.title,
-                  ),
-                  _FormTextInput(
-                    label: "Duration",
-                    hintText: "${entry.duration} minutes",
-                  ),
-                  _FormTextInput(
-                    label: "Category",
-                    hintText: entry.category,
-                  ),
-                  _FormTextInput(
-                    label: "Symptoms",
-                    hintText: entry.symptoms,
-                  ),
+                  _FormTextInput(entry: entry),
+                  // _FormTextInput(
+                  //   label: "Title",
+                  //   hintText: entry.title,
+                  // ),
+                  // _FormTextInput(
+                  //   label: "Duration",
+                  //   hintText: "${entry.duration} minutes",
+                  // ),
+                  // _FormTextInput(
+                  //   label: "Category",
+                  //   hintText: entry.category,
+                  // ),
+                  // _FormTextInput(
+                  //   label: "Symptoms",
+                  //   hintText: entry.symptoms,
+                  // ),
                   Stack(
                       alignment: Alignment.bottomRight,
                       clipBehavior: Clip.none,
@@ -86,13 +91,11 @@ class _EntryEditFormState extends State<EntryEditForm> {
 
 @immutable
 class _FormTextInput extends StatelessWidget {
-  const _FormTextInput({
-    required this.label,
-    required this.hintText,
-  });
 
-  final String label;
-  final String hintText;
+  _FormTextInput({
+    required this.entry
+  });
+  EntriesModel entry;
   final double itemWidth = 9;
   final double itemHeight = 3;
 
@@ -102,19 +105,36 @@ class _FormTextInput extends StatelessWidget {
         padding: const EdgeInsets.only(top: 30),
         child: 
         //Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Expanded (
-          child: GridView.count(
+          GridView.count(
             crossAxisCount: 2,
             childAspectRatio: (itemWidth / itemHeight),
             shrinkWrap: true,
             children: [
-            Text(
-              label,
+              gridKey("Title"),
+              gridValue(entry.title),
+              gridKey("Duration"),
+              gridValue("${entry.duration} minutes"),
+              gridKey("Category"),
+              gridValue(entry.category),
+              gridKey("Symptoms"),
+              gridValue(entry.symptoms),           
+            ]
+          )
+          );
+        // ]));
+  }
+
+  Text gridKey(key) {
+    return Text(
+              key,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
-            ),
-            TextFormField(
+            );
+  }
+
+  TextFormField gridValue(value) {
+    return TextFormField(
               decoration: InputDecoration(
-                  hintText: hintText,
+                  hintText: value,
                   enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black, width: 4.0)),
                   focusedBorder: const UnderlineInputBorder(
@@ -125,12 +145,6 @@ class _FormTextInput extends StatelessWidget {
                 }
                 return null;
               },
-            )
-            
-            ]
-          )
-          )
-    );
-        // ]));
+            );
   }
 }
