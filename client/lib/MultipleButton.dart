@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 
 final Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -18,9 +19,20 @@ class MultipleButton extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  buttonWidget("Button 1", context, "/first"),
+                  // top container
+                  new Expanded(
+                    child: new Text(
+                      'Hello Julia',
+                      style: new TextStyle(fontSize: 50.0),
+                    ), // todo, add the two texts,
+                  ),
+                  new Expanded(
+                    child: Image.asset('./assets/profile.png'),
+                  ),
+                  buttonWidget("User Settings", context, "/first"),
                   buttonWidget("Button 2", context, "/second"),
                   buttonWidget("Button 3", context, "/third"),
+                  //largeButtonWidget("Button 3", context, "/third"),
                 ]),
           ),
         ),
@@ -39,5 +51,19 @@ class MultipleButton extends StatelessWidget {
         child: Text(label),
       ),
     );
+  }
+
+  Widget largeButtonWidget(
+      String label, BuildContext context, String pathName) {
+    return ButtonTheme(
+        minWidth: 200.0,
+        height: 80.0,
+        child: GFButton(
+          onPressed: () {
+            Navigator.pushNamed(context, pathName);
+          },
+          text: "secondary",
+          shape: GFButtonShape.pills,
+        ));
   }
 }

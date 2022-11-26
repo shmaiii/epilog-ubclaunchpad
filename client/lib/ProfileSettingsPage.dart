@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ProfileSettingsPage extends StatelessWidget {
-  static final String path = "lib/src/pages/settings/profilesettings.dart";
-
+class ProfileSettingsPage extends StatefulWidget {
+  const ProfileSettingsPage({super.key});
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: EditPage(),
-    );
-  }
+  State<ProfileSettingsPage> createState() => _EditPageState();
 }
 
-class EditPage extends StatefulWidget {
-  @override
-  _EditPageState createState() => _EditPageState();
-}
-
-class _EditPageState extends State<EditPage> {
+class _EditPageState extends State<ProfileSettingsPage> {
   bool showPassword = false;
   @override
   Widget build(BuildContext context) {
+    var button = new IconButton(
+        icon: new Icon(Icons.arrow_back), onPressed: _onButtonPressed);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -184,5 +175,9 @@ class _EditPageState extends State<EditPage> {
             )),
       ),
     );
+  }
+
+  void _onButtonPressed() {
+    Navigator.pop(context);
   }
 }
