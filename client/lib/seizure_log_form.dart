@@ -1,16 +1,18 @@
+import 'package:client/duration_input.dart';
 import 'package:flutter/material.dart';
+import 'date_time_input.dart';
+import 'date_time_input.dart';
 
 class SeizureLogPage extends StatelessWidget {
-  const SeizureLogPage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const SeizureLogPage({Key? key, this.title}) : super(key: key);
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Scaffold(
-          appBar: AppBar(),
-          body: const SeizureLogForm(),
+          body: SeizureLogForm(),
         ),
       ),
     );
@@ -31,6 +33,13 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: Column(children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 30, left: 30),
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: BackButton(),
+          ),
+        ),
         Column(children: [
           Form(
             key: _formKey,
@@ -39,27 +48,25 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const <Widget>[
-                  Text(
+                children: <Widget>[
+                  const Text(
                     'New Seizure Log',
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),
                   ),
-                  _FormTextInput(
+                  const _FormTextInput(
                     label: "What would you like to name this entry?",
                     hintText: "New Title",
                   ),
-                  _FormTextInput(
-                    label: "When did the seizure happen?",
-                    hintText: "Date and Time",
+                  DateTimeInput(
+                    label: "When did this seizure occur?",
                   ),
-                  _FormTextInput(
+                  const DurationInput(
                     label: "How long did the seizure last?",
-                    hintText: "Duration",
                   ),
-                  _FormTextInput(
+                  const _FormTextInput(
                     label: "What were you doing at the time of the seizure?",
                     hintText: "Activity",
                   ),
