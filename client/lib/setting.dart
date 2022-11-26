@@ -59,7 +59,11 @@ class _SettingPageState extends State<SettingPage> {
             buildAccountOption(context, "Change Password"),
             buildAccountOption(context, "Push Notification"),
             buildAccountOption(context, "Update Bio"),
-            buildAccountOption(context, "Theme Change")
+            buildAccountOption(context, "Theme Change"),
+            Divider(
+              height: 20,
+              thickness: 1,
+            ),
           ],
         ),
       ),
