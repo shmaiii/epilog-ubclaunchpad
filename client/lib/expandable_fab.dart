@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'seizure_log_form.dart';
 
 @immutable
 class ExpandableFab extends StatefulWidget {
@@ -64,6 +65,7 @@ class _ExpandableFabState extends State<ExpandableFab>
       width: 56.0,
       height: 56.0,
       child: FloatingActionButton(
+        heroTag: "closeFAB",
         backgroundColor: Colors.white,
         elevation: 4.0,
         onPressed: _toggle,
@@ -92,6 +94,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
+            heroTag: "openFAB",
             backgroundColor: const Color.fromARGB(255, 217, 217, 217),
             elevation: 0.0,
             onPressed: _toggle,
@@ -213,4 +216,30 @@ class _ExpandingActionButton extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget entriesFAB(context) {
+  return Padding(
+    padding: const EdgeInsets.all(20),
+    child: ExpandableFab(
+      distance: 60.0,
+      baseAngle: 10,
+      children: [
+        ActionButton(
+          onPressed: () => {},
+          icon: Icons.add_to_photos,
+          buttonText: "Track symptoms",
+        ),
+        ActionButton(
+          onPressed: () => {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return const SeizureLogPage();
+            }))
+          },
+          icon: Icons.add,
+          buttonText: "Add a new seizure log",
+        ),
+      ],
+    ),
+  );
 }
