@@ -1,93 +1,122 @@
-import 'package:client/model/entries.dart';
 import 'package:flutter/material.dart';
 
-class entryEdit extends StatefulWidget {
+import '../model/entries.dart';
+
+class entryEdit extends StatelessWidget {
   EntriesModel entry;
   entryEdit({required this.entry});
-  _editState createState() => _editState(entry: entry);
-}
-
-class _editState extends State<entryEdit> {
-  EntriesModel entry;
-  _editState({required this.entry});
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text(entry.title),
+      body: Center(
+        child: Scaffold(
+          appBar: AppBar(),
+          body: EntryEditForm(entry: entry),
         ),
-        body: Form(
-          child: Padding(
+      ),
+    );
+  }
+}
+
+class EntryEditForm extends StatefulWidget {
+  EntriesModel entry;
+  EntryEditForm({super.key, required this.entry});
+
+  @override
+  State<EntryEditForm> createState() => _EntryEditFormState(entry: entry);
+}
+
+class _EntryEditFormState extends State<EntryEditForm> {
+  EntriesModel entry;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  _EntryEditFormState({required this.entry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
-            child: Column( 
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(
-                  entry.title,
-                  textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),                        
-                ),
-                const Text(
-                  'Seizure Information',
-                  textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),                        
-                ),
-                Expanded
-                (child: GridView.count(
-                  // Create a grid with 2 columns. If you change the scrollDirection to
-                  // horizontal, this produces 2 rows.
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0.0,
-                  mainAxisSpacing: 0.0,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child:const Text("Duration: ",
-                          style: TextStyle(fontSize: 20)),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Text("${entry.duration} minutes",
-                          style: const TextStyle(fontSize: 20)),
-                    ),               
-                    Text("Activities: "),
-                    Text("...: "),
-                    Text("Category: "),
-                    Text(entry.category),
-                    Text("Type: "),
-                    Text("...: "),
-                    Text("Before Effect: "),
-                    Text("...: "),
-                    Text("After Effect: "),
-                    Text("...: "),
-                    Text("Symptoms: "),
-                    Text(entry.symptoms),
-                    Text("Check ups: "),
-                    Text("...: "),
-                  ]          
-                ),
-                ),
-                TextButton(
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const Text(
+                    'Edit The Entry',
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),
                   ),
-                  onPressed: () { },
-                  child: Text('TextButton'),
-                )
-              ],
+                  _FormTextInput(
+                    label: "Title",
+                    hintText: entry.title,
+                  ),
+                  _FormTextInput(
+                    label: "Duration",
+                    hintText: "${entry.duration} minutes",
+                  ),
+                  _FormTextInput(
+                    label: "Category",
+                    hintText: entry.category,
+                  ),
+                  _FormTextInput(
+                    label: "Symptoms",
+                    hintText: entry.symptoms,
+                  ),
+                  Stack(
+                      alignment: Alignment.bottomRight,
+                      clipBehavior: Clip.none,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            // Validate will return true if the form is valid, or false if
+                            // the form is invalid.
+                            if (_formKey.currentState!.validate()) {
+                              // Process data.
+                            }
+                          },
+                          child: const Text('Submit'),
+                        ),
+                      ])
+                ])));
+  }
+}
+
+@immutable
+class _FormTextInput extends StatelessWidget {
+  const _FormTextInput({
+    required this.label,
+    required this.hintText,
+  });
+
+  final String label;
+  final String hintText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22.0),
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+                hintText: hintText,
+                enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 4.0)),
+                focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.black, width: 4.0))),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           )
-          
-        )
-    ));
+        ]));
   }
 }

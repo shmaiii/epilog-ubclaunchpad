@@ -1,0 +1,97 @@
+import 'package:client/model/entries.dart';
+import 'package:client/pages/entryEdit.dart';
+import 'package:flutter/material.dart';
+
+class entryDetail extends StatefulWidget {
+  EntriesModel entry;
+  entryDetail({required this.entry});
+  _editState createState() => _editState(entry: entry);
+}
+
+class _editState extends State<entryDetail> {
+  EntriesModel entry;
+  _editState({required this.entry});
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(entry.title),
+        ),
+        body: Form(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
+            child: Column( 
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  entry.title,
+                  textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),                        
+                ),
+                const Text(
+                  'Seizure Information',
+                  textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),                        
+                ),
+                Expanded
+                (child: GridView.count(
+                  // Create a grid with 2 columns. If you change the scrollDirection to
+                  // horizontal, this produces 2 rows.
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 0.0,
+                  mainAxisSpacing: 0.0,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child:const Text("Duration: ",
+                          style: TextStyle(fontSize: 20)),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text("${entry.duration} minutes",
+                          style: const TextStyle(fontSize: 20)),
+                    ),               
+                    Text("Activities: "),
+                    Text("...: "),
+                    Text("Category: "),
+                    Text(entry.category),
+                    Text("Type: "),
+                    Text("...: "),
+                    Text("Before Effect: "),
+                    Text("...: "),
+                    Text("After Effect: "),
+                    Text("...: "),
+                    Text("Symptoms: "),
+                    Text(entry.symptoms),
+                    Text("Check ups: "),
+                    Text("...: "),
+                  ]          
+                ),
+                ),
+                TextButton(
+                  style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                  ),
+                  onPressed: () { 
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    debugPrint("Clicked");
+                    return entryEdit(entry: this.entry );
+                    }));
+                  },
+                  child: Text('Edit'),
+                )
+              ],
+          )
+          )));
+          }}
+          

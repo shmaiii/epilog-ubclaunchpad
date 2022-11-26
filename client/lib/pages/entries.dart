@@ -1,5 +1,5 @@
 //import 'dart:html';
-import 'package:client/pages/entryEdit.dart';
+import 'package:client/pages/entryDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -41,7 +41,7 @@ class EntriesState extends State<Entries> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                     debugPrint("Clicked");
-                    return entryEdit(entry: _entryModels[index]);
+                    return entryDetail(entry: _entryModels[index]);
                   }));
                   },
                   title: Text(_entryModels[index].title),
