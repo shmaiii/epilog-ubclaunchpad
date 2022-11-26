@@ -1,7 +1,96 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:getwidget/getwidget.dart';
 
-class ProfileScreen extends StatelessWidget {
+import 'ProfileSettingsPage.dart';
+import 'setting.dart';
+
+const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
+
+class MultipleButton extends StatelessWidget {
+  const MultipleButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/first': (context) => const SettingPage(),
+        '/second': (context) => const SecondRoute(),
+        '/third': (context) => const ProfileSettingsPage(),
+      },
+      title: 'Navigation Basics',
+      home: Scaffold(
+        body: Center(
+          child: Container(
+            height: 600.0,
+            padding: const EdgeInsets.symmetric(vertical: 50.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  // top container
+                  const Expanded(
+                    child: Text(
+                      'Hello Julia',
+                      style: TextStyle(fontSize: 50.0),
+                    ), // todo, add the two texts,
+                  ),
+                  Expanded(
+                    child: Image.asset('./assets/profile.png'),
+                  ),
+                  ButtonTheme(
+                    minWidth: 200.0,
+                    height: 80.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SettingPage()));
+                      },
+                      child: const Text("User Settings"),
+                    ),
+                  ),
+                  ButtonTheme(
+                    minWidth: 200.0,
+                    height: 80.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SecondRoute()));
+                      },
+                      child: const Text("Button 2"),
+                    ),
+                  ),
+                  ButtonTheme(
+                    minWidth: 200.0,
+                    height: 80.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ProfileSettingsPage()));
+                      },
+                      child: const Text("Button 3"),
+                    ),
+                  ),
+                ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  //const SecondRoute({super.key});
+  const SecondRoute({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -10,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [
                 Color.fromRGBO(4, 9, 35, 1),
@@ -24,28 +113,21 @@ class ProfileScreen extends StatelessWidget {
         Scaffold(
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 73),
               child: Column(
                 children: [
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Icon(
-                  //       AntDesign.arrowleft,
-                  //       color: Colors.white,
-                  //     ),
-                  //     Icon(
-                  //       AntDesign.logout,
-                  //       color: Colors.white,
-                  //     ),
-                  //   ],
-                  // ),
-                  SizedBox(
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Go back!'),
+                  ),
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text(
+                  const Text(
                     'My\nProfile',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -54,10 +136,10 @@ class ProfileScreen extends StatelessWidget {
                       fontFamily: 'Nisebuschgardens',
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 22,
                   ),
-                  Container(
+                  SizedBox(
                     height: height * 0.43,
                     child: LayoutBuilder(
                       builder: (context, constraints) {
@@ -79,18 +161,18 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                                 child: Column(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 80,
                                     ),
-                                    Text(
-                                      'Jhone Doe',
+                                    const Text(
+                                      'Simon',
                                       style: TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
                                         fontFamily: 'Nunito',
                                         fontSize: 37,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 5,
                                     ),
                                     Row(
@@ -100,14 +182,14 @@ class ProfileScreen extends StatelessWidget {
                                         Column(
                                           children: [
                                             Text(
-                                              'Orders',
+                                              'YYY',
                                               style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontFamily: 'Nunito',
                                                 fontSize: 25,
                                               ),
                                             ),
-                                            Text(
+                                            const Text(
                                               '10',
                                               style: TextStyle(
                                                 color: Color.fromRGBO(
@@ -136,14 +218,14 @@ class ProfileScreen extends StatelessWidget {
                                         Column(
                                           children: [
                                             Text(
-                                              'Pending',
+                                              'TTT',
                                               style: TextStyle(
                                                 color: Colors.grey[700],
                                                 fontFamily: 'Nunito',
                                                 fontSize: 25,
                                               ),
                                             ),
-                                            Text(
+                                            const Text(
                                               '1',
                                               style: TextStyle(
                                                 color: Color.fromRGBO(
@@ -160,27 +242,18 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Positioned(
-                            //   top: 110,
-                            //   right: 20,
-                            //   child: Icon(
-                            //     AntDesign.setting,
-                            //     color: Colors.grey[700],
-                            //     size: 30,
-                            //   ),
-                            // ),
                             Positioned(
                               top: 0,
                               left: 0,
                               right: 0,
                               child: Center(
                                 child: Container(
-                                  child: Image.asset(
-                                    'profile.png',
-                                    width: innerWidth * 0.45,
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                ),
+                                    // child: Image.asset(
+                                    //   'profile.png',
+                                    //   width: innerWidth * 0.45,
+                                    //   fit: BoxFit.fitWidth,
+                                    // ),
+                                    ),
                               ),
                             ),
                           ],
@@ -188,7 +261,7 @@ class ProfileScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Container(
@@ -202,36 +275,36 @@ class ProfileScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            'My Orders',
+                          const Text(
+                            'Selection',
                             style: TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 27,
                               fontFamily: 'Nunito',
                             ),
                           ),
-                          Divider(
+                          const Divider(
                             thickness: 2.5,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
                             height: height * 0.15,
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
                             child: ElevatedButton(
-                                child: Text("ththt"),
+                                child: const Text("emergency contact"),
                                 onPressed: () {
                                   print('You pressed the button.');
                                 }),
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -241,7 +314,7 @@ class ProfileScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
