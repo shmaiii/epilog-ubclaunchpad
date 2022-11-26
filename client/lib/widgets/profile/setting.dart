@@ -1,8 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -16,12 +12,12 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Settings Page", style: TextStyle(fontSize: 22)),
+        title: const Text("Settings Page", style: TextStyle(fontSize: 22)),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new,
             color: Colors.white,
           ),
@@ -31,11 +27,11 @@ class _SettingPageState extends State<SettingPage> {
         padding: const EdgeInsets.all(10),
         child: ListView(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 40,
             ),
             Row(
-              children: [
+              children: const [
                 Icon(
                   Icons.person,
                   color: Colors.lightBlue,
@@ -49,11 +45,11 @@ class _SettingPageState extends State<SettingPage> {
                 ),
               ],
             ),
-            Divider(
+            const Divider(
               height: 20,
               thickness: 1,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             buildAccountOption(context, "Change Password"),
@@ -102,7 +98,7 @@ class _SettingPageState extends State<SettingPage> {
                       fontWeight: FontWeight.w500,
                       color: Colors.grey[600]),
                 ),
-                Icon(
+                const Icon(
                   Icons.arrow_forward_ios_sharp,
                   color: Colors.grey,
                 )
