@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   final _screens = [
     const HomeScreen(),
     const EntryScreen(),
-    const RecordScreen(),
+    RecordScreen(),
     const NotificationScreen(),
     const ProfileScreen(),
   ];
