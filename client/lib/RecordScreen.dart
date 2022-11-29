@@ -7,9 +7,9 @@ import 'package:camera/camera.dart';
 
 
 class RecordScreen extends StatefulWidget {
-  const RecordScreen({super.key});
+  const RecordScreen({Key? key}): super(key: key);
   //const RecordingPage({super.key});
-  final String title = "This is recording test page";
+  //final String title = "This is recording test page";
 
   @override
   State<RecordScreen> createState() => _RecordScreenState();
@@ -22,13 +22,19 @@ class _RecordScreenState extends State<RecordScreen> {
   bool _isLoading = true;
   bool _isRecording = false;
 
-  // bool _imagePickerActive = false;
-  // final ImagePicker _picker = ImagePicker();
+  //  bool _imagePickerActive = false;
+  //  final ImagePicker _picker = ImagePicker();
+
+  //  @override
+  //  void initState(){
+  //   super.initState();
+  //   takeVideo();
+  //  }
   initCamera() async {
     final cameras = await availableCameras();
     // final firstCamera = cameras.first;
     final front = cameras.first;
-    _cameraController = CameraController(front, ResolutionPreset.medium);
+    _cameraController = CameraController(front, ResolutionPreset.max);
     _cameraController.initialize();
     setState(() {
       _isLoading = false;
@@ -39,6 +45,7 @@ class _RecordScreenState extends State<RecordScreen> {
   void initState(){
     super.initState();
     initCamera();  
+    
   }
 
   @override
@@ -80,7 +87,7 @@ class _RecordScreenState extends State<RecordScreen> {
   //   setState(() {
   //     videos.add(videoFile.path);
   //     print(videoFile.path);
-  //   });
+  //   });}
 
   
   @override
@@ -109,30 +116,30 @@ class _RecordScreenState extends State<RecordScreen> {
     ],
   ),
 );
-    }
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text(widget.title),
-  //       ),
-  //       body: Center(
-  //         child: ListView.builder(
-  //           padding: const EdgeInsets.all(8),
-  //           itemCount: videos.length,
-  //           itemBuilder: (BuildContext context, int index) {
-  //             return Card(
-  //               child: Container(
-  //                 padding: const EdgeInsets.all(8),
-  //                 child: Center(child: Text(index.toString()))
-  //               ),
-  //             );
-  //           },
-  //         ),),
-  //         floatingActionButton: FloatingActionButton(
-  //           onPressed: takeVideo,
-  //           tooltip: 'Take Video',
-  //           child: const Icon(Icons.add),
-  //           ),
-  //   );
+     }
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text(widget.title),
+    //     ),
+    //     body: Center(
+    //       child: ListView.builder(
+    //         padding: const EdgeInsets.all(8),
+    //         itemCount: videos.length,
+    //         itemBuilder: (BuildContext context, int index) {
+    //           return Card(
+    //             child: Container(
+    //               padding: const EdgeInsets.all(8),
+    //               child: Center(child: Text(index.toString()))
+    //             ),
+    //           );
+    //         },
+    //       ),),
+    //       floatingActionButton: FloatingActionButton(
+    //         onPressed: takeVideo,
+    //         tooltip: 'Take Video',
+    //         child: const Icon(Icons.add),
+    //         ),
+    // );
   }
 }
 
@@ -148,28 +155,49 @@ class _VideoPageState extends  State<VideoPage> {
   late VideoPlayerController _videoPlayerController;
   late Future<void> _initializeVideo;
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    _videoPlayerController = VideoPlayerController.file(io.File(widget.filePath));
-    _initializeVideo = _videoPlayerController.initialize();
-    _videoPlayerController.play();
-  }
+  //   _videoPlayerController = VideoPlayerController.file(io.File(widget.filePath));
+  //   _initializeVideo = _videoPlayerController.initialize();
+  //   _videoPlayerController.play();
+  // }
 
   @override 
   void dispose(){
     _videoPlayerController.dispose();
     super.dispose();
   }
-    // Future _initVideoPlayer() async {
-    //   _videoPlayerController = VideoPlayerController.file(io.File(widget.filePath));
-    //   await _videoPlayerController.initialize();
-    //   await _videoPlayerController.play();
-    // }
+    Future _initVideoPlayer() async {
+      _videoPlayerController = VideoPlayerController.file(io.File(widget.filePath));
+      await _videoPlayerController.initialize();
+      await _videoPlayerController.play();
+    }
 
   @override 
   Widget build(BuildContext context){
-    return Container(); //stub
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              print("icon pressed");
+              }
+            )],
+      ),
+      extendBodyBehindAppBar: true,
+      body: FutureBuilder(
+        future: _initVideoPlayer(),
+        builder:(context, state) {
+          if (state.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return VideoPlayer(_videoPlayerController);
+          }
+        }
+      )
+    );
   }
 }
