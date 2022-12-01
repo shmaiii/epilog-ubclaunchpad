@@ -1,6 +1,5 @@
-import 'package:client/duration_input.dart';
+import 'package:client/duration_picker.dart';
 import 'package:flutter/material.dart';
-import 'date_time_input.dart';
 import 'date_time_input.dart';
 
 class SeizureLogPage extends StatelessWidget {
@@ -63,7 +62,7 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                   DateTimeInput(
                     label: "When did this seizure occur?",
                   ),
-                  const DurationInput(
+                  const DurationPicker(
                     label: "How long did the seizure last?",
                   ),
                   const _FormTextInput(
