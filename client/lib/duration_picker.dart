@@ -45,7 +45,7 @@ class _DurationPickerState extends State<DurationPicker> {
                     onPressed: () => Picker(
                         adapter: NumberPickerAdapter(data: [
                           const NumberPickerColumn(begin: 0, end: 59),
-                          const NumberPickerColumn(begin: 0, end: 59),
+                          const NumberPickerColumn(begin: 0, end: 59, jump: 5),
                         ]),
                         selecteds: [_currentMinutes, _currentSeconds],
                         delimiter: [
@@ -68,6 +68,10 @@ class _DurationPickerState extends State<DurationPicker> {
                           updateDuration(value);
                         }).showDialog(context),
                     child: Row(children: [
+                      const Icon(
+                        Icons.timer_outlined,
+                        color: Colors.black,
+                      ),
                       Text(
                         _currentMinutes.toString().padLeft(2, '0'),
                         style: const TextStyle(
