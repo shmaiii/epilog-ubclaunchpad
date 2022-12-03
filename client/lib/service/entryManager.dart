@@ -11,11 +11,22 @@ class Resource<T> {
 }
 
 class EntryManager {
+  static const String url = "http://localhost:8080/entries"; 
   Future<List<EntriesModel>> load<T>(Resource<List<EntriesModel>> resource) async {
       final response = await http.get(Uri.parse(resource.url));
       print(response);
       if(response.statusCode == 200) {
         return resource.parse(response);
+      } else {
+        throw Exception('Failed to load data!');
+      }
+  }
+
+  update(EntriesModel entry, userId) async {
+    final response = await http.put(Uri.parse(url), body: {userId, entry});
+      print(response);
+      if(response.statusCode == 200) {
+        return response.body;
       } else {
         throw Exception('Failed to load data!');
       }
