@@ -1,4 +1,5 @@
 //import 'dart:html';
+import 'package:client/model/userEntryModel.dart';
 import 'package:client/pages/entryDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -14,7 +15,7 @@ class Entries extends StatefulWidget {
 
 class EntriesState extends State<Entries> {
   // ignore: deprecated_member_use, prefer_collection_literals
-  List<EntriesModel> _entryModels = <EntriesModel>[];
+  List<UserEntryModel> _entryModels = <UserEntryModel>[];
 
   @override
   void initState() {
@@ -23,7 +24,7 @@ class EntriesState extends State<Entries> {
   }
 
   void _populateEntries() {
-    EntryManager().load(EntriesModel.all).then((entryModels) => {
+    EntryManager().getAll().then((entryModels) => {
       setState(() => {
         _entryModels = entryModels
       })
@@ -41,10 +42,10 @@ class EntriesState extends State<Entries> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                     debugPrint("Clicked");
-                    return entryDetail(entry: _entryModels[index]);
+                    return entryDetail(userId: _entryModels[index].userId, entry: _entryModels[index].entry);
                   }));
                   },
-                  title: Text(_entryModels[index].title),
+                  title: Text(_entryModels[index].entry.title),
                 ),
               )
               );

@@ -3,8 +3,10 @@ import 'package:client/pages/entryEdit.dart';
 import 'package:flutter/material.dart';
 
 class entryDetail extends StatefulWidget {
+  String userId;
   EntriesModel entry;
-  entryDetail({required this.entry});
+  
+  entryDetail({required this.userId, required this.entry});
   _editState createState() => _editState(entry: entry);
 }
 

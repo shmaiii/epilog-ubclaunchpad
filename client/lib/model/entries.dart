@@ -11,7 +11,7 @@ class EntriesModel {
   EntriesModel({required this.title, required this.category, required this.duration, required this.symptoms});
 
   factory EntriesModel.fromJson(Map<String, dynamic> json) {
-    return EntriesModel(title: json['title'], category: json['category'], duration: json['duration'], symptoms: json['symptoms']);
+      return EntriesModel(title: json['title'], category: json['category'], duration: json['duration'], symptoms: json['symptoms']);
   }
   //url: 'https://jsonplaceholder.typicode.com/todos',
   static Resource<List<EntriesModel>> get all {

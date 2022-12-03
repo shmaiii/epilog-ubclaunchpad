@@ -1,4 +1,5 @@
 import 'package:client/model/entries.dart';
+import 'package:client/model/userEntryModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -12,7 +13,7 @@ class Resource<T> {
 
 class EntryManager {
   static const String url = "http://localhost:8080/entries"; 
-  Future<List<EntriesModel>> load<T>(Resource<List<EntriesModel>> resource) async {
+  Future<List<UserEntryModel>> load<T>(Resource<List<UserEntryModel>> resource) async {
       final response = await http.get(Uri.parse(resource.url));
       print(response);
       if(response.statusCode == 200) {
@@ -20,6 +21,16 @@ class EntryManager {
       } else {
         throw Exception('Failed to load data!');
       }
+  }
+
+  getAll() async {
+    final response = await http.get(Uri.parse(url + "/all"));
+    print(response);
+    if(response.statusCode == 200) {
+        return UserEntryModel.getAll(response);
+    } else {
+        throw Exception('Failed to load data!');
+    }
   }
 
   update(EntriesModel entry, userId) async {
