@@ -26,4 +26,11 @@ class EntriesModel {
         }
       );
   }
+
+  Map toJson() => {
+    'title': title,
+    'duration': duration,
+    'category': category,
+    'symptoms': symptoms
+  };
 }

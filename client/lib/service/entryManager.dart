@@ -3,6 +3,7 @@ import 'package:client/model/userEntryModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'dart:convert';
 
 class Resource<T> {
   final String url;
@@ -33,8 +34,14 @@ class EntryManager {
     }
   }
 
-  update(EntriesModel entry, userId) async {
-    final response = await http.put(Uri.parse(url), body: {userId, entry});
+  static update(EntriesModel entry, userId) async {
+    UserEntryModel requestObject = new UserEntryModel(userId: userId, entry: entry);
+    String requestString = jsonEncode(requestObject);
+    Map<String, String> customHeaders = {
+      "content-type": "application/json"
+    };
+    print(requestString);
+    final response = await http.put(Uri.parse(url), headers: customHeaders, body: requestString);
       print(response);
       if(response.statusCode == 200) {
         return response.body;

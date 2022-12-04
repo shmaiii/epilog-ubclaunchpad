@@ -20,4 +20,9 @@ class UserEntryModel {
     print(result);
     return list.map((model) => UserEntryModel.fromJson(model["id"], model["info"])).toList();        
   }
+
+  Map toJson() {
+    Map entry = this.entry.toJson();
+    return {'userId': userId, 'entry': entry};
+  }
 }

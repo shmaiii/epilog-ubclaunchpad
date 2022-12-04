@@ -40,7 +40,7 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        console.log("Received an update request: ---------- ", req)
+        console.log("Received an update request: ---------- ", req.body)
         const entryInfo = req.body;
         console.log("Request body: ", entryInfo)
         const docRef = doc(db, "Users", entryInfo.userId)

@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 class entryDetail extends StatefulWidget {
   String userId;
   EntriesModel entry;
-  
+
   entryDetail({required this.userId, required this.entry});
-  _editState createState() => _editState(entry: entry);
+  _editState createState() => _editState(userId: userId, entry: entry);
 }
 
 class _editState extends State<entryDetail> {
+  String userId;
   EntriesModel entry;
-  _editState({required this.entry});
+  _editState({required this.userId, required this.entry});
   @override
   void initState() {
     super.initState();
@@ -69,7 +70,7 @@ class _editState extends State<entryDetail> {
               onPressed: () { 
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                 debugPrint("Clicked");
-                return entryEdit(entry: this.entry );
+                return entryEdit(userId: this.userId, entry: this.entry );
                 }));
               },
               child: Text('Edit'),
