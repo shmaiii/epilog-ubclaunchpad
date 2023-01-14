@@ -1,63 +1,59 @@
 import 'package:client/model/userEntryModel.dart';
-import 'package:client/pages/entryDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:scoped_model/scoped_model.dart';
 import '../model/entries.dart';
 import '../service/entryManager.dart';
 
 class Entries extends StatefulWidget {
-
   @override
-  createState() => EntriesState();
+  _EntriesState createState() => _EntriesState();
 }
 
-class EntriesState extends State<Entries> {
+class _EntriesState extends State<Entries> {
+  //List to store the entries 
   List<UserEntryModel> _entryModels = <UserEntryModel>[];
 
   @override
   void initState() {
     super.initState();
+    // Fetch the entries from the database 
     _populateEntries();
   }
 
+  // Method to fetch the entries from the database
   void _populateEntries() {
     EntryManager().getAll().then((entryModels) => {
-      setState(() => {
-        _entryModels = entryModels
-      })
-    });
-  }
-
-  Padding _buildItemsForListView(BuildContext context, int index) {
-      return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 4.0),
-              child: Card(
-                child: ListTile(
-                  onTap: () {
-                      Navigator.pushNamed(context, '/entry', arguments: {
-                          "userId": _entryModels[index].userId, 
-                          "entry": _entryModels[index].entry
-                      }).then((_) => _populateEntries());
-                  },
-                  title: Text(_entryModels[index].entry.title),
-                ),
-              )
-              );
+          // Update the state with the new entries
+          setState(() => _entryModels = entryModels),
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    print("The entries page is built with the following information");
-    _entryModels.forEach((entry) => print(entry.entry.title));
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Entries'),
-        ),
-        body: ListView.builder(
-          itemCount: _entryModels.length,
-          itemBuilder: _buildItemsForListView,
-        )
-      );
+      // AppBar with the title
+      appBar: AppBar(
+        title: Text('Entries'),
+      ),
+      //ListView to display the entries
+      body: ListView.builder(
+        itemCount: _entryModels.length,
+        itemBuilder: (context, index) {
+          // Return a Card for each entry
+          return Card(
+            child: ListTile(
+              //On Tap navigate to the entry detail page and pass the necessary arguments
+              onTap: () {
+                Navigator.pushNamed(context, '/entry', arguments: {
+                  "userId": _entryModels[index].userId, 
+                  "entry": _entryModels[index].entry
+                }).then((_) => _populateEntries());
+              },
+              title: Text(_entryModels[index].entry.title),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
