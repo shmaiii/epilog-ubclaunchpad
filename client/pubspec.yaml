@@ -95,3 +95,6 @@ flutter:
         - family: List_alt_filled
           fonts:
             - asset: fonts/List_alt_filled.ttf
+        - family: Calendar_Add
+          fonts:
+            - asset: fonts/Calendar_Add.ttf

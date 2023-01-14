@@ -27,6 +27,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(title: 'Home Page'),
+      routes: {
+        '/reminder': (context) => const NotificationScreen(),
+        '/reminder/upcoming': (context) => const UpComingScreen(),
+        '/reminder/recent': (context) => const RecentScreen(),
+        '/reminder/new': (context) => const NewReminder(),
+      },
     );
   }
 }
