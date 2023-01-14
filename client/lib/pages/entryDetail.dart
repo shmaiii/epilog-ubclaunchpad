@@ -35,19 +35,11 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
         body: (
           mainColumn(context)
         )
-        // body: Form(
-        //   child: Padding(
-        //     padding:
-        //         const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
-        //     child: mainColumn(context)
-        //   ))
     );
   }
 
   Column mainColumn(BuildContext context) {
     return Column( 
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.all(20),
@@ -76,8 +68,6 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
                       "userId": this.userId, 
                       "entry": this.entry
                   }).then((_) {
-                      // Update the entry object with the new values
-                      // 
                       setState(() {
                         this.entry = entry;
                       });
@@ -95,8 +85,6 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
                 // Create a grid with 2 columns. If you change the scrollDirection to
                 // horizontal, this produces 2 rows.
                 crossAxisCount: 2,
-                // crossAxisSpacing: 0.0,
-                // mainAxisSpacing: 0.0,
                 childAspectRatio: (itemWidth / itemHeight),
                 children: <Widget>[
                   gridChildrenContainerKey("Duration: "),
