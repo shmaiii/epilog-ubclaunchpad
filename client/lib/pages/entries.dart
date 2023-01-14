@@ -3,7 +3,7 @@ import 'package:client/model/userEntryModel.dart';
 import 'package:client/pages/entryDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
+import 'package:scoped_model/scoped_model.dart';
 import '../model/entries.dart';
 import '../service/entryManager.dart';
 
@@ -39,12 +39,25 @@ class EntriesState extends State<Entries> {
               padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 4.0),
               child: Card(
                 child: ListTile(
+                  // onTap: () {
+                  //   Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  //   debugPrint("Clicked");
+                  //   return entryDetail(userId: _entryModels[index].userId, entry: _entryModels[index].entry);
+                  // }));
+                  // },
+                  // onTap: () {
+                  //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                  //     return entryDetail(userId: _entryModels[index].userId, entry: _entryModels[index].entry);
+                  //     }));
+                  // },
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    debugPrint("Clicked");
-                    return entryDetail(userId: _entryModels[index].userId, entry: _entryModels[index].entry);
-                  }));
+                      Navigator.pushNamed(context, '/entry', arguments: {
+                          "userId": _entryModels[index].userId, 
+                          "entry": _entryModels[index].entry
+                      }).then((_) => _populateEntries());
                   },
+
+
                   title: Text(_entryModels[index].entry.title),
                 ),
               )
@@ -53,6 +66,9 @@ class EntriesState extends State<Entries> {
 
   @override
   Widget build(BuildContext context) {
+    print("The entries page is built with the following information");
+    _entryModels.forEach((entry) => print(entry.entry.title));
+    //return ScopedModel<EntriesModel>()
     return Scaffold(
         appBar: AppBar(
           title: Text('Entries'),
@@ -63,7 +79,6 @@ class EntriesState extends State<Entries> {
         )
       );
   }
-
 }
 
 

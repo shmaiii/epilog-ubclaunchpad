@@ -1,18 +1,38 @@
 //import 'dart:js';
 
 import 'package:client/pages/entries.dart';
+import 'package:client/pages/entryDetail.dart';
+import 'package:client/pages/entryEdit.dart';
 import 'package:client/pages/home.dart';
 import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MaterialApp(
   initialRoute: '/',
-  routes: {
-    '/': (context) => Entries(),
-    '/home': (context) => Home(),
-    '/entries': (context) => Entries(),
-  }
+  onGenerateRoute: (RouteSettings settings) {
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (context) => Entries());
+      case '/home':
+        return MaterialPageRoute(builder: (context) => Home());
+      case '/entries':
+        return MaterialPageRoute(builder: (context) => Entries());
+      case '/entry':
+        final arguments = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (context) => entryDetail(
+                userId: arguments["userId"], entry: arguments["entry"]));
+      case '/entryEdit':
+        final arguments = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+            builder: (context) => entryEdit(
+                userId: arguments["userId"], entry: arguments["entry"]));
+    }
+    return null;
+  },
 ));
+
+
 
 
 // void main() {

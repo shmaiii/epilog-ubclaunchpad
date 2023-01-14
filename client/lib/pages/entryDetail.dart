@@ -10,7 +10,9 @@ class entryDetail extends StatefulWidget {
   _editState createState() => _editState(userId: userId, entry: entry);
 }
 
-class _editState extends State<entryDetail> {
+class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   String userId;
   EntriesModel entry;
   _editState({required this.userId, required this.entry});
@@ -21,6 +23,8 @@ class _editState extends State<entryDetail> {
 
   @override
   Widget build(BuildContext context) {
+    print("-----------------I am built in the entry detail page");
+    print (entry);
     return Scaffold(
       appBar: AppBar(
           title: Text(entry.title),
@@ -37,8 +41,8 @@ class _editState extends State<entryDetail> {
         //         const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
         //     child: mainColumn(context)
         //   ))
-          );
-          }
+    );
+  }
 
   Column mainColumn(BuildContext context) {
     return Column( 
@@ -68,11 +72,18 @@ class _editState extends State<entryDetail> {
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
               ),
               onPressed: () { 
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                debugPrint("Clicked");
-                return entryEdit(userId: this.userId, entry: this.entry );
-                }));
+                Navigator.pushNamed(context, '/entryEdit', arguments: {
+                      "userId": this.userId, 
+                      "entry": this.entry
+                  }).then((_) {
+                      // Update the entry object with the new values
+                      // 
+                      setState(() {
+                        this.entry = entry;
+                      });
+                  });
               },
+
               child: Text('Edit'),
             );
   }
