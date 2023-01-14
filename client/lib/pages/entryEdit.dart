@@ -47,51 +47,54 @@ class _EntryEditFormState extends State<EntryEditForm> {
         child: Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'Seizure Information',
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-                  ),
-                  _FormTextInput(entry: entry, updatedValues: updatedValues),
-                  Stack(
-                      alignment: Alignment.bottomRight,
-                      clipBehavior: Clip.none,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            // Validate will return true if the form is valid, or false if
-                            // the form is invalid.
-                            if (_formKey.currentState!.validate()) {
-                              // Process data.
-                            }
-                            for (MapEntry<String, String> element in updatedValues.entries) {
-                              switch (element.key) {
-                                case "Title":
-                                  entry.title = element.value;
-                                  break;
-                                case "Duration":
-                                  entry.duration = int.parse(element.value);
-                                  break;
-                                case "Category":
-                                  entry.category = element.value;
-                                  break;
-                                case "Symptom":
-                                  entry.symptoms = element.value;
-                                  break;
-                              }
-
-                            }
-                            EntryManager.update(entry, userId);
-                          },
-                          child: const Text('Submit'),
-                        ),
-                      ])
-                ])));
+            child: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Seizure Information',
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+                    ),
+                    _FormTextInput(entry: entry, updatedValues: updatedValues),
+                    Stack(
+                        alignment: Alignment.bottomRight,
+                        clipBehavior: Clip.none,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                                // Validate will return true if the form is valid, or false if
+                                // the form is invalid.
+                                if (_formKey.currentState!.validate()) {
+                                  // Process data.
+                                }
+                                for (MapEntry<String, String> element in updatedValues.entries) {
+                                  switch (element.key) {
+                                    case "Title":
+                                      entry.title = element.value;
+                                      break;
+                                    case "Duration":
+                                      entry.duration = int.parse(element.value);
+                                      break;
+                                    case "Category":
+                                      entry.category = element.value;
+                                      break;
+                                    case "Symptom":
+                                      entry.symptoms = element.value;
+                                      break;
+                                  }
+                                }
+                                EntryManager.update(entry, userId);
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ])
+                  ])
+              )
+            )
+        );
   }
 }
 
