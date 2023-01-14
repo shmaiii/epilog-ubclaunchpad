@@ -9,7 +9,8 @@ const firebaseConfig = {
   projectId: "epilog-1fa6c",
   storageBucket: "epilog-1fa6c.appspot.com",
   messagingSenderId: "768848997584",
-  appId: "1:768848997584:web:5a943283446d64f8d942d5"
+  appId: "1:768848997584:web:5a943283446d64f8d942d5",
+  measurementId: "G-7FKJSC1P1L"
 };
 
 // Initialize Firebase
