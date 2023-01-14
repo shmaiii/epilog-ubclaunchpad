@@ -5,7 +5,7 @@
 
 <h3 align="center">Epilog</h3>
   <p align="center">
-    project_description
+    Consolidate epilepsy management into one place and easily shared with others
     <br />
     <br />
     <a href="https://github.com/ubclaunchpad/epilog/">View Demo</a>
@@ -40,6 +40,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+This is a UBC LaunchPad Project where a team of 12 developers, 3 designers, a team lead, and a stakeholder worked over an 8 month period to build the application from start to finish. 
+
+EpiLog is a mHealth seizure tracking app for people with epilepsy and their carers. Epilepsy requires consistent monitoring for effective treatment. This application is to consolidate epilepsy management into one place and is easily shared with others. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -56,8 +59,14 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them. 
+
+**Add flutter doctor info and npm info**
 
 * flutter
   ```sh
@@ -93,8 +102,14 @@
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
-## Roadmap
+<!-- ## Roadmap
 
+- [ ] Feature 1
+- [ ] Feature 2
+- [ ] Feature 3
+    - [ ] Nested Feature -->
+
+See the [open issues](https://github.com/ubclaunchpad/epilog/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
