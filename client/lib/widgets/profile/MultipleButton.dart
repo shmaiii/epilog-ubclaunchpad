@@ -14,12 +14,7 @@ class MultipleButton extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: darkBlue),
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/first': (context) => const SettingPage(),
-        '/second': (context) => const SecondRoute(),
-        '/third': (context) => const ProfileSettingsPage(),
-      },
+      // initialRoute: '/',
       title: 'Navigation Basics',
       home: Scaffold(
         body: Center(
@@ -29,16 +24,35 @@ class MultipleButton extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  //Text("data"),
                   // top container
-                  const Expanded(
-                    child: Text(
-                      'Hello Julia',
-                      style: TextStyle(fontSize: 50.0),
-                    ), // todo, add the two texts,
-                  ),
                   Expanded(
-                    child: Image.asset('./assets/profile.png'),
-                  ),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Image.asset('./assets/profile.png',
+                            scale: 5.1, alignment: Alignment.topLeft),
+                        Column(
+                          // verticalDirection: VerticalDirection.down,
+                          children: const [
+                            Text(
+                              'Hello Julia',
+                              style: TextStyle(fontSize: 50.0),
+                            ), //
+                            Text(
+                              'small bio',
+                              style: TextStyle(fontSize: 20.0),
+                            ), //
+                          ],
+                        )
+                      ])),
+                  // Container(
+                  //   child: Image.asset('./assets/profile.png'),
+                  // ),
+                  // Expanded(
+                  //   child: Image.asset('./assets/profile.png'),
+                  // ),
                   ButtonTheme(
                     minWidth: 200.0,
                     height: 80.0,
@@ -62,7 +76,7 @@ class MultipleButton extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => const SecondRoute()));
                       },
-                      child: const Text("Button 2"),
+                      child: const Text("User Medical Information"),
                     ),
                   ),
                   ButtonTheme(
@@ -76,7 +90,7 @@ class MultipleButton extends StatelessWidget {
                                 builder: (context) =>
                                     const ProfileSettingsPage()));
                       },
-                      child: const Text("Button 3"),
+                      child: const Text("User Profile"),
                     ),
                   ),
                 ]),
