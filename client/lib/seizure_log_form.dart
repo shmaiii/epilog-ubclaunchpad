@@ -3,6 +3,7 @@ import 'package:client/EntryFormPages/Symptoms.dart';
 import 'package:flutter/material.dart';
 import 'EntryFormPages/NewEntry.dart';
 import 'dart:math';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SeizureLogPage extends StatelessWidget {
   const SeizureLogPage({Key? key, this.title}) : super(key: key);
@@ -33,9 +34,9 @@ List<GlobalKey<FormState>> formKeys =
 });
 
 List<Widget> formPages = [
-  NewEntry(formKey: formKeys[0]),
-  CategoryType(formKey: formKeys[1]),
-  Symptoms(formKey: formKeys[2]),
+  NewEntry(formKey: formKeys[0], storage: storage),
+  CategoryType(formKey: formKeys[1], storage: storage),
+  Symptoms(formKey: formKeys[2], storage: storage),
 ];
 
 List<String> pageTitles = [
@@ -43,6 +44,8 @@ List<String> pageTitles = [
   "Category and Type",
   "Symptoms",
 ];
+
+const storage = FlutterSecureStorage();
 
 class _SeizureLogFormState extends State<SeizureLogForm> {
   int formPageInd = 0;
