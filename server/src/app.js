@@ -35,15 +35,50 @@ app.get('/user/:id/personal-information/read', async (req, res) => {
     try {
         const snapshot = await getDoc(testSpecial);
         if (snapshot.exists()) {
-            const docData = snapshot.data().doctors;
-            console.log(docData)
-            res.status(200).send(`Data is ${JSON.stringify(docData)}`);
+            const docData = snapshot.data();
+            res.status(200).send(JSON.stringify(docData));
+            
         }
     } catch (error) {
         console.log("Got an error");
         console.log(error);
     }
 
+});
+
+app.get('/user/:id/patientsdoctors/read', async (req, res) => {
+    console.log("getting user's personal info from db");
+
+    const id = req.params.id;
+    const testSpecial = doc(db, "/users/" + id);
+    var docData;
+    try {
+        const snapshot = await getDoc(testSpecial);
+        if (snapshot.exists()) {
+            docData = snapshot.data().doctors;
+            //console.log(docData)
+            //res.status(200).send(`Data is ${JSON.stringify(docData)}`);
+        }
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
+    //console.log(docData)
+    const xx = doc(db, "/contacts/" + docData[0] );
+    
+    try {
+        const snapshot = await getDoc(xx);
+        if (snapshot.exists()) {
+            docData = snapshot.data();
+            console.log(docData)
+            res.status(200).send(`Data is ${JSON.stringify(docData)}`);
+            const docData = snapshot.data();
+            res.status(200).send(JSON.stringify(docData));
+        }
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
 });
 
 app.get('/user/:id/patientsdoctors/read', async (req, res) => {
@@ -87,14 +122,74 @@ app.post('/user/:id/personal-information/edit', async (req, res) => {
 
 app.get('/user/:id/medications/read', async (req, res) => {
     console.log("getting user's medications from db");
+
+    const id = req.params.id;
+    const testSpecial = doc(db, "/users/" + id);
+
+    try {
+        const snapshot = await getDoc(testSpecial);
+        if (snapshot.exists()) {
+            const docData = snapshot.data();
+
+            const mids = [];
+            for (const x of docData["Medications"]) {
+                mids.push(x["_key"]["path"]["segments"][6]);
+            }
+
+            const medications = [];
+            for (const y of mids) {
+                const testSpecial2 = doc(db, "/medications/" + y);
+
+                const snapshot2 = await getDoc(testSpecial2)
+    
+                if (snapshot2.exists()) {
+                    medications.push(snapshot2.data());
+                }
+            }
+
+            res.status(200).send(JSON.stringify(medications));
+        }
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
 });
 
 app.post('/medications/add', async (req, res) => {
-    console.log("adding user's medication in db");
+    console.log("adding medication in db");
+    const testSpecial = doc(db, "/medications/FDsVfAhfhwqkqvesRPVH");
+
+    const docData = {
+        name: req.body.name,
+        dosage: req.body.dosage,
+        administration_method: req.body.administration_method
+    };
+    console.log("Defined docData");
+    try {
+        await setDoc(testSpecial, docData);
+        res.status(200).send("success");
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
 });
 
-app.post('/medications/:mid/edit', async (req, res) => {
+app.post('/medications/edit', async (req, res) => {
     console.log("editing user's medication in db");
+
+    const testSpecial = doc(db, req.body.path);
+
+    const docData = {
+        name: req.body.name
+    };
+    console.log("Defined docData");
+    try {
+        await updateDoc(testSpecial, docData);
+        res.status(200).send("success");
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
 });
 
 // CONTACTS ENDPOINTS
