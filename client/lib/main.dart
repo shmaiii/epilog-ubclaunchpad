@@ -1,6 +1,3 @@
-import 'package:client/pages/category.dart';
-import 'package:client/pages/dropdown.dart';
-import 'package:client/pages/symptoms.dart';
 import 'package:flutter/material.dart';
 import 'NavBar.dart';
 
