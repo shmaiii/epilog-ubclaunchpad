@@ -5,37 +5,36 @@ import 'package:video_player/video_player.dart';
 import 'dart:io' as io; 
 import 'package:camera/camera.dart';
 
+class RecordingPage extends StatelessWidget {
+  const RecordingPage({Key? key}) : super(key:key);
+
+  @override
+  Widget build(BuildContext context){
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: RecordScreen(),
+    );
+  }
+}
 
 class RecordScreen extends StatefulWidget {
   const RecordScreen({Key? key}): super(key: key);
-  //const RecordingPage({super.key});
-  //final String title = "This is recording test page";
 
   @override
   State<RecordScreen> createState() => _RecordScreenState();
 }
 
 class _RecordScreenState extends State<RecordScreen> {
-  //List<String> videos = <String>[]; // store video file paths
 
   late CameraController _cameraController;
   bool _isLoading = true;
   bool _isRecording = false;
 
-  //  bool _imagePickerActive = false;
-  //  final ImagePicker _picker = ImagePicker();
-
-  //  @override
-  //  void initState(){
-  //   super.initState();
-  //   takeVideo();
-  //  }
-  initCamera() async {
+  _initCamera() async {
     final cameras = await availableCameras();
-    // final firstCamera = cameras.first;
-    final front = cameras.first;
+    final front = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
     _cameraController = CameraController(front, ResolutionPreset.max);
-    _cameraController.initialize();
+    await _cameraController.initialize();
     setState(() {
       _isLoading = false;
     });
@@ -44,8 +43,7 @@ class _RecordScreenState extends State<RecordScreen> {
   @override
   void initState(){
     super.initState();
-    initCamera();  
-    
+    _initCamera();  
   }
 
   @override
@@ -73,22 +71,6 @@ class _RecordScreenState extends State<RecordScreen> {
       });
     }
   }
-
-  // void takeVideo() async {
-  //   if (_imagePickerActive) return;
-  //   _imagePickerActive = true;
-
-  //   final XFile ? videoFile = await _picker.pickVideo(source: ImageSource.camera);
-  //   _imagePickerActive = false;
-
-    
-
-  //   if (videoFile == null) return;
-  //   setState(() {
-  //     videos.add(videoFile.path);
-  //     print(videoFile.path);
-  //   });}
-
   
   @override
   Widget build(BuildContext context) {
@@ -101,45 +83,22 @@ class _RecordScreenState extends State<RecordScreen> {
       );
     } else {
       return Center(
-  child: Stack(
-    alignment: Alignment.bottomCenter,
-    children: [
-      CameraPreview(_cameraController),
-      Padding(
-        padding: const EdgeInsets.all(25),
-        child: FloatingActionButton(
-          backgroundColor: Colors.red,
-          child: Icon(_isRecording ? Icons.stop : Icons.circle),
-          onPressed: () => _recordVideo(),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            CameraPreview(_cameraController),
+            Padding(
+              padding: const EdgeInsets.all(25),
+              child: FloatingActionButton(
+                backgroundColor: Colors.red,
+                child: Icon(_isRecording ? Icons.stop : Icons.circle),
+                onPressed: () => _recordVideo(),
+              ),
+            ),
+          ],
         ),
-      ),
-    ],
-  ),
-);
+      );
      }
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text(widget.title),
-    //     ),
-    //     body: Center(
-    //       child: ListView.builder(
-    //         padding: const EdgeInsets.all(8),
-    //         itemCount: videos.length,
-    //         itemBuilder: (BuildContext context, int index) {
-    //           return Card(
-    //             child: Container(
-    //               padding: const EdgeInsets.all(8),
-    //               child: Center(child: Text(index.toString()))
-    //             ),
-    //           );
-    //         },
-    //       ),),
-    //       floatingActionButton: FloatingActionButton(
-    //         onPressed: takeVideo,
-    //         tooltip: 'Take Video',
-    //         child: const Icon(Icons.add),
-    //         ),
-    // );
   }
 }
 
@@ -172,6 +131,7 @@ class _VideoPageState extends  State<VideoPage> {
     Future _initVideoPlayer() async {
       _videoPlayerController = VideoPlayerController.file(io.File(widget.filePath));
       await _videoPlayerController.initialize();
+      await _videoPlayerController.setLooping(true); // video will loop
       await _videoPlayerController.play();
     }
 
