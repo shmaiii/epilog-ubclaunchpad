@@ -3,6 +3,9 @@ import 'package:getwidget/getwidget.dart';
 
 import 'ProfileSettingsPage.dart';
 import 'setting.dart';
+import 'package:http/http.dart' as http;
+
+import 'FetchProfile.dart';
 
 const Color darkBlue = Color.fromARGB(255, 18, 32, 47);
 
@@ -74,6 +77,19 @@ class MultipleButton extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
+                                builder: (context) => const SettingPage()));
+                      },
+                      child: const Text("Emergency Contact"),
+                    ),
+                  ),
+                  ButtonTheme(
+                    minWidth: 200.0,
+                    height: 80.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
                                 builder: (context) => const SecondRoute()));
                       },
                       child: const Text("User Medical Information"),
@@ -90,7 +106,19 @@ class MultipleButton extends StatelessWidget {
                                 builder: (context) =>
                                     const ProfileSettingsPage()));
                       },
-                      child: const Text("User Profile"),
+                      child: FutureBuilder<ProfileInfo>(
+                        future: fetchProfile(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(snapshot.data!.full_name);
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          }
+
+                          // By default, show a loading spinner.
+                          return const CircularProgressIndicator();
+                        },
+                      ),
                     ),
                   ),
                 ]),

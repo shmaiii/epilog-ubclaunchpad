@@ -4,13 +4,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<Album> fetchAlbum() async {
-  final response = await http.get(Uri.parse('http://localhost:8080/'));
+Future<ProfileInfo> fetchProfile() async {
+  final response = await http.get(Uri.parse(
+      'http://localhost:8080/user/pw8swdwzWDz4HrsB1dWC/personal-information/read'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
+    return ProfileInfo.fromJson(jsonDecode(response.body));
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
@@ -18,42 +19,40 @@ Future<Album> fetchAlbum() async {
   }
 }
 
-class Album {
-  final int userId;
-  final int id;
-  final String title;
+class ProfileInfo {
+  final String full_name;
+  final String address;
+  final int age;
 
-  const Album({
-    required this.userId,
-    required this.id,
-    required this.title,
+  const ProfileInfo({
+    required this.full_name,
+    required this.address,
+    required this.age,
   });
 
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      userId: json['userId'],
-      id: json['id'],
-      title: json['title'],
+  factory ProfileInfo.fromJson(Map<String, dynamic> json) {
+    return ProfileInfo(
+      full_name: json['Full Name'],
+      address: json['Address'],
+      age: json['Age'],
     );
   }
 }
 
-void main() => runApp(const MyApp());
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyProfile extends StatefulWidget {
+  const MyProfile({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyProfile> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  late Future<Album> futureAlbum;
+class _MyAppState extends State<MyProfile> {
+  late Future<ProfileInfo> futureAlbum;
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
+    futureAlbum = fetchProfile();
   }
 
   @override
@@ -68,11 +67,11 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Fetch Data Example'),
         ),
         body: Center(
-          child: FutureBuilder<Album>(
+          child: FutureBuilder<ProfileInfo>(
             future: futureAlbum,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.id.toString());
+                return Text(snapshot.data!.full_name.toString());
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
