@@ -36,16 +36,43 @@ class _HomeState extends State<HomeScreen> {
           const Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(
-              "Hi Julia",
+              "Hi Brug",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
             ),
+          ),
+          Text(
+                "Today is Sunday",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+              ),
+          Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                width: 150,
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.amber[600],
+                  borderRadius: BorderRadius.all(Radius.circular(25))
+              ),
+                child: FractionallySizedBox(
+                  widthFactor: 0.8,
+                  heightFactor: 0.8,
+                  child: Column(
+                    children: [Text(
+                    "Calendar",
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+                    ),]
+                  ), 
+                ),
+              ),
+            ]
           ),
           Row(
             children: [
               const Padding(
                 padding: EdgeInsets.all(20.0),
                 child: Text(
-                  "Calender",
+                  "Calenghrerthjy",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                 ),
               ),
