@@ -1,4 +1,5 @@
 import 'package:client/duration_picker.dart';
+import 'package:client/pages/category.dart';
 import 'package:flutter/material.dart';
 import 'package:client/FormInputs/FormTextInput.dart';
 import 'package:client/date_time_input.dart';
@@ -25,12 +26,7 @@ class CategoryType extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              FormTextInput(
-                label: "What category of seizure did this appear to be?",
-                hintText: "Category",
-                storage: storage,
-                id: "category",
-              ),
+              const Category(),
               FormTextInput(
                 label: "What type of seizure did this appear to be?",
                 hintText: "Type",
