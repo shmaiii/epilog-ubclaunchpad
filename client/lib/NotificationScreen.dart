@@ -115,7 +115,7 @@ class UpComingScreen extends StatelessWidget {
         toolbarHeight: 100,
         leading: IconButton(
           icon: const Padding(
-            padding: EdgeInsets.only(left: 20.0),
+            padding: EdgeInsets.only(left: 10.0),
             child: Icon(Icons.arrow_circle_left_outlined, color: Colors.black, size: 40.0,),
           ),
           onPressed: () => Navigator.pop(context),
@@ -194,7 +194,7 @@ class RecentScreen extends StatelessWidget {
         toolbarHeight: 100,
         leading: IconButton(
           icon: const Padding(
-            padding: EdgeInsets.only(left: 20.0),
+            padding: EdgeInsets.only(left: 10.0),
             child: Icon(Icons.arrow_circle_left_outlined, color: Colors.black, size: 40.0,),
           ),
           onPressed: () => Navigator.pop(context),
@@ -327,6 +327,7 @@ class ListEntry extends StatelessWidget {
   }
 }
 
+
 //-------------------------------------New Reminder Page------------------------------------//
 class NewReminder extends StatelessWidget {
   const NewReminder({super.key});
@@ -337,7 +338,7 @@ class NewReminder extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Padding(
-          padding: EdgeInsets.only(top: 120.0),
+          padding: EdgeInsets.only(top: 90),
           child: Text("New Reminder", style: TextStyle(color: Colors.black, fontSize: 35),)
         ),
         backgroundColor: Colors.white,
@@ -346,12 +347,121 @@ class NewReminder extends StatelessWidget {
         toolbarHeight: 150,
         leading: IconButton(
           icon: const Padding(
-            padding: EdgeInsets.only(left: 20.0),
+            padding: EdgeInsets.only(left: 10.0),
             child: Icon(Icons.arrow_circle_left_outlined, color: Colors.black, size: 40.0,),
           ),
           onPressed: () => Navigator.pop(context),
         ), 
+      ),
+      body:  Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: SizedBox(
+            width: 300,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                const Expanded(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("Type", style: TextStyle(color: Colors.black, fontSize: 20),),
+                  )
+                ),
+                const Expanded(
+                  child: ReminderTypeDropDown()
+                ),
+                const Expanded(child: Text("Title", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                const Expanded(child: TextField()),
+                const Expanded(child: Text("Date", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                const Expanded(child: Text("Time", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                const Expanded(child: Text("Notes", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                Expanded(child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Expanded(child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Container(
+                          color: Colors.grey,
+                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: Colors.white, fontSize: 13.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: TextButton(
+                        onPressed: () {},
+                        child: Container(
+                          color: Colors.grey,
+                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(color: Colors.white, fontSize: 13.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ])),
+              ],
+            ),
+          ),
+        ),
       )
-  );
+    );
+  }
+}
+
+// List for the reminder types
+const List<String> list = <String>['Medication', 'Appointment', 'Restock'];
+
+// Data type for saving user inputs
+class ReminderData {
+  String type;
+  String title;
+  String date;
+  String time;
+  String notes;
+
+  ReminderData(this.type, this.title, this.date, this.time, this.notes);
+}
+
+var input = ReminderData("Medication", "Aspirin", "2023/01/01", "11:11", "2 pills");
+
+// Widget for reminder type dropdown
+class ReminderTypeDropDown extends StatefulWidget {
+  const ReminderTypeDropDown({super.key});
+
+  @override
+  State<ReminderTypeDropDown> createState() => _ReminderTypeDropDownState();
+}
+
+// State changes to the reminder type dropdown
+class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
+  String? dropdownValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<String>(
+        value: dropdownValue,
+        hint: const Text("Choose the type of the reminder"),
+        elevation: 16,
+        style: const TextStyle(color: Colors.black),
+        onChanged: (String? value) {
+          // This is called when the user selects an item.
+          setState(() {
+            dropdownValue = value!;
+            input.type = value;
+          });
+        },
+        items: list.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      )
+    );
   }
 }
