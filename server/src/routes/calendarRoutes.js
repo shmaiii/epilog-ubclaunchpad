@@ -1,11 +1,11 @@
-import express from 'express'
+import express from 'express';
 
-import getAllCalendarDocumentsFromUser from '../controllers/calendarController.js'
+import calendarController from '../controllers/calendarController.js';
 
-const router = express.Router()
+const router = express.Router();
 
-router.get('/:user', getAllCalendarDocumentsFromUser.getAllCalendarDocumentsGivenUser)
-router.get('/:user/:id', getAllCalendarDocumentsFromUser.getCalendarDocumentGivenId)
+router.get('/:user', calendarController.getAllCalendarDocumentsGivenUser);
+router.get('/:user/:id', calendarController.getCalendarDocumentGivenId);
+router.post('/', calendarController.postCalendarDocument);
 
-
-export default router
+export default router;

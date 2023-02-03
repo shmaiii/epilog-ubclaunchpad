@@ -1,10 +1,10 @@
-import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore"; 
+import { collection, query, where, getDocs, doc, getDoc, addDoc, Timestamp } from "firebase/firestore"; 
 import { db } from "../firebase/db.js";
 
 const getAllCalendarDocumentsGivenUser = async (req, res, next) => {
   try{
-    const q = query(collection(db, "calendar"), where("user", "==", req.params.user));
-    const querySnapshot = await getDocs(q);
+    const queryStatement = query(collection(db, "calendar"), where("user", "==", req.params.user));
+    const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
 
     querySnapshot.forEach((doc) => {
@@ -14,14 +14,14 @@ const getAllCalendarDocumentsGivenUser = async (req, res, next) => {
     return res.json({userCalendarDocuments});
   } catch (err) {
     err.statusCode = 500;
-    next(err)
+    next(err);
   }
-}
+};
 
 const getCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    const d = doc(db, "calendar", req.params.id);
-    const documentSnapshot = await getDoc(d);
+    const docRef = doc(db, "calendar", req.params.id);
+    const documentSnapshot = await getDoc(docRef);
     let documentData = documentSnapshot.data();
     let responseStatusCode = 200;
 
@@ -36,11 +36,23 @@ const getCalendarDocumentGivenId = async (req, res, next) => {
     return res.status(responseStatusCode).json(documentData);
   } catch (err) {
     err.statusCode = 500;
-    next(err)
+    next(err);
   }
-}
+};
+
+const postCalendarDocument = async (req, res, next) => {
+  try {
+    const addedDocFieldInputs = req.body;
+    const addedDocRef = await addDoc(collection(db, "calendar"), addedDocFieldInputs); 
+    return res.json({id: addedDocRef.id, ...addedDocFieldInputs});
+  } catch (err) {
+    err.statusCode = 500;
+    next(err);
+  }
+};
 
 export default {
   getAllCalendarDocumentsGivenUser,
-  getCalendarDocumentGivenId
-}
+  getCalendarDocumentGivenId,
+  postCalendarDocument
+};
