@@ -1,3 +1,4 @@
+import 'package:client/widgets/profile/MedicalInfo/medical_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
@@ -90,7 +91,7 @@ class MultipleButton extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SecondRoute()));
+                                builder: (context) => const MedicalInfoPage()));
                       },
                       child: const Text("User Medical Information"),
                     ),

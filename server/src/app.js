@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-import { addDoc, collection, doc, getDoc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 import { db } from './firebase/db.js';
 
 
@@ -124,68 +124,74 @@ app.get('/user/:id/medications/read', async (req, res) => {
     console.log("getting user's medications from db");
 
     const id = req.params.id;
-    const testSpecial = doc(db, "/users/" + id);
+    const userMedications = collection(db, "/users/" + id + "/medications");
 
     try {
-        const snapshot = await getDoc(testSpecial);
-        if (snapshot.exists()) {
-            const docData = snapshot.data();
+        const medDocs = await getDocs(userMedications);
 
-            const mids = [];
-            for (const x of docData["Medications"]) {
-                mids.push(x["_key"]["path"]["segments"][6]);
-            }
+        const medications = [];
+        medDocs.forEach((medDoc) => {
+            var data = medDoc.data();
+            data.id = medDoc.id;
+            medications.push(data);
+        })
 
-            const medications = [];
-            for (const y of mids) {
-                const testSpecial2 = doc(db, "/medications/" + y);
+        res.status(200).send(JSON.stringify(medications));
 
-                const snapshot2 = await getDoc(testSpecial2)
-    
-                if (snapshot2.exists()) {
-                    medications.push(snapshot2.data());
-                }
-            }
-
-            res.status(200).send(JSON.stringify(medications));
-        }
     } catch (error) {
         console.log("Got an error");
         console.log(error);
     }
 });
 
-app.post('/medications/add', async (req, res) => {
+app.post('/user/:id/medications/add', async (req, res) => {
     console.log("adding medication in db");
-    const testSpecial = doc(db, "/medications/FDsVfAhfhwqkqvesRPVH");
 
+    const id = req.params.id;
     const docData = {
         name: req.body.name,
         dosage: req.body.dosage,
         administration_method: req.body.administration_method
     };
-    console.log("Defined docData");
+
     try {
-        await setDoc(testSpecial, docData);
-        res.status(200).send("success");
+        const medDoc = await addDoc(collection(db, '/users/' + id + '/medications'), docData);
+        res.status(200).send(medDoc.id);
     } catch (error) {
         console.log("Got an error");
         console.log(error);
     }
 });
 
-app.post('/medications/edit', async (req, res) => {
+app.post('/user/:uid/medications/:mid/edit', async (req, res) => {
     console.log("editing user's medication in db");
 
-    const testSpecial = doc(db, req.body.path);
-
+    const uid = req.params.uid;
+    const mid = req.params.mid;
     const docData = {
-        name: req.body.name
+        name: req.body.name,
+        dosage: req.body.dosage,
+        administration_method: req.body.administration_method
     };
-    console.log("Defined docData");
+
     try {
-        await updateDoc(testSpecial, docData);
-        res.status(200).send("success");
+        await updateDoc(doc(db, '/users/' + uid + '/medications/' + mid), docData);
+        res.status(200).send("Success!");
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
+});
+
+app.post('/user/:uid/medications/:mid/delete', async (req, res) => {
+    console.log("deleting user's medication in db");
+
+    const uid = req.params.uid;
+    const mid = req.params.mid;
+
+    try {
+        await deleteDoc(doc(db, '/users/' + uid + '/medications/' + mid));
+        res.status(200).send("Success!");
     } catch (error) {
         console.log("Got an error");
         console.log(error);
