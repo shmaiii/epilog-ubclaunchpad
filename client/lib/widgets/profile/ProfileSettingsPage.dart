@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'FetchProfile.dart';
 
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
@@ -121,20 +122,17 @@ class _EditPageState extends State<ProfileSettingsPage> {
                             color: Colors.black)),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
-                    // color: Colors.green,
-                    // padding: EdgeInsets.symmetric(horizontal: 50),
-                    // elevation: 2,
-                    // shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(20)),
-                    child: Text(
-                      "SAVE",
-                      style: TextStyle(
-                          fontSize: 14,
-                          letterSpacing: 2.2,
-                          color: Colors.white),
-                    ),
-                  )
+                      onPressed: () {},
+
+                      child: Text(
+                        "SAVE",
+                        style: TextStyle(
+                            fontSize: 14,
+                            letterSpacing: 2.2,
+                            color: Colors.white),
+                      ),
+                      //child: const MyProfile()
+                      )
                 ],
               )
             ],
