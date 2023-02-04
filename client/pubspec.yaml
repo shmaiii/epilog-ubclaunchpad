@@ -31,6 +31,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^0.13.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -40,6 +41,7 @@ dependencies:
   intl: ^0.17.0
   flutter_picker: ^2.0.5
   flutter_secure_storage: ^7.0.1
+  scoped_model: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -99,3 +101,4 @@ flutter:
         - family: List_alt_filled
           fonts:
             - asset: fonts/List_alt_filled.ttf
+
