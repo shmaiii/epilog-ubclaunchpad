@@ -1,16 +1,11 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore"; 
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc } from "firebase/firestore"; 
 import { db } from "../firebase/db.js";
 
-// Todo: implement authorization for calendar collection in firebase website once we implement authentication
-
+// Note: commends below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUID
 const getAllCalendarDocuments = async (req, res, next) => {
   try{
     const queryStatement = query(collection(db, "calendar"), where("user", "==", req.params.user));
-
-    // Note: we might not need req.params.user once we implement firebase authorization rules to deny user access 
-    // other user's calendar documents. If so, use code below for queryStatement variable and delete user path params
-    //const queryStatement = query(collection(db, "calendar"));
-
+    // const queryStatement = query(collection(db, "calendar"), where("user", "==", req.firebaseUID));
     const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
 
@@ -29,8 +24,17 @@ const getCalendarDocumentGivenId = async (req, res, next) => {
   try {
     const documentSnapshot = await getDoc(doc(db, "calendar", req.params.id));
     let documentData = documentSnapshot.data();
+    let responseStatusCode = 200;
 
-    return res.json(documentData);
+    // if (documentData?.user === req.firebaseUID) {
+    //   documentData = {id: documentSnapshot.id, ...documentData};
+    //   responseStatusCode = 200;
+    // } else {
+    //   documentData = null;
+    //   responseStatusCode = 404;
+    // }
+
+    return res.status(responseStatusCode).json(documentData);
   } catch (err) {
     err.code = err.code ?? 500;
     next(err);
@@ -40,6 +44,12 @@ const getCalendarDocumentGivenId = async (req, res, next) => {
 const postCalendarDocument = async (req, res, next) => {
   try {
     const addDocFieldInputs = req.body;
+
+    // if (addDocFieldInputs.user !== req.firebaseUID) {
+    //   const error = new Error("Cannot create calendar documents for another user");
+    //   error.statusCode = 403
+    //   throw error;
+    // }
 
     const addedDocRef = await addDoc(collection(db, "calendar"), addDocFieldInputs); 
     return res.json({id: addedDocRef.id});
@@ -52,9 +62,22 @@ const postCalendarDocument = async (req, res, next) => {
 const updateCalendarDocumentGivenId = async (req, res, next) => {
   try {
     const updateDocFieldInputs = req.body;
+    // const documentSnapshot = await getDoc(doc(db, "calendar", req.firebaseUID));
+    // const documentData = documentSnapshot.data();
 
-    await updateDoc(doc(db, "calendar", req.params.id), updateDocFieldInputs); 
-    return res.json({id: req.params.id});
+    // if (documentData.user !== req.firebaseUID){
+    //   const error = new Error("Cannot update the calendar documents of another user");
+    //   error.statusCode = 403
+    //   throw error;
+    // }
+    // else if (updateDocFieldInputs.user !== undefined) {
+    //   const error = new Error("Cannot update calendar document's user field");
+    //   error.statusCode = 400
+    //   throw error;
+    // }
+
+    const updatedDocRef = await updateDoc(doc(db, "calendar", req.params.id), updateDocFieldInputs); 
+    return res.json({id: updatedDocRef.id});
   } catch (err) {
     err.code = err.code ?? 500;
     next(err);
