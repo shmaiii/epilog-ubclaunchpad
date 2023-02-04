@@ -46,40 +46,40 @@ app.get('/user/:id/personal-information/read', async (req, res) => {
 
 });
 
-app.get('/user/:id/patientsdoctors/read', async (req, res) => {
-    console.log("getting user's personal info from db");
+// app.get('/user/:id/patientsdoctors/read', async (req, res) => {
+//     console.log("getting user's personal info from db");
 
-    const id = req.params.id;
-    const testSpecial = doc(db, "/users/" + id);
-    var docData;
-    try {
-        const snapshot = await getDoc(testSpecial);
-        if (snapshot.exists()) {
-            docData = snapshot.data().doctors;
-            //console.log(docData)
-            //res.status(200).send(`Data is ${JSON.stringify(docData)}`);
-        }
-    } catch (error) {
-        console.log("Got an error");
-        console.log(error);
-    }
-    //console.log(docData)
-    const xx = doc(db, "/contacts/" + docData[0] );
+//     const id = req.params.id;
+//     const testSpecial = doc(db, "/users/" + id);
+//     var docData;
+//     try {
+//         const snapshot = await getDoc(testSpecial);
+//         if (snapshot.exists()) {
+//             docData = snapshot.data().doctors;
+//             //console.log(docData)
+//             //res.status(200).send(`Data is ${JSON.stringify(docData)}`);
+//         }
+//     } catch (error) {
+//         console.log("Got an error");
+//         console.log(error);
+//     }
+//     //console.log(docData)
+//     const xx = doc(db, "/contacts/" + docData[0] );
     
-    try {
-        const snapshot = await getDoc(xx);
-        if (snapshot.exists()) {
-            docData = snapshot.data();
-            console.log(docData)
-            res.status(200).send(`Data is ${JSON.stringify(docData)}`);
-            const docData = snapshot.data();
-            res.status(200).send(JSON.stringify(docData));
-        }
-    } catch (error) {
-        console.log("Got an error");
-        console.log(error);
-    }
-});
+//     try {
+//         const snapshot = await getDoc(xx);
+//         if (snapshot.exists()) {
+//             docData = snapshot.data();
+//             console.log(docData)
+//             res.status(200).send(`Data is ${JSON.stringify(docData)}`);
+//             const docData = snapshot.data();
+//             res.status(200).send(JSON.stringify(docData));
+//         }
+//     } catch (error) {
+//         console.log("Got an error");
+//         console.log(error);
+//     }
+// });
 
 app.get('/user/:id/patientsdoctors/read', async (req, res) => {
     console.log("getting user's personal info from db");
@@ -272,4 +272,9 @@ app.post('/contacts/:cid/edit', async (req, res) => {
     }
 
     await updateDoc(doc(db, "/users/", id), reqBody);
+});
+app.get('/test', async (req, res) => {
+    res.send(
+    JSON.stringify({"a": "working"})
+    )
 });
