@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'calendar__add_icons.dart';
 import 'main.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -391,7 +394,7 @@ class NewReminder extends StatelessWidget {
                       ),
                     ),
                     Expanded(child: TextButton(
-                        onPressed: () {},
+                        onPressed: () => {addReminder(input)},
                         child: Container(
                           color: Colors.grey,
                           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -415,18 +418,18 @@ class NewReminder extends StatelessWidget {
 // List for the reminder types
 const List<String> list = <String>['Medication', 'Appointment', 'Restock'];
 
-// Data type for saving user inputs
-class ReminderData {
-  String type;
-  String title;
-  String date;
-  String time;
-  String notes;
+// // Data type for saving user inputs
+// class ReminderData {
+//   String type;
+//   String title;
+//   String date;
+//   String time;
+//   String notes;
 
-  ReminderData(this.type, this.title, this.date, this.time, this.notes);
-}
+//   ReminderData(this.type, this.title, this.date, this.time, this.notes);
+// }
 
-var input = ReminderData("Medication", "Aspirin", "2023/01/01", "11:11", "2 pills");
+var input = {"type":"Appointment", "title":"Meet Aryan", "date":"2023/01/01", "time":"11:11", "notes":"At OC"};
 
 // Widget for reminder type dropdown
 class ReminderTypeDropDown extends StatefulWidget {
@@ -452,7 +455,7 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
           // This is called when the user selects an item.
           setState(() {
             dropdownValue = value!;
-            input.type = value;
+            input["type"] = value;
           });
         },
         items: list.map<DropdownMenuItem<String>>((String value) {
@@ -463,5 +466,29 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
         }).toList(),
       )
     );
+  }
+}
+
+Future<String> addReminder(newReminder) async {
+  print("enter");
+  final response = await http.post(
+    Uri.parse('http://10.0.2.2:8080/new_reminder'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, Object>{
+      'id': 'Reminder_Test_User',
+      'reminder': newReminder,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return "Success";
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('failed to add reminder');
   }
 }
