@@ -1,3 +1,5 @@
+import 'package:client/expandable_fab.dart';
+import 'package:client/seizure_log_form.dart';
 import 'package:flutter/material.dart';
 
 import 'main.dart';
@@ -12,12 +14,9 @@ class EntryScreen extends StatefulWidget {
 class _EntryState extends State<EntryScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Entry',
-          style: demotextstyle,
-        ),
+    return Scaffold(
+      body: Container(
+        child: entriesFAB(context),
       ),
     );
   }
