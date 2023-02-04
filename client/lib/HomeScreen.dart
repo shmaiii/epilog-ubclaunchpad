@@ -49,10 +49,26 @@ class _HomeState extends State<HomeScreen> {
             children: [
               Expanded (
               //start of component
-              child: CalendarComponent(),
+              child: CalendarComponent(
+                  (Colors.amber[600])!,
+                  "Calendar",
+                  Icon(
+                            Icons.calendar_today,
+                            color: Color(0XFF0342E9),
+                            size: 50,
+                        )
+                ),
               ),
               Expanded (
-              child: CalendarComponent(),
+              child: CalendarComponent(
+                  (Colors.blue[600])!,
+                  "Data visualization",
+                  Icon(
+                            Icons.leaderboard,
+                            color: (Colors.amber[600])!,
+                            size: 50,
+                        )
+                ),
               ), 
             ]
           ),

@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CalendarComponent extends StatelessWidget {
+    CalendarComponent(
+        this.color, this.text, this.child
+    );
+    final Color color;
+    final String text;
+    final Widget child;
+
     @override
     Widget build (BuildContext context) {
     return InkWell(
@@ -9,7 +16,7 @@ class CalendarComponent extends StatelessWidget {
             width: 150,
             height: 150,
             decoration: BoxDecoration(
-                color: Colors.amber[600],
+                color: color,
                 borderRadius: BorderRadius.all(Radius.circular(25))
             ),
             child: FractionallySizedBox(
@@ -19,17 +26,13 @@ class CalendarComponent extends StatelessWidget {
                     children: [Padding(
                         padding: EdgeInsets.all(10),
                         child: Text(
-                            "Calendar",
+                            text,
                             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
                         ),
                     ),
                     Padding(
                         padding: EdgeInsets.all(5),
-                        child: Icon(
-                            Icons.calendar_today,
-                            color: Color(0XFF0342E9),
-                            size: 50,
-                        )
+                        child: child
                     )]          
                 ), 
             )),
