@@ -46,41 +46,6 @@ app.get('/user/:id/personal-information/read', async (req, res) => {
 
 });
 
-// app.get('/user/:id/patientsdoctors/read', async (req, res) => {
-//     console.log("getting user's personal info from db");
-
-//     const id = req.params.id;
-//     const testSpecial = doc(db, "/users/" + id);
-//     var docData;
-//     try {
-//         const snapshot = await getDoc(testSpecial);
-//         if (snapshot.exists()) {
-//             docData = snapshot.data().doctors;
-//             //console.log(docData)
-//             //res.status(200).send(`Data is ${JSON.stringify(docData)}`);
-//         }
-//     } catch (error) {
-//         console.log("Got an error");
-//         console.log(error);
-//     }
-//     //console.log(docData)
-//     const xx = doc(db, "/contacts/" + docData[0] );
-    
-//     try {
-//         const snapshot = await getDoc(xx);
-//         if (snapshot.exists()) {
-//             docData = snapshot.data();
-//             console.log(docData)
-//             res.status(200).send(`Data is ${JSON.stringify(docData)}`);
-//             const docData = snapshot.data();
-//             res.status(200).send(JSON.stringify(docData));
-//         }
-//     } catch (error) {
-//         console.log("Got an error");
-//         console.log(error);
-//     }
-// });
-
 app.get('/user/:id/patientsdoctors/read', async (req, res) => {
     console.log("getting user's personal info from db");
 
@@ -200,44 +165,31 @@ app.post('/user/:uid/medications/:mid/delete', async (req, res) => {
 
 // CONTACTS ENDPOINTS
 
-const readIds = async (collection, ids)=>{
-    const reads = ids.map(id => collection.doc(id).get())
-    const result = await Promise.all(reads)
-    return result.map(v => v.data())
-}
+// const readIds = async (collection, ids)=>{
+//     const reads = ids.map(id => collection.doc(id).get())
+//     const result = await Promise.all(reads)
+//     return result.map(v => v.data())
+// }
 
 
 app.get('/user/:id/contacts/read', async (req, res) => {
     console.log("getting user's contacts from db");
-   
 
     const id = req.params.id;
-    const testSpecial = doc(db, "/users/" + id);
-    var docDataArray;
+    const userContactsInfo = collection(db, "/users/" + id + "/contacts");
+
     try {
-        const snapshot = await getDoc(testSpecial);
-        if (snapshot.exists()) {
-            docDataArray = snapshot.data().Doctors;
-            console.log(docDataArray)
-        }
-    } catch (error) {
-        console.log("Got an error");
-        console.log(error);
-    }
-    let result = {};
-    try {
-        for(var i =0; i< docDataArray.length; i++){
-            const snapshot = await getDoc(docDataArray[i]);
-            if (snapshot.exists()) {
-                const docData = snapshot.data();
-                //console.log(docData)
-                result[i] = docData;
-                
-            }
-        }
-        console.log(result)
-        res.status(200).send(`Data is ${JSON.stringify(result)}`);
-       
+        const contactsDocs = await getDocs(userContactsInfo);
+
+        const contacts = [];
+        contactsDocs.forEach((contactDoc) => {
+            var data = contactDoc.data();
+            data.id = contactDoc.id;
+            contacts.push(data);
+        })
+
+        res.status(200).send(JSON.stringify(contacts));
+
     } catch (error) {
         console.log("Got an error");
         console.log(error);
@@ -247,40 +199,57 @@ app.get('/user/:id/contacts/read', async (req, res) => {
 /**
  * still need to figure out how to assign a auto-generated id to each document 
  */
-app.post('/contacts/add', async (req, res) => {
-    console.log("adding user's contact in db");
-    const data = {
-    first: 'Ada',
-    last: 'Lovelace',
-    born: 1815
+app.post('/user/:id/contacts/add', async (req, res) => {
+    console.log("adding a new contact in db");
+    const id = req.params.id;
+    const docData = {
+        name : req.body.name,
+        phoneNumber: req.body.phoneNumber,
+        type: req.body.type
+    };
+    try {
+        const medDoc = await addDoc(collection(db, '/users/' + id + '/contacts'), docData);
+        res.status(200).send(medDoc.id);
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
     }
-
-    await setDoc(doc(db, "/users/", "1"), data);
-    //res.status(200).send(`Data is ${JSON.stringify(result)}`);
 });
 
 
-// does not work
-app.post('/contacts/:cid/edit', async (req, res) => {
-    const id = req.params.cid;
-    const reqBody = {
-        first : req.body.fullName,
-        last : req.body.height,
-        born: 999
-    }
-    console.log(req)
+
+app.post('/user/:uid/contacts/:cid/edit', async (req, res) => {
+    
     console.log("adding user's contact in db");
     
-    const data = {
-        first: 'aha',
-        last: 'changed',
-        born: 2002
-    }
+    const uid = req.params.uid;
+    const cid = req.params.cid;
+    const docData = {
+        name: req.body.name,
+        phoneNumber: req.body.phoneNumber,
+        type: req.body.type
+    };
 
-    await updateDoc(doc(db, "/users/", id), reqBody);
+    try {
+        await updateDoc(doc(db, '/users/' + uid + '/contacts/' + cid), docData);
+        res.status(200).send("Success!");
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
 });
-app.get('/test', async (req, res) => {
-    res.send(
-    JSON.stringify({"a": "working"})
-    )
+
+app.post('/user/:uid/contacts/:cid/delete', async (req, res) => {
+    console.log("deleting user's contact in db");
+
+    const uid = req.params.uid;
+    const cid = req.params.cid;
+    try {
+        await deleteDoc(doc(db, '/users/' + uid + '/contacts/' + cid));
+        res.status(200).send("Success!");
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+    }
 });
+

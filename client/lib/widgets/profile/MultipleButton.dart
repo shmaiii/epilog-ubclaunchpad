@@ -1,3 +1,4 @@
+import 'package:client/widgets/profile/ContactInfo/contact_info_page.dart';
 import 'package:client/widgets/profile/MedicalInfo/medical_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
@@ -78,7 +79,7 @@ class MultipleButton extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const SettingPage()));
+                                builder: (context) => const ContactInfoPage()));
                       },
                       child: const Text("Emergency Contact"),
                     ),

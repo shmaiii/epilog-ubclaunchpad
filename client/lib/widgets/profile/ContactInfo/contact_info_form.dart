@@ -1,23 +1,23 @@
-import 'package:client/widgets/profile/MedicalInfo/medical_info_page.dart';
-import 'package:client/widgets/profile/MedicalInfo/medications_controller.dart';
+import 'package:client/widgets/profile/ContactInfo/contact_info_page.dart';
+import 'package:client/widgets/profile/ContactInfo/contacts_controller.dart';
 import 'package:flutter/material.dart';
 
-class MedicalInfoForm extends StatefulWidget {
+class ContactInfoForm extends StatefulWidget {
   final Function() onSubmit;
-  const MedicalInfoForm({super.key, required this.onSubmit});
+  const ContactInfoForm({super.key, required this.onSubmit});
 
   @override
-  State<MedicalInfoForm> createState() => _MedicalInfoFormState();
+  State<ContactInfoForm> createState() => _ContactInfoFormState();
 }
 
-class _MedicalInfoFormState extends State<MedicalInfoForm> {
+class _ContactInfoFormState extends State<ContactInfoForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     String? name;
-    String? administrationMethod;
-    String? dosage;
+    String? phoneNumber;
+    String? type;
     return Form(
       key: _formKey,
       child: Column(
@@ -39,10 +39,10 @@ class _MedicalInfoFormState extends State<MedicalInfoForm> {
           ),
           TextFormField(
             onSaved: (String? value) {
-              administrationMethod = value!;
+              phoneNumber = value!;
             },
             decoration: const InputDecoration(
-              hintText: 'Enter new administration method',
+              hintText: 'Enter new phone number',
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
@@ -53,10 +53,10 @@ class _MedicalInfoFormState extends State<MedicalInfoForm> {
           ),
           TextFormField(
             onSaved: (String? value) {
-              dosage = value!;
+              type = value!;
             },
             decoration: const InputDecoration(
-              hintText: 'Enter new dosage',
+              hintText: 'Enter new type',
             ),
             validator: (String? value) {
               if (value == null || value.isEmpty) {
@@ -78,15 +78,15 @@ class _MedicalInfoFormState extends State<MedicalInfoForm> {
                       // Process data.
                       _formKey.currentState!.save();
 
-                      if (medicationId!.isEmpty) {
-                        await addMedication(
-                            name!, administrationMethod!, dosage!);
+                      if (contactId!.isEmpty) {
+                        await addContact(
+                            name!, phoneNumber!, type!);
                         widget.onSubmit();
                       }
 
-                      if (medicationId!.isNotEmpty) {
-                        await editMedication(name!, administrationMethod!,
-                            dosage!, medicationId!);
+                      if (contactId!.isNotEmpty) {
+                        await editContact(name!, phoneNumber!,
+                            type!, contactId!);
                         widget.onSubmit();
                       }
                     }
@@ -95,9 +95,9 @@ class _MedicalInfoFormState extends State<MedicalInfoForm> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
-                    if (medicationId!.isNotEmpty) {
-                      await deleteMedication(medicationId!);
-                      medicationId = null;
+                    if (contactId!.isNotEmpty) {
+                      await deleteContact(contactId!);
+                      contactId = null;
                       widget.onSubmit();
                     }
                   },

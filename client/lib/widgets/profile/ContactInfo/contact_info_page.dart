@@ -1,17 +1,17 @@
-import 'package:client/widgets/profile/MedicalInfo/medications_controller.dart';
+import 'package:client/widgets/profile/ContactInfo/contacts_controller.dart';
 import 'package:flutter/material.dart';
 
-import 'medical_info_form.dart';
+import 'contact_info_form.dart';
 
-class MedicalInfoPage extends StatefulWidget {
-  const MedicalInfoPage({super.key});
+class ContactInfoPage extends StatefulWidget {
+  const ContactInfoPage({super.key});
   @override
-  State<MedicalInfoPage> createState() => _MedicalInfoPageState();
+  State<ContactInfoPage> createState() => _ContactInfoPageState();
 }
 
-String? medicationId;
+String? contactId;
 
-class _MedicalInfoPageState extends State<MedicalInfoPage> {
+class _ContactInfoPageState extends State<ContactInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +24,7 @@ class _MedicalInfoPageState extends State<MedicalInfoPage> {
             color: Colors.green,
           ),
           onPressed: () {
-            medicationId = null;
+            contactId = null;
             Navigator.pop(context);
           },
         ),
@@ -47,7 +47,7 @@ class _MedicalInfoPageState extends State<MedicalInfoPage> {
           child: ListView(
             children: [
               const Text(
-                "Medications",
+                "Contacts",
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500),
               ),
               const SizedBox(
@@ -56,40 +56,40 @@ class _MedicalInfoPageState extends State<MedicalInfoPage> {
               const SizedBox(
                 height: 35,
               ),
-              FutureBuilder<List<Medication>>(
-                future: readMedications(),
+              FutureBuilder<List<Contact>>(
+                future: readContacts(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    List<Widget> medicationsWidgets = [];
-                    for (Medication m in snapshot.data!) {
-                      medicationsWidgets.add(TextButton(
+                    List<Widget> contactsWidgets = [];
+                    for (Contact c in snapshot.data!) {
+                      contactsWidgets.add(TextButton(
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Name: ${m.name}'),
+                              Text('Name: ${c.name}'),
                               Text(
-                                  'Administration Method: ${m.administrationMethod}'),
-                              Text('Dosage: ${m.dosage}'),
+                                  'Phone Number: ${c.phoneNumber}'),
+                              Text('Type: ${c.type}'),
                             ],
                           ),
                         ),
                         onPressed: () {
                           setState((() {
-                            medicationId = m.id;
+                            contactId = c.id;
                           }));
                         },
                       ));
                     }
-                    medicationsWidgets.add(TextButton(
+                    contactsWidgets.add(TextButton(
                       child: const Padding(
                         padding: EdgeInsets.all(10.0),
-                        child: Text('Add new medication'),
+                        child: Text('Add new contact'),
                       ),
                       onPressed: () {
                         setState((() {
-                          medicationId = "";
+                          contactId = "";
                         }));
                       },
                     ));
@@ -97,7 +97,7 @@ class _MedicalInfoPageState extends State<MedicalInfoPage> {
                       height: 100,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
-                        children: medicationsWidgets,
+                        children: contactsWidgets,
                       ),
                     );
                   } else if (snapshot.hasError) {
@@ -111,7 +111,7 @@ class _MedicalInfoPageState extends State<MedicalInfoPage> {
               const SizedBox(
                 height: 35,
               ),
-              if (medicationId != null) MedicalInfoForm(
+              if (contactId != null) ContactInfoForm(
                 onSubmit: () {
                   setState((() {}));
                 }
