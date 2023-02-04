@@ -35,7 +35,7 @@ app.get('/Users/:id/Reminders', async (req, res) => {
     var reminders = [];
 
     try {
-        const reminderSnapshot = await getDocs(collection(db, "/Users/" + id + "/Reminders"));
+        const reminderSnapshot = await getDocs(collection(db, "/users/" + id + "/Reminders"));
 
         // Add all reminder objects into an array
         reminderSnapshot.docs.forEach((doc) => {
@@ -57,10 +57,11 @@ app.post('/new_reminder', async (req, res) => {
 
     const id = req.body.id;
     const new_reminder = req.body.reminder;
-    const docRef = await addDoc(collection(db, "/Users/" + id + "/Reminders"), new_reminder)
+    const docRef = await addDoc(collection(db, "/users/" + id + "/Reminders"), new_reminder)
 
     res.status(200).send();
 });
+
 app.use((error, req, res, next) => {
     console.log(error)
     return res.status(error.code ?? 400).json({err: error.message})
