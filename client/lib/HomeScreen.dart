@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
+import 'calendar_container.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,25 +47,13 @@ class _HomeState extends State<HomeScreen> {
               ),
           Row(
             children: [
-              Container(
-                margin: const EdgeInsets.all(10.0),
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.amber[600],
-                  borderRadius: BorderRadius.all(Radius.circular(25))
+              Expanded (
+              //start of component
+              child: CalendarComponent(),
               ),
-                child: FractionallySizedBox(
-                  widthFactor: 0.8,
-                  heightFactor: 0.8,
-                  child: Column(
-                    children: [Text(
-                    "Calendar",
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
-                    ),]
-                  ), 
-                ),
-              ),
+              Expanded (
+              child: CalendarComponent(),
+              ), 
             ]
           ),
           Row(
