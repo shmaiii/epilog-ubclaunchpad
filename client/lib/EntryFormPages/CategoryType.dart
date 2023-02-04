@@ -25,14 +25,8 @@ class CategoryType extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Category(),
-              FormTextInput(
-                label: "What type of seizure did this appear to be?",
-                hintText: "Type",
-                storage: storage,
-                id: "type",
-              ),
+            children: const <Widget>[
+              Category(),
             ],
           ),
         ),

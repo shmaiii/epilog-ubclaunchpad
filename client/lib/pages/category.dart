@@ -4,7 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'dropdown.dart';
 
-const List<String> list1 = <String>[
+const List<String> types = <String>[
+  'Type1',
+  'Type2',
+  'Type3',
+  'Type4',
+];
+
+const List<String> categories = <String>[
   'Category1',
   'Category2',
   'Category3',
@@ -37,7 +44,7 @@ class _Category extends State<Category> {
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
-          child: const DropdownButtonExample(list: list1),
+          child: const DropdownButtonExample(list: categories),
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -49,7 +56,7 @@ class _Category extends State<Category> {
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
-          child: const DropdownButtonExample(list: list1),
+          child: const DropdownButtonExample(list: types),
         )
       ],
     );
