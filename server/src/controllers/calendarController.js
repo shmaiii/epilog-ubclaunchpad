@@ -4,7 +4,7 @@ import { db } from "../firebase/db.js";
 // Note: comments below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUserId
 const getAllCalendarDocuments = async (req, res, next) => {
   try{
-    const queryStatement = query(collection(db, "calendar"), where("user", "==", req.params.user));
+    const queryStatement = query(collection(db, `/users/${req.params.user}/calendar`));
     // const queryStatement = query(collection(db, "calendar"), where("user", "==", req.firebaseUserId));
     const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
@@ -22,7 +22,7 @@ const getAllCalendarDocuments = async (req, res, next) => {
 
 const getCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    const documentSnapshot = await getDoc(doc(db, "calendar", req.params.calendarDocId));
+    const documentSnapshot = await getDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`));
     let documentData = documentSnapshot.data();
     let responseStatusCode = 200;
 
@@ -51,7 +51,7 @@ const postCalendarDocument = async (req, res, next) => {
     //   throw error;
     // }
 
-    const addedDocRef = await addDoc(collection(db, "calendar"), addDocFieldInputs); 
+    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), addDocFieldInputs); 
     return res.json({id: addedDocRef.id});
   } catch (err) {
     err.code = err.code ?? 500;
@@ -76,7 +76,7 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
     //   throw error;
     // }
 
-    await updateDoc(doc(db, "calendar", req.params.calendarDocId), updateDocFieldInputs); 
+    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {
     err.code = err.code ?? 500;
@@ -86,7 +86,7 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
 
 const deleteCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    await deleteDoc(doc(db, "calendar", req.params.calendarDocId)); 
+    await deleteDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`)); 
     return res.sendStatus(200);
   } catch (err) {
     err.code = err.code ?? 500;
