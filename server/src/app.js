@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import calendarRoutes from './routes/calendarRoutes.js';
 
-
 const app = express();
 
 app.use(express.json());
@@ -17,8 +16,7 @@ app.get('/ping', (req, res) => {
 
 app.use((error, req, res, next) => {
     console.log(error)
-    const errorStatus = error.statusCode || 400;
-    return res.status(errorStatus).json({err: error.message})
+    return res.status(error.code ?? 400).json({err: error.message})
 });
 
 const PORT = 8080;

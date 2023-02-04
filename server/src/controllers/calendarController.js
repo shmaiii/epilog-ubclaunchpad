@@ -1,9 +1,16 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, Timestamp } from "firebase/firestore"; 
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore"; 
 import { db } from "../firebase/db.js";
 
-const getAllCalendarDocumentsGivenUser = async (req, res, next) => {
+// Todo: implement authorization for calendar collection in firebase website once we implement authentication
+
+const getAllCalendarDocuments = async (req, res, next) => {
   try{
     const queryStatement = query(collection(db, "calendar"), where("user", "==", req.params.user));
+
+    // Note: we might not need req.params.user once we implement firebase authorization rules to deny user access 
+    // other user's calendar documents. If so, use code below for queryStatement variable and delete user path params
+    //const queryStatement = query(collection(db, "calendar"));
+
     const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
 
@@ -13,46 +20,61 @@ const getAllCalendarDocumentsGivenUser = async (req, res, next) => {
 
     return res.json({userCalendarDocuments});
   } catch (err) {
-    err.statusCode = 500;
+    err.code = err.code ?? 500;
     next(err);
   }
 };
 
 const getCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    const docRef = doc(db, "calendar", req.params.id);
-    const documentSnapshot = await getDoc(docRef);
+    const documentSnapshot = await getDoc(doc(db, "calendar", req.params.id));
     let documentData = documentSnapshot.data();
-    let responseStatusCode = 200;
 
-    if (documentData?.user === req.params.user) {
-      documentData = {id: documentSnapshot.id, ...documentData};
-      responseStatusCode = 200;
-    } else {
-      documentData = null;
-      responseStatusCode = 404;
-    }
-
-    return res.status(responseStatusCode).json(documentData);
+    return res.json(documentData);
   } catch (err) {
-    err.statusCode = 500;
+    err.code = err.code ?? 500;
     next(err);
   }
 };
 
 const postCalendarDocument = async (req, res, next) => {
   try {
-    const addedDocFieldInputs = req.body;
-    const addedDocRef = await addDoc(collection(db, "calendar"), addedDocFieldInputs); 
-    return res.json({id: addedDocRef.id, ...addedDocFieldInputs});
+    const addDocFieldInputs = req.body;
+
+    const addedDocRef = await addDoc(collection(db, "calendar"), addDocFieldInputs); 
+    return res.json({id: addedDocRef.id});
   } catch (err) {
-    err.statusCode = 500;
+    err.code = err.code ?? 500;
+    next(err);
+  }
+};
+
+const updateCalendarDocumentGivenId = async (req, res, next) => {
+  try {
+    const updateDocFieldInputs = req.body;
+
+    await updateDoc(doc(db, "calendar", req.params.id), updateDocFieldInputs); 
+    return res.json({id: req.params.id});
+  } catch (err) {
+    err.code = err.code ?? 500;
+    next(err);
+  }
+};
+
+const deleteCalendarDocumentGivenId = async (req, res, next) => {
+  try {
+    await deleteDoc(doc(db, "calendar", req.params.id)); 
+    return res.sendStatus(200);
+  } catch (err) {
+    err.code = err.code ?? 500;
     next(err);
   }
 };
 
 export default {
-  getAllCalendarDocumentsGivenUser,
+  getAllCalendarDocuments,
   getCalendarDocumentGivenId,
-  postCalendarDocument
+  postCalendarDocument,
+  updateCalendarDocumentGivenId,
+  deleteCalendarDocumentGivenId
 };
