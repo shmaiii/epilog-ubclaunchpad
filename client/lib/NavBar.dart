@@ -1,3 +1,6 @@
+import 'package:client/pages/entries.dart';
+import 'package:client/pages/entryDetail.dart';
+import 'package:client/pages/entryEdit.dart';
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
 import 'EntryScreen.dart';
@@ -13,6 +16,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {          
+          case '/entries':
+            return MaterialPageRoute(builder: (context) => Entries());
+          case '/entry':
+            final arguments = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+                builder: (context) => entryDetail(
+                    userId: arguments["userId"], entry: arguments["entry"]));
+          case '/entryEdit':
+            final arguments = settings.arguments as Map<String, dynamic>;
+            return MaterialPageRoute(
+                builder: (context) => entryEdit(
+                    userId: arguments["userId"], entry: arguments["entry"]));
+          }
+          return null;
+        },
       title: 'Seizure Tracker',
       theme: ThemeData(
         // This is the theme of your application.
@@ -58,7 +78,7 @@ class _HomePageState extends State<HomePage> {
   // List of screens for the naviagation bar to choose from, contents are in other files
   final _screens = [
     const HomeScreen(),
-    const EntryScreen(),
+    Entries(),
     const RecordScreen(),
     const NotificationScreen(),
     const ProfileScreen(),
