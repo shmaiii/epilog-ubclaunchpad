@@ -1,6 +1,7 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'dropdown.dart';
 
@@ -19,7 +20,12 @@ const List<String> categories = <String>[
 ];
 
 class Category extends StatefulWidget {
-  const Category({super.key});
+  const Category({
+    super.key,
+    required this.storage,
+  });
+
+  final FlutterSecureStorage storage;
 
   @override
   State<Category> createState() => _Category();
@@ -44,7 +50,11 @@ class _Category extends State<Category> {
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
-          child: const DropdownButtonExample(list: categories),
+          child: DropdownButtonExample(
+            list: categories,
+            storage: widget.storage,
+            id: "category_dropdown",
+          ),
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
@@ -56,7 +66,11 @@ class _Category extends State<Category> {
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
-          child: const DropdownButtonExample(list: types),
+          child: DropdownButtonExample(
+            list: types,
+            storage: widget.storage,
+            id: "type_dropdown",
+          ),
         )
       ],
     );

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({
     super.key,
     required this.list,
+    required this.storage,
+    required this.id,
   });
 
   final List<String> list;
+  final FlutterSecureStorage storage;
+  final String id;
 
   @override
   State<DropdownButtonExample> createState() => _DropdownButtonExampleState();
@@ -19,6 +24,14 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   void initState() {
     super.initState();
     dropdownValue = widget.list.first;
+    _loadValue();
+    setState(() {});
+  }
+
+  _loadValue() async {
+    String? val = await widget.storage.read(key: widget.id);
+    dropdownValue = val ?? widget.list.first;
+    setState(() {});
   }
 
   @override
@@ -43,6 +56,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
             // This is called when the user selects an item.
             setState(() {
               dropdownValue = value!;
+              widget.storage.write(key: widget.id, value: value);
             });
           },
           items: widget.list.map<DropdownMenuItem<String>>((String value) {

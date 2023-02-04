@@ -25,8 +25,8 @@ class CategoryType extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
-              Category(),
+            children: <Widget>[
+              Category(storage: storage),
             ],
           ),
         ),
