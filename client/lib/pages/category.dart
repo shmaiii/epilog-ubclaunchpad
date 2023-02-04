@@ -28,67 +28,29 @@ class _Category extends State<Category> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-          child: const Text(
-            'Category and Type',
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
           child: const Text('What category of seizure did this appear to be?',
               style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.3)),
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+              )),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
           child: const DropdownButtonExample(list: list1),
         ),
-        // Container(
-        //     padding: const EdgeInsets.fromLTRB(10, 0, 10, 35),
-        //     child: DropdownButton<String>(
-        //       value: selectedValue,
-        //       items: <String>['A', 'B', 'C', 'D'].map((String value) {
-        //         return DropdownMenuItem<String>(
-        //           value: value,
-        //           child: Text(value),
-        //         );
-        //       }).toList(),
-        //       onChanged: (String? newValue){
-        //         setState(() {
-        //         selectedValue = newValue!;
-        //   });
-        // },
-        // ),
-        // ),
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
           child: const Text('What type of seizure did this appear to be?',
               style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2.0)),
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+              )),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
-          child: DropdownButtonExample(list: list1),
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
+          child: const DropdownButtonExample(list: list1),
         )
-        // Container(
-        // padding: const EdgeInsets.fromLTRB(10, 0, 10, 35),
-        // child: DropdownButton<String>(
-        //   items: <String>['A', 'B', 'C', 'D'].map((String value) {
-        //     return DropdownMenuItem<String>(
-        //       value: value,
-        //       child: Text(value),
-        //     );
-        //   }).toList(),
-        //   onChanged: (_) {},
-        // ),
-        // )
       ],
     );
   }
