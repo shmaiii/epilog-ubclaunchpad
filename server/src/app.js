@@ -2,9 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import calendarRoutes from './routes/calendarRoutes.js';
 
-import { addDoc, collection, doc, getDoc, getFirestore, setDoc, updateDoc, getDocs } from "firebase/firestore";
-import { db } from './firebase/db.js';
-
 const app = express();
 
 app.use(express.json());
