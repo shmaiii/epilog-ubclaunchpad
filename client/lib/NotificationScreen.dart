@@ -475,7 +475,7 @@ void addReminder(ReminderData reminder) async {
   print("enter");
   print(reminder.time);
 
-  var newReminder = {"type": reminder.type, "title": reminder.title, "seconds": Timestamp.fromDate(reminder.time).seconds, "nanoseconds": Timestamp.fromDate(reminder.time).nanoseconds,"notes": reminder.notes};
+  var newReminder = {"type": reminder.type, "title": reminder.title, "date": {"seconds": Timestamp.fromDate(reminder.time).seconds, "nanoseconds": Timestamp.fromDate(reminder.time).nanoseconds},"notes": reminder.notes};
 
   String jsonString = jsonEncode(newReminder);
 
