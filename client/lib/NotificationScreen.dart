@@ -5,6 +5,8 @@ import 'main.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -394,7 +396,7 @@ class NewReminder extends StatelessWidget {
                       ),
                     ),
                     Expanded(child: TextButton(
-                        onPressed: () => {addReminder(input)},
+                        onPressed: () => addReminder(input),
                         child: Container(
                           color: Colors.grey,
                           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -418,18 +420,18 @@ class NewReminder extends StatelessWidget {
 // List for the reminder types
 const List<String> list = <String>['Medication', 'Appointment', 'Restock'];
 
-// // Data type for saving user inputs
-// class ReminderData {
-//   String type;
-//   String title;
-//   String date;
-//   String time;
-//   String notes;
+// Data type for saving user inputs
+class ReminderData {
+  String type;
+  String title;
+  DateTime time;
+  String notes;
 
-//   ReminderData(this.type, this.title, this.date, this.time, this.notes);
-// }
+  ReminderData({required this.type, required this.title, required this.time, required this.notes});
+}
 
-var input = {"type":"Appointment", "title":"Meet Aryan", "date":"2023/01/01", "time":"11:11", "notes":"At OC"};
+var input = ReminderData(type: "Appointment", title: "Meet Aryan", time: DateTime(2023,1,1,11,11), notes: "At OC");
+// var input = {"type":"Appointment", "title":"Meet Aryan", "time": DateTime(2023,1,1,11,11), "notes":"At OC"};
 
 // Widget for reminder type dropdown
 class ReminderTypeDropDown extends StatefulWidget {
@@ -455,7 +457,7 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
           // This is called when the user selects an item.
           setState(() {
             dropdownValue = value!;
-            input["type"] = value;
+            input.type = value;
           });
         },
         items: list.map<DropdownMenuItem<String>>((String value) {
@@ -469,23 +471,26 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
   }
 }
 
-Future<String> addReminder(newReminder) async {
+void addReminder(ReminderData reminder) async {
   print("enter");
-  final response = await http.post(
-    Uri.parse('http://10.0.2.2:8080/new_reminder'),
+  print(reminder.time);
+
+  var newReminder = {"type": reminder.type, "title": reminder.title, "seconds": Timestamp.fromDate(reminder.time).seconds, "nanoseconds": Timestamp.fromDate(reminder.time).nanoseconds,"notes": reminder.notes};
+
+  String jsonString = jsonEncode(newReminder);
+
+  var response = await http.post(
+    Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
-    body: jsonEncode(<String, Object>{
-      'id': 'Reminder_Test_User',
-      'reminder': newReminder,
-    }),
+    body: jsonString,
   );
 
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    return "Success";
+    // return "Success";
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.

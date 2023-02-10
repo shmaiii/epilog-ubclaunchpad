@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore"; 
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, Timestamp } from "firebase/firestore"; 
 import { db } from "../firebase/db.js";
 
 // Note: comments below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUserId
@@ -51,7 +51,10 @@ const postCalendarDocument = async (req, res, next) => {
     //   throw error;
     // }
 
-    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), addDocFieldInputs); 
+    // var request = JSON.parse(addDocFieldInputs);
+    var newRequest = {"type": addDocFieldInputs.type, "title": addDocFieldInputs.title, "date": Timestamp.fromMillis(addDocFieldInputs.seconds * 1000), "notes": addDocFieldInputs.notes};
+
+    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), newRequest); 
     return res.json({id: addedDocRef.id});
   } catch (err) {
     err.code = err.code ?? 500;
