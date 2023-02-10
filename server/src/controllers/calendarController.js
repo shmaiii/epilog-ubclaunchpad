@@ -45,10 +45,8 @@ const postCalendarDocument = async (req, res, next) => {
   try {
     const addDocFieldInputs = req.body;
 
-    if (addDocFieldInputs.seconds && addDocFieldInputs.nanoseconds) {
+    if (addDocFieldInputs.date?.seconds && addDocFieldInputs.date?.nanoseconds) {
       addDocFieldInputs.date = new Timestamp(addDocFieldInputs.seconds, addDocFieldInputs.nanoseconds);
-      addDocFieldInputs.seconds = undefined;
-      addDocFieldInputs.nanoseconds = undefined;
     } 
 
     // if (addDocFieldInputs.user !== req.firebaseUserId) {
