@@ -45,16 +45,19 @@ const postCalendarDocument = async (req, res, next) => {
   try {
     const addDocFieldInputs = req.body;
 
+    if (addDocFieldInputs.seconds && addDocFieldInputs.nanoseconds) {
+      addDocFieldInputs.date = new Timestamp(addDocFieldInputs.seconds, addDocFieldInputs.nanoseconds);
+      addDocFieldInputs.seconds = undefined;
+      addDocFieldInputs.nanoseconds = undefined;
+    } 
+
     // if (addDocFieldInputs.user !== req.firebaseUserId) {
     //   const error = new Error("Cannot create calendar documents for another user");
     //   error.statusCode = 403
     //   throw error;
     // }
 
-    // var request = JSON.parse(addDocFieldInputs);
-    var newRequest = {"type": addDocFieldInputs.type, "title": addDocFieldInputs.title, "date": Timestamp.fromMillis(addDocFieldInputs.seconds * 1000), "notes": addDocFieldInputs.notes};
-
-    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), newRequest); 
+    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), addDocFieldInputs); 
     return res.json({id: addedDocRef.id});
   } catch (err) {
     err.code = err.code ?? 500;
