@@ -10,26 +10,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeScreen> {
+  final _key = GlobalKey<ScaffoldState>(); // Create a key
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: AppBar(
         backgroundColor: Colors.white,
         automaticallyImplyLeading: false,
         elevation: 5.0,
-        leading: const Icon(
-          Icons.bar_chart_rounded,
-          size: 35.0,
+        leading: IconButton(
+          icon: Icon(Icons.bar_chart_rounded),
+          iconSize: 35.0,
+          onPressed: () => {
+            if(_key.currentState!.isDrawerOpen){
+              _key.currentState!.closeDrawer()
+            //close drawer, if drawer is open
+            }else{
+              _key.currentState!.openDrawer()
+              //open drawer, if drawer is closed
+            }
+          }
         ),
-        actions: const <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 20.0),
-            child: Icon(
-              Icons.search,
-              size: 35.0,
-            ),
-          ),
-        ],
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Column(
@@ -96,6 +98,63 @@ class _HomeState extends State<HomeScreen> {
             ],
           ),
         ],
+      ),
+      drawer: Drawer(
+        // Add a ListView to the drawer. This ensures the user can scroll
+        // through the options in the drawer if there isn't enough vertical
+        // space to fit everything.
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const SizedBox(
+              height: 80.0,
+              child:
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Settings', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            ),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.library_books,
+              ),
+              title: const Text('Epilepsy resources', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+              ),
+              title: const Text('Preferences', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.account_circle,
+              ),
+              title: const Text('Sign out', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              onTap: () {
+                // Update the state of the app
+                // ...
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
