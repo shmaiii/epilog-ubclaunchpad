@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io' as io; 
+import 'dart:typed_data';
 import 'package:camera/camera.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class RecordingPage extends StatelessWidget {
   const RecordingPage({Key? key}) : super(key:key);
@@ -123,6 +125,7 @@ class _VideoPageState extends  State<VideoPage> {
   //   _videoPlayerController.play();
   // }
 
+
   @override 
   void dispose(){
     _videoPlayerController.dispose();
@@ -135,6 +138,12 @@ class _VideoPageState extends  State<VideoPage> {
       await _videoPlayerController.play();
     }
 
+  void _saveVideo() async {
+    await GallerySaver.saveVideo(widget.filePath);
+    print('video saved');
+    dispose(); // later changed to link to entry page or sth
+  }
+
   @override 
   Widget build(BuildContext context){
     return Scaffold(
@@ -144,6 +153,7 @@ class _VideoPageState extends  State<VideoPage> {
             icon: const Icon(Icons.check),
             onPressed: () {
               print("icon pressed");
+              _saveVideo();
               }
             )],
       ),
