@@ -63,6 +63,7 @@ class _EntryEditFormState extends State<EntryEditForm> {
                         alignment: Alignment.bottomRight,
                         clipBehavior: Clip.none,
                         children: [
+                          //todo: adding a message the info got updated correctly
                           ElevatedButton(
                             onPressed: () {
                                 // Validate will return true if the form is valid, or false if
@@ -150,12 +151,6 @@ class _FormTextInput extends StatelessWidget {
                       borderSide: BorderSide(color: Colors.black, width: 4.0)),
                   focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black, width: 4.0))),
-              validator: (String? value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
               onChanged:(value) => {
                 if (key == "Title")
                   updatedValues["Title"] = value

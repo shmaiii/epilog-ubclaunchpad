@@ -33,9 +33,6 @@ class _EntriesState extends State<Entries> {
   Widget build(BuildContext context) {
     return Scaffold(
       // AppBar with the title
-      appBar: AppBar(
-        title: const Text('Entries'),
-      ),
       floatingActionButton: entriesFAB(context),
       //ListView to display the entries
       body: ListView.builder(

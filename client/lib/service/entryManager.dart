@@ -49,4 +49,19 @@ class EntryManager {
         throw Exception('Failed to load data!');
       }
   }
+
+  static post(EntriesModel entry) async {
+    String requestString = jsonEncode(entry);
+    Map<String, String> customHeaders = {
+      "content-type": "application/json"
+    };
+    print(requestString);
+    final response = await http.post(Uri.parse(url + "/create"), headers: customHeaders, body: requestString);
+      print(response);
+      if(response.statusCode == 200) {
+        return response.body;
+      } else {
+        throw Exception('Failed to post data!');
+      }
+  }
 }
