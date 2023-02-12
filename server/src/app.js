@@ -1,11 +1,31 @@
 import express from 'express';
 import cors from 'cors';
 import calendarRoutes from './routes/calendarRoutes.js';
+import { auth } from './firebase/auth.js';
+import { getBearerTokenFromHeader } from './utils/index.js';
 
 const app = express();
-
 app.use(express.json());
 app.use(cors());
+
+app.use(async (req, res, next) => {
+    try {
+        const idToken = getBearerTokenFromHeader(req);
+
+        if (idToken === null) {
+            const error = new Error("request does not have authorization header");
+            error.code = 401;
+            throw error;
+        }
+
+        const decodedIdToken = await auth.verifyIdToken(idToken);
+        req.firebaseUserId = decodedIdToken.uid;
+        next()
+    } catch (err){
+        err.code = err.code ?? 500
+        next(err)
+    }
+})
 
 app.use('/calendar', calendarRoutes);
 
