@@ -1,9 +1,8 @@
 //import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'main.dart';
-import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:client/home_screen_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 
 DateTime now = DateTime.now();
 String date = Jiffy().format('MMMM do');
-String time = Jiffy().format("h:mm a");
 
 class _HomeState extends State<HomeScreen> {
   @override
@@ -86,46 +84,56 @@ class _HomeState extends State<HomeScreen> {
               )
             ],
           ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  time,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-              )
-            ],
-          ),
           Flexible(
-            child: ListView.builder(
-              scrollDirection: Axis.vertical,
-              // Let the ListView know how many items it needs to build.
-              itemCount: upcomingEntries.length,
-              // Provide a builder function. This is where the magic happens.
-              // Convert each item into a widget based on the type of item it is.
-              itemBuilder: (context, index) {
-                final testEntry = upcomingEntries[index];
+              child: FutureBuilder<List<CalendarDocument>>(
+            future: readAllCalendarDocuments(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  // Let the ListView know how many items it needs to build.
+                  itemCount: snapshot.data?.length,
+                  // Provide a builder function. This is where the magic happens.
+                  // Convert each item into a widget based on the type of item it is.
+                  itemBuilder: (context, index) {
+                    final testEntry = snapshot.data?[index];
+                    final time = Jiffy(testEntry?.date).format("h:mm a");
+                    return Column(children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              time,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 20.0),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(children: [
+                        Flexible(
+                            child: Column(children: [
+                          ListEntry(
+                            title: testEntry!.title,
+                            notes: testEntry.notes,
+                            type: testEntry.type,
+                          ),
+                          const SizedBox(height: 50)
+                        ]))
+                      ])
+                    ]);
+                  },
+                  padding: const EdgeInsets.only(right: 25.0, left: 25.0),
+                );
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
 
-                return Row(children: [
-                  Flexible(
-                      child: Column(children: [
-                    ListEntry(
-                      title: testEntry.title,
-                      frequency: testEntry.frequency,
-                      time: testEntry.time,
-                      dose: testEntry.dose,
-                      reminderTime: testEntry.reminderTime,
-                      textButton: testEntry.textButton,
-                    ),
-                    const SizedBox(height: 50)
-                  ]))
-                ]);
-              },
-              padding: const EdgeInsets.only(right: 25.0, left: 25.0),
-            ),
-          ),
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          )),
         ]));
   }
 }
@@ -136,64 +144,28 @@ const List<String> optionText = <String>[
 ];
 
 class EntryInfo {
-  String title;
-  String frequency;
-  String time;
-  int dose;
-  TimeOfDay reminderTime;
-  FilledButton textButton;
   EntryInfo(this.title, this.frequency, this.time, this.dose, this.reminderTime,
       this.textButton);
-}
 
-final List<EntryInfo> upcomingEntries = [
-  EntryInfo(
-    "Levetiracetam",
-    "Daily",
-    "Morning and Night",
-    2,
-    const TimeOfDay(hour: 10, minute: 0),
-    FilledButton(
-      style: FilledButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20),
-      ),
-      onPressed: () {},
-      child: const Text('TAKE'),
-    ),
-  ),
-  EntryInfo(
-    "Get Topiramate",
-    "Daily",
-    "Morning and Night",
-    2,
-    const TimeOfDay(hour: 10, minute: 0),
-    FilledButton(
-      style: TextButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 20),
-      ),
-      onPressed: () {},
-      child: const Text('TAKE'),
-    ),
-  ),
-];
+  int dose;
+  String frequency;
+  TimeOfDay reminderTime;
+  FilledButton textButton;
+  String time;
+  String title;
+}
 
 // Widget for each entry in the list of reminders
 class ListEntry extends StatelessWidget {
   final String title;
-  final String frequency;
-  final String time;
-  final int dose;
-  final TimeOfDay reminderTime;
-  final FilledButton textButton;
+  final String type;
+  final String notes;
 
   const ListEntry({
     super.key,
     required this.title,
-    required this.frequency,
-    required this.time,
-    required this.dose,
-    required this.reminderTime,
-    required this.textButton,
+    required this.type,
+    required this.notes,
   });
 
   @override
@@ -254,14 +226,14 @@ class ListEntry extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
-                            "$frequency · $time",
+                            "type $type",
                             style: const TextStyle(color: Colors.black),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
-                            "$dose pills",
+                            notes,
                             style: const TextStyle(color: Colors.black),
                           ),
                         ),
@@ -283,8 +255,10 @@ class ListEntry extends StatelessWidget {
 }
 
 class ToggleButton extends StatefulWidget {
+  const ToggleButton({super.key});
+
   @override
-  _ToggleButtonState createState() => _ToggleButtonState();
+  State<ToggleButton> createState() => _ToggleButtonState();
 }
 
 class _ToggleButtonState extends State<ToggleButton> {
@@ -302,11 +276,14 @@ class _ToggleButtonState extends State<ToggleButton> {
         width: 83,
         height: 34,
         child: FilledButton(
-            onPressed: _toggleButtonText,
-            style: pressed
-                ? TextButton.styleFrom(backgroundColor: Colors.purple)
-                : TextButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 156, 94, 167)),
-            child: pressed ? const Text('UNTAKE') : const Text('TAKE')));
+          onPressed: _toggleButtonText,
+          style: pressed
+              ? TextButton.styleFrom(backgroundColor: Colors.purple)
+              : TextButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 156, 94, 167)),
+          child: pressed
+              ? const Text('UNTAKE', style: TextStyle(fontSize: 10))
+              : const Text('TAKE', style: TextStyle(fontSize: 10)),
+        ));
   }
 }
