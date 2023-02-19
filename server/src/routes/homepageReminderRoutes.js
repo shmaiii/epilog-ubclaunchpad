@@ -5,6 +5,6 @@ import homepageReminderController from '../controllers/homepageReminderControlle
 const router = express.Router();
 
 router.get('/:user', homepageReminderController.getAllReminderDocuments);
-//router.get('/:user/:reminderDocId', homepageReminderController.deleteHomepageReminderDocumentGivenId);
+router.delete('/:user/delete/:reminderDocId', homepageReminderController.deleteHomepageReminderDocumentGivenId);
 
 export default router;

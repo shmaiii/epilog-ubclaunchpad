@@ -1,5 +1,6 @@
 //import 'dart:ffi';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:client/home_screen_controller.dart';
@@ -89,15 +90,26 @@ class _HomeState extends State<HomeScreen> {
             future: readAllHomepageReminderDocuments(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                List<HomepageReminderDocument> homepageReminderDocuments =
+                    snapshot.data!;
+
+                void deleteItem(String id) {
+                  setState(() {
+                    deleteHomepageReminder(id);
+                  });
+                }
+
                 return ListView.builder(
                   scrollDirection: Axis.vertical,
                   // Let the ListView know how many items it needs to build.
-                  itemCount: snapshot.data?.length,
+                  itemCount: homepageReminderDocuments.length,
+
                   // Provide a builder function. This is where the magic happens.
                   // Convert each item into a widget based on the type of item it is.
                   itemBuilder: (context, index) {
-                    final testEntry = snapshot.data?[index];
+                    final testEntry = homepageReminderDocuments[index];
                     final time = Jiffy(testEntry?.date).format("h:mm a");
+
                     return Column(children: [
                       Row(
                         children: [
@@ -115,10 +127,11 @@ class _HomeState extends State<HomeScreen> {
                         Flexible(
                             child: Column(children: [
                           ListEntry(
-                            title: testEntry!.title,
-                            notes: testEntry.notes,
-                            type: testEntry.type,
-                          ),
+                              id: testEntry!.id,
+                              title: testEntry!.title,
+                              notes: testEntry.notes,
+                              type: testEntry.type,
+                              deleteItem: deleteItem),
                           const SizedBox(height: 50)
                         ]))
                       ])
@@ -157,16 +170,19 @@ class EntryInfo {
 
 // Widget for each entry in the list of reminders
 class ListEntry extends StatelessWidget {
+  final String id;
   final String title;
   final String type;
   final String notes;
+  final Function(String) deleteItem;
 
-  const ListEntry({
-    super.key,
-    required this.title,
-    required this.type,
-    required this.notes,
-  });
+  const ListEntry(
+      {super.key,
+      required this.id,
+      required this.title,
+      required this.type,
+      required this.notes,
+      required this.deleteItem});
 
   @override
   Widget build(BuildContext context) {
@@ -197,6 +213,15 @@ class ListEntry extends StatelessWidget {
                       ),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
+                      onSelected: (value) {
+                        if (value == 0) {
+                          // Perform action on click on Reschedule
+                        }
+                        if (value == 1) {
+                          // Perform action on click on Delete
+                          deleteItem(id);
+                        }
+                      },
                       itemBuilder: (context) => [
                         PopupMenuItem(
                             value: 0,
@@ -226,7 +251,7 @@ class ListEntry extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20.0),
                           child: Text(
-                            "type $type",
+                            type,
                             style: const TextStyle(color: Colors.black),
                           ),
                         ),
@@ -287,3 +312,27 @@ class _ToggleButtonState extends State<ToggleButton> {
         ));
   }
 }
+
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return PopupMenuItem(
+  //     child: FutureBuilder(
+  //       future: _futureData,
+  //       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+  //         if (snapshot.connectionState == ConnectionState.waiting) {
+  //           return const CircularProgressIndicator();
+  //         } else if (snapshot.hasData) {
+  //           return Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: snapshot.data!.map((String item) => Text(item)).toList(),
+  //           );
+  //         } else if (snapshot.hasError) {
+  //           return Text('Error: ${snapshot.error}');
+  //         } else {
+  //           return const Text('No data');
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }

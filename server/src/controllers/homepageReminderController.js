@@ -23,18 +23,18 @@ const getAllReminderDocuments = async (req, res, next) => {
 };
 
 
-// const deleteHomepageReminderDocumentGivenId = async (req, res, next) => {
-//   try {
-//     await deleteDoc(doc(db, `/users/${req.params.user}/reminder/${req.params.reminderDocId}`)); 
-//     return res.sendStatus(200);
-//   } catch (err) {
-//     err.code = err.code ?? 500;
-//     next(err);
-//   }
-// };
+const deleteHomepageReminderDocumentGivenId = async (req, res, next) => {
+  try {
+    await deleteDoc(doc(db, `/users/${req.params.user}/reminder/${req.params.reminderDocId}`)); 
+    return res.sendStatus(200);
+  } catch (err) {
+    err.code = err.code ?? 500;
+    next(err);
+  }
+};
 
 
 export default {
   getAllReminderDocuments,
-  // deleteHomepageReminderDocumentGivenId
+  deleteHomepageReminderDocumentGivenId
 };
