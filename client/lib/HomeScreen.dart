@@ -85,8 +85,8 @@ class _HomeState extends State<HomeScreen> {
             ],
           ),
           Flexible(
-              child: FutureBuilder<List<CalendarDocument>>(
-            future: readAllCalendarDocuments(),
+              child: FutureBuilder<List<HomepageReminderDocument>>(
+            future: readAllHomepageReminderDocuments(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(

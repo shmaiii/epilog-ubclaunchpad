@@ -7,21 +7,22 @@ import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<CalendarDocument>> readAllCalendarDocuments() async {
+Future<List<HomepageReminderDocument>>
+    readAllHomepageReminderDocuments() async {
   final response = await http.get(
       Uri.parse('http://localhost:8080/homepageReminder/home_page_calendar'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
-    List<CalendarDocument> result = [];
+    List<HomepageReminderDocument> result = [];
     var jsonResponse = jsonDecode(response.body);
 
     for (var c in jsonResponse['userReminderDocuments']) {
       c["date"] =
           Timestamp(c["date"]["seconds"], c["date"]["nanoseconds"]).toDate();
 
-      result.add(CalendarDocument.fromJson(c));
+      result.add(HomepageReminderDocument.fromJson(c));
     }
     // sort entries based on date and time
     result.sort((a, b) => a.date.compareTo(b.date));
@@ -117,7 +118,7 @@ Future<String> deleteMedication(String medicationId) async {
   }
 }
 
-class CalendarDocument {
+class HomepageReminderDocument {
   final String id;
   final String title;
   final String type;
@@ -125,7 +126,7 @@ class CalendarDocument {
   final DateTime date;
   //final DateTime date;
 
-  const CalendarDocument({
+  const HomepageReminderDocument({
     required this.id,
     required this.title,
     required this.type,
@@ -133,8 +134,8 @@ class CalendarDocument {
     required this.date,
   });
 
-  factory CalendarDocument.fromJson(Map<String, dynamic> json) {
-    return CalendarDocument(
+  factory HomepageReminderDocument.fromJson(Map<String, dynamic> json) {
+    return HomepageReminderDocument(
       id: json['id'],
       title: json['title'],
       type: json['type'],
@@ -145,7 +146,7 @@ class CalendarDocument {
   // For testing purposes
   @override
   String toString() {
-    return 'CalendarDocument(title: $title, date: $date)';
+    return 'HomepageReminderDocument(title: $title, date: $date)';
   }
 }
 
