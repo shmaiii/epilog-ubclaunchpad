@@ -8,15 +8,16 @@ import 'package:jiffy/jiffy.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<CalendarDocument>> readAllCalendarDocuments() async {
-  final response = await http
-      .get(Uri.parse('http://localhost:8080/calendar/home_page_calendar'));
+  final response = await http.get(
+      Uri.parse('http://localhost:8080/homepageReminder/home_page_calendar'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     List<CalendarDocument> result = [];
     var jsonResponse = jsonDecode(response.body);
-    for (var c in jsonResponse['userCalendarDocuments']) {
+
+    for (var c in jsonResponse['userReminderDocuments']) {
       c["date"] =
           Timestamp(c["date"]["seconds"], c["date"]["nanoseconds"]).toDate();
 
