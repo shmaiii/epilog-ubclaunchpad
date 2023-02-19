@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 Future<List<Medication>> readMedications() async {
   final response = await http.get(Uri.parse(
-      'http://localhost:8080/user/pw8swdwzWDz4HrsB1dWC/medications/read'));
+      'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/read'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -25,7 +25,7 @@ Future<List<Medication>> readMedications() async {
 Future<String> addMedication(String name, String administrationMethod, String dosage) async {
   final response = await http.post(
       Uri.parse(
-          'http://localhost:8080/user/pw8swdwzWDz4HrsB1dWC/medications/add'),
+          'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -47,7 +47,7 @@ Future<String> addMedication(String name, String administrationMethod, String do
 Future<String> editMedication(String name, String administrationMethod, String dosage, String medicationId) async {
   final response = await http.post(
       Uri.parse(
-          'http://localhost:8080/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit'),
+          'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -69,7 +69,7 @@ Future<String> editMedication(String name, String administrationMethod, String d
 Future<String> deleteMedication(String medicationId) async {
   final response = await http.post(
       Uri.parse(
-          'http://localhost:8080/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
+          'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
 
   if (response.statusCode == 200) {
     return response.body;

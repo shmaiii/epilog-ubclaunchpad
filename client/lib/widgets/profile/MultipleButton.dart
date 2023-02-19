@@ -101,59 +101,57 @@ class MultipleButton extends StatelessWidget {
                     minWidth: 200.0,
                     height: 80.0,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    const ProfileSettingsPage()));
-                      },
-                      child: 
-                      Column(children: [
-                          FutureBuilder<ProfileInfo>(
-                            future: fetchProfile(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(snapshot.data!.full_name);
-                              } else if (snapshot.hasError) {
-                                return Text('${snapshot.error}');
-                              }
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProfileSettingsPage()));
+                        },
+                        child: Column(
+                          children: [
+                            FutureBuilder<ProfileInfo>(
+                              future: fetchProfile(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(snapshot.data!.fullName);
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
 
-                              // By default, show a loading spinner.
-                              return const CircularProgressIndicator();
-                            },
-                          ),
-                          FutureBuilder<ProfileInfo>(
-                            future: fetchProfile(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(snapshot.data!.age.toString());
-                              } else if (snapshot.hasError) {
-                                return Text('${snapshot.error}');
-                              }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                            FutureBuilder<ProfileInfo>(
+                              future: fetchProfile(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(snapshot.data!.age.toString());
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
 
-                              // By default, show a loading spinner.
-                              return const CircularProgressIndicator();
-                            },
-                          ),
-                          FutureBuilder<ProfileInfo>(
-                            future: fetchProfile(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(snapshot.data!.address.toString());
-                              } else if (snapshot.hasError) {
-                                return Text('${snapshot.error}');
-                              }
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                            FutureBuilder<ProfileInfo>(
+                              future: fetchProfile(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                      snapshot.data!.address.toString());
+                                } else if (snapshot.hasError) {
+                                  return Text('${snapshot.error}');
+                                }
 
-                              // By default, show a loading spinner.
-                              return const CircularProgressIndicator();
-                            },
-                          ),
-                      ],)
-                      
-                      
-                    
-                    ),
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
+                          ],
+                        )),
                   ),
                 ]),
           ),

@@ -15,24 +15,24 @@ Future<ProfileInfo> fetchProfile() async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to load profile');
   }
 }
 
 class ProfileInfo {
-  final String full_name;
+  final String fullName;
   final String address;
   final int age;
 
   const ProfileInfo({
-    required this.full_name,
+    required this.fullName,
     required this.address,
     required this.age,
   });
 
   factory ProfileInfo.fromJson(Map<String, dynamic> json) {
     return ProfileInfo(
-      full_name: json['Full Name'],
+      fullName: json['Full Name'],
       address: json['Address'],
       age: json['Age'],
     );
@@ -71,7 +71,7 @@ class _MyAppState extends State<MyProfile> {
             future: futureAlbum,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Text(snapshot.data!.full_name.toString());
+                return Text(snapshot.data!.fullName.toString());
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
