@@ -6,6 +6,7 @@ import 'dart:io' as io;
 import 'dart:typed_data';
 import 'package:camera/camera.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 
 class RecordingPage extends StatelessWidget {
   const RecordingPage({Key? key}) : super(key:key);
@@ -139,9 +140,19 @@ class _VideoPageState extends  State<VideoPage> {
     }
 
   void _saveVideo() async {
-    await GallerySaver.saveVideo(widget.filePath);
+    print(widget.filePath);
+    var result = await ImageGallerySaver.saveFile(widget.filePath);
+    print (result);
+    var path;
+    if (result == null){
+      path = '';
+    } else {
+      path = result['filePath'];
+    }
     print('video saved');
-    dispose(); // later changed to link to entry page or sth
+    print('saved path: ' + path);
+    //dispose(); // later changed to link to entry page or sth
+
   }
 
   @override 
