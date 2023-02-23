@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:client/service/entryManager.dart';
 
 import 'dropdown.dart';
 
@@ -53,7 +54,7 @@ class _Category extends State<Category> {
           child: DropdownButtonExample(
             list: categories,
             storage: widget.storage,
-            id: "category_dropdown",
+            id: EntryFields.category,
           ),
         ),
         Container(
@@ -69,7 +70,7 @@ class _Category extends State<Category> {
           child: DropdownButtonExample(
             list: types,
             storage: widget.storage,
-            id: "type_dropdown",
+            id: EntryFields.type,
           ),
         )
       ],

@@ -1,5 +1,6 @@
 import 'package:client/EntryFormPages/CategoryType.dart';
 import 'package:client/EntryFormPages/Symptoms.dart';
+import 'package:client/service/entryManager.dart';
 import 'package:flutter/material.dart';
 import 'EntryFormPages/NewEntry.dart';
 import 'dart:math';
@@ -97,33 +98,38 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                 ),
               ),
             const Spacer(),
-            if (formPageInd < formPages.length - 1)
-              Align(
-                alignment: Alignment.bottomRight,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Validate will return true if the form is valid, or false if
-                    // the form is invalid.
-                    if (formKeys[formPageInd].currentState!.validate()) {
+            Align(
+              alignment: Alignment.bottomRight,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Validate will return true if the form is valid, or false if
+                  // the form is invalid.
+                  if (formKeys[formPageInd].currentState!.validate()) {
+                    if (formPageInd < formPages.length - 1) {
                       setState(() {
                         formPageInd =
                             min(formPageInd + 1, formPages.length - 1);
                       });
+                    } else {
+                      // attempt submit
+                      EntryManager.buildModel(storage);
                     }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(100, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(100, 60),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
                   ),
-                  child: const Text('Next >',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
                 ),
+                child: Text(
+                    (formPageInd < formPages.length - 1) ? 'Next >' : 'Submit',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    )),
               ),
+            ),
           ]),
         ),
       ),
