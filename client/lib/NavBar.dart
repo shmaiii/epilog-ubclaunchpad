@@ -5,6 +5,7 @@ import 'HomeScreen.dart';
 import 'NotificationScreen.dart';
 import 'ProfileScreen.dart';
 import 'RecordScreen.dart';
+import 'LoginScreen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
     const RecordScreen(),
     const NotificationScreen(),
     const ProfileScreen(),
+    const LoginScreen(),
   ];
 
   // Helper function for change the states
@@ -113,6 +115,11 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.person_outline_rounded),
             activeIcon: Icon(Icons.person_sharp),
             label: 'Profile',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.circle),
+            activeIcon: Icon(Icons.circle),
+            label: 'Login',
           ),
         ],
         currentIndex: _selectedIndex,
