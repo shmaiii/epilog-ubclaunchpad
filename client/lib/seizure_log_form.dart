@@ -51,15 +51,55 @@ const storage = FlutterSecureStorage();
 class _SeizureLogFormState extends State<SeizureLogForm> {
   int formPageInd = 0;
 
+  _showExitDialog() async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Exit Entry Form?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('Are you sure you want to exit?'),
+                Text('Form data will be lost.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('EXIT'),
+              onPressed: () {
+                // exit alert dialog and form page
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                // clear all stored form values
+                storage.deleteAll();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
         child: Column(children: [
-      const Padding(
-        padding: EdgeInsets.only(top: 30, left: 30),
+      Padding(
+        padding: const EdgeInsets.only(top: 30, left: 30),
         child: Align(
           alignment: Alignment.topLeft,
-          child: BackButton(),
+          child: BackButton(
+            onPressed: () => {_showExitDialog()},
+          ),
         ),
       ),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[

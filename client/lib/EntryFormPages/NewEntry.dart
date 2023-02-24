@@ -1,7 +1,7 @@
-import 'package:client/duration_picker.dart';
+import 'package:client/FormInputs/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:client/FormInputs/FormTextInput.dart';
-import 'package:client/date_time_input.dart';
+import 'package:client/FormInputs/date_time_input.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:client/service/entryManager.dart';
 
@@ -34,6 +34,7 @@ class NewEntry extends StatelessWidget {
               ),
               DateTimeInput(
                 label: "When did this seizure occur?",
+                storage: storage,
               ),
               DurationPicker(
                 label: "How long did the seizure last?",

@@ -31,8 +31,15 @@ class EntryManager {
   static buildModel(FlutterSecureStorage storage) async {
     EntriesModel entry = EntriesModel(
       title: await storage.read(key: EntryFields.name) ?? "Entry",
+      dateTime: DateTime.parse(await storage.read(key: EntryFields.datetime) ??
+          DateTime.now().toString()),
+      duration: await storage.read(key: EntryFields.duration) ?? "0",
+      activities: await storage.read(key: EntryFields.activity) ?? "",
       category: await storage.read(key: EntryFields.category) ?? "N/A",
-      duration: int.parse(await storage.read(key: EntryFields.duration) ?? "0"),
+      type: await storage.read(key: EntryFields.type) ?? "N/A",
+      beforeEffects:
+          await storage.read(key: EntryFields.beforeEffects) ?? "N/A",
+      afterEffects: await storage.read(key: EntryFields.afterEffects) ?? "N/A",
       symptoms: await storage.read(key: EntryFields.symptoms) ?? "N/A",
     );
     print(entry.toJson());

@@ -27,7 +27,9 @@ class _DurationPickerState extends State<DurationPicker> {
   int _currentMinutes = 0;
   int _currentSeconds = 0;
 
+  @override
   void initState() {
+    super.initState();
     _loadValue();
   }
 
