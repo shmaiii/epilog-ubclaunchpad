@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'EntryFormPages/NewEntry.dart';
 import 'dart:math';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:client/model/entries.dart';
 
 class SeizureLogPage extends StatelessWidget {
   const SeizureLogPage({Key? key, this.title}) : super(key: key);
@@ -141,7 +142,7 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
             Align(
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // Validate will return true if the form is valid, or false if
                   // the form is invalid.
                   if (formKeys[formPageInd].currentState!.validate()) {
@@ -151,8 +152,14 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                             min(formPageInd + 1, formPages.length - 1);
                       });
                     } else {
-                      // attempt submit
-                      EntryManager.buildModel(storage);
+                      try {
+                        // attempt submit
+                        EntriesModel entry =
+                            await EntryManager.buildModel(storage);
+                        // EntryManager.post(entry);
+                      } catch (e) {
+                        debugPrint("Failed to post");
+                      }
                     }
                   }
                 },

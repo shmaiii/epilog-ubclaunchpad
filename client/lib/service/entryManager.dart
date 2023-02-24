@@ -42,8 +42,7 @@ class EntryManager {
       afterEffects: await storage.read(key: EntryFields.afterEffects) ?? "N/A",
       symptoms: await storage.read(key: EntryFields.symptoms) ?? "N/A",
     );
-    print(entry.toJson());
-    return true;
+    return entry;
   }
 
   static const String url = "http://localhost:8080/entries";
