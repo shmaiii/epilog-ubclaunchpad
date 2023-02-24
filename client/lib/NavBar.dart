@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
-import 'EntryScreen.dart';
-import 'HomeScreen.dart';
-import 'NotificationScreen.dart';
-import 'ProfileScreen.dart';
-import 'RecordScreen.dart';
+import 'screens/EntryScreen.dart';
+import 'screens/HomeScreen.dart';
+import 'screens/NotificationScreen.dart';
+import 'screens/ProfileScreen.dart';
+import 'screens/RecordScreen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
     const EntryScreen(),
     const RecordScreen(),
     const NotificationScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
 
   // Helper function for change the states
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.black,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromARGB(255, 233, 233, 233),
+        backgroundColor: const Color.fromARGB(255, 233, 233, 233),
         selectedFontSize: 13.5,
         unselectedFontSize: 13.5,
       ),
