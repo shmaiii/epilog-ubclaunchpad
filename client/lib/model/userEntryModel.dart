@@ -10,8 +10,12 @@ class UserEntryModel {
   UserEntryModel({required this.userId, required this.entry});
 
   factory UserEntryModel.fromJson(String userId, Map<String, dynamic> json) {
-  final dateTimeJson = json['dateTime'] as Map<String, dynamic>;
-  final dateTime = DateTime.fromMillisecondsSinceEpoch(dateTimeJson['seconds'] * 1000);
+    // converting firebase date time to flutter Datetime
+  // final dateTimeJson = json['dateTime'] as Map<String, dynamic>;
+  // final dateTime = DateTime.fromMillisecondsSinceEpoch(dateTimeJson['seconds'] * 1000);
+
+  // changing the string value to DateTime type
+  DateTime dateTime = DateTime.parse(json['dateTime']);
   
   final model = EntriesModel(
     title: json['title'],

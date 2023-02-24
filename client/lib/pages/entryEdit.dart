@@ -175,7 +175,7 @@ import '../model/entries.dart';
 
 
 class entryEdit extends StatefulWidget {
-  final EntriesModel entry;
+  EntriesModel entry;
   String userId;
 
   // const EntryEditPage({this.entry});
@@ -261,7 +261,7 @@ class _EntryEditPageState extends State<entryEdit> {
       ),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -409,8 +409,6 @@ class _EntryEditPageState extends State<entryEdit> {
                           symptoms: _symptomsController.text,
                         );
 
-                        // TODO: Save the new entry
-
                         EntryManager.update(newEntry, userId);
 
                         // Show success message
@@ -421,7 +419,7 @@ class _EntryEditPageState extends State<entryEdit> {
                         );
 
                         // Navigate back to the previous screen
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(newEntry);
                       }
                     },
                     child: Text('Save'),
