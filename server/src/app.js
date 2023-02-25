@@ -1,5 +1,8 @@
 import express from 'express';
 import cors from 'cors';
+import userRoutes from './routes/userRoutes.js';
+import medicationsRoutes from './routes/medicationsRoutes.js';
+import contactsRoutes from './routes/contactsRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
 import { auth } from './firebase/auth.js';
 import { getBearerTokenFromHeader } from './utils/index.js';
@@ -27,6 +30,9 @@ app.use(async (req, res, next) => {
     }
 })
 
+app.use('/user', userRoutes);
+app.use('/medications', medicationsRoutes);
+app.use('/contacts', contactsRoutes);
 app.use('/calendar', calendarRoutes);
 
 app.get('/ping', (req, res) => {
