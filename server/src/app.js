@@ -16,7 +16,7 @@ app.get('/ping', (req, res) => {
 
 app.use((error, req, res, next) => {
     console.log(error)
-    return res.status(error.code ?? 400).json({err: error.message})
+    return res.status(error.code ?? 500).json({err: error.message})
 });
 
 const PORT = 8080;
