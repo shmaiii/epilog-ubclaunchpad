@@ -13,16 +13,16 @@ app.use(async (req, res, next) => {
         const idToken = getBearerTokenFromHeader(req);
 
         if (idToken === null) {
-            const error = new Error("request does not have authorization header");
+            const error = new Error("request does not have valid authorization header");
             error.code = 401;
             throw error;
         }
 
         const decodedIdToken = await auth.verifyIdToken(idToken);
         req.firebaseUserId = decodedIdToken.uid;
+        console.log(`uid is: ${req.firebaseUserId}`)
         next()
     } catch (err){
-        err.code = err.code ?? 500
         next(err)
     }
 })
