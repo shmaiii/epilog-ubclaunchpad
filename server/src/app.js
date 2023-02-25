@@ -23,6 +23,8 @@ app.use(async (req, res, next) => {
 
         const decodedIdToken = await auth.verifyIdToken(idToken);
         req.firebaseUserId = decodedIdToken.uid;
+
+        // Console log for testing. Need to remove later
         console.log(`uid is: ${req.firebaseUserId}`)
         next()
     } catch (err){
