@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await Auth().signInWithEmailAndPassword(
           email: _controllerEmail.text, password: _controllerPassword.text);
 
+      // This is for testing purposes only. Need to remove later.
       var uid = await Auth().currentUser?.getIdToken() ?? 'none';
       if (uid != 'none') {
         var response = await http.get(
