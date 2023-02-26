@@ -1,10 +1,6 @@
-//import 'dart:ffi';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:client/home_screen_controller.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -245,40 +241,6 @@ class ListEntry extends StatelessWidget {
                           },
                               currentTime: DateTime.now(),
                               locale: LocaleType.en);
-
-                          // showDialog(
-                          //   context: context,
-                          //   builder: (BuildContext context) {
-                          //     return AlertDialog(
-                          //       title: Text('Select Date '),
-                          //       // content: Container(
-                          //       //   height: 300,
-                          //       //   width: 300,
-                          //       //   child: SfDateRangePicker(
-                          //       //     view: DateRangePickerView.month,
-                          //       //     monthViewSettings:
-                          //       //         DateRangePickerMonthViewSettings(
-                          //       //             showTrailingAndLeadingDates: true),
-                          //       //   ),
-                          //       actions: [
-                          //         TextButton(
-                          //           child: Text('Cancel'),
-                          //           onPressed: () {
-                          //             Navigator.of(context).pop();
-                          //           },
-                          //         ),
-                          //         TextButton(
-                          //           child: Text('OK'),
-                          //           onPressed: () {
-                          //             // Do something with the selected date range.
-
-                          //             Navigator.of(context).pop();
-                          //           },
-                          //         ),
-                          //       ],
-                          //     );
-                          //   },
-                          // );
                         }
                         if (value == 1) {
                           // Perform action on click on Delete
@@ -375,63 +337,3 @@ class _ToggleButtonState extends State<ToggleButton> {
         ));
   }
 }
-
-// @override
-// Widget build(BuildContext context) {
-//   return PopupMenuItem(
-//     child: FutureBuilder(
-//       future: _futureData,
-//       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-//         if (snapshot.connectionState == ConnectionState.waiting) {
-//           return const CircularProgressIndicator();
-//         } else if (snapshot.hasData) {
-//           return Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: snapshot.data!.map((String item) => Text(item)).toList(),
-//           );
-//         } else if (snapshot.hasError) {
-//           return Text('Error: ${snapshot.error}');
-//         } else {
-//           return const Text('No data');
-//         }
-//       },
-//     ),
-//   );
-// }
-
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-      body: Container(
-    child: SfDateRangePicker(),
-  ));
-}
-
-class DateTimePicker extends StatefulWidget {
-  @override
-  _DateTimePickerState createState() => _DateTimePickerState();
-}
-
-class _DateTimePickerState extends State<DateTimePicker> {
-  @override
-  Widget build(BuildContext context) {
-    return SfDateRangePicker();
-  }
-}
-
-// class MyWidget extends StatefulWidget {
-//   @override
-//   _MyWidgetState createState() => _MyWidgetState();
-// }
-
-// class _MyWidgetState extends State<MyWidget> {
-//   DateRangePickerController _datePickerController;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _datePickerController = DateRangePickerController();
-//   }
-
-//   // rest of the code
-// }
