@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//-------------------------------------Reminder Main Pages------------------------------------//
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
 
@@ -17,6 +18,10 @@ class NotificationScreen extends StatefulWidget {
 
 class _NotificationState extends State<NotificationScreen> {
   @override
+  void initState() {
+    super.initState();
+    upcomingEntries.clear();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -63,6 +68,8 @@ class ReminderBody extends StatelessWidget {
   }
 }
 
+//-------------------------------------Upcoming pages------------------------------------//
+// Upcomming widget inside ReminderBody
 class UpComing extends StatelessWidget {
   const UpComing({super.key});
   
@@ -89,22 +96,33 @@ class UpComing extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        // Let the ListView know how many items it needs to build.
-        itemCount: upcomingEntries.length,
-        // Provide a builder function. This is where the magic happens.
-        // Convert each item into a widget based on the type of item it is.
-        itemBuilder: (context, index) {
-          final testEntry = upcomingEntries[index];
+      body: FutureBuilder(
+        future: fetchAllReminder(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(                    
+              // Let the ListView know how many items it needs to build.
+              itemCount: upcomingEntries.length,
+              // Provide a builder function. This is where the magic happens.
+              // Convert each item into a widget based on the type of item it is.
+              itemBuilder: (context, index) {
+                final testEntry = upcomingEntries[index];
 
-          return ListEntry(title: testEntry.title, frequency: testEntry.frequency, time: testEntry.time, dose: testEntry.dose, reminderTime: testEntry.reminderTime);
-        },
-        padding: const EdgeInsets.only(right: 25.0, left: 25.0),
-      )
+                return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+              },
+              padding: const EdgeInsets.only(right: 25.0, left: 25.0),
+
+            );
+          }
+        }
+      ),
     );
   }
 }
 
+// Upcomming screen for complete list of reminders
 class UpComingScreen extends StatelessWidget {
   const UpComingScreen({super.key});
 
@@ -134,7 +152,7 @@ class UpComingScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final testEntry = upcomingEntries[index];
 
-          return ListEntry(title: testEntry.title, frequency: testEntry.frequency, time: testEntry.time, dose: testEntry.dose, reminderTime: testEntry.reminderTime);
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
         },
         padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       )
@@ -142,6 +160,7 @@ class UpComingScreen extends StatelessWidget {
   }
 }
 
+//-------------------------------------Recent pages------------------------------------//
 class Recent extends StatelessWidget {
   const Recent({super.key});
   
@@ -168,17 +187,27 @@ class Recent extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        // Let the ListView know how many items it needs to build.
-        itemCount: upcomingEntries.length,
-        // Provide a builder function. This is where the magic happens.
-        // Convert each item into a widget based on the type of item it is.
-        itemBuilder: (context, index) {
-          final testEntry = upcomingEntries[index];
+      body: FutureBuilder(
+        future: fetchAllReminder(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.builder(                    
+              // Let the ListView know how many items it needs to build.
+              itemCount: upcomingEntries.length,
+              // Provide a builder function. This is where the magic happens.
+              // Convert each item into a widget based on the type of item it is.
+              itemBuilder: (context, index) {
+                final testEntry = upcomingEntries[index];
 
-          return ListEntry(title: testEntry.title, frequency: testEntry.frequency, time: testEntry.time, dose: testEntry.dose, reminderTime: testEntry.reminderTime);
-        },
-        padding: const EdgeInsets.only(right: 25.0, left: 25.0),
+                return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+              },
+              padding: const EdgeInsets.only(right: 25.0, left: 25.0),
+
+            );
+          }
+        }
       ),
     );
   }
@@ -213,7 +242,7 @@ class RecentScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final testEntry = upcomingEntries[index];
 
-          return ListEntry(title: testEntry.title, frequency: testEntry.frequency, time: testEntry.time, dose: testEntry.dose, reminderTime: testEntry.reminderTime);
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
         },
         padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       )
@@ -221,24 +250,43 @@ class RecentScreen extends StatelessWidget {
   }
 }
 
-final upcomingEntries = List<EntryInfo>.generate(
+//-------------------------------------General reminder list helpers------------------------------------//
+// TODO: Check if global list is ok
+var upcomingEntries = List<EntryInfo>.generate(
   1,
-  (index) => EntryInfo("Take Levetiracetam", "Daily", "Morning and Night", 2, const TimeOfDay(hour: 10, minute: 0)),
+  (index) => EntryInfo("Take Levetiracetam", "Medication", "Daily·Morning and Night, 2 pills", const TimeOfDay(hour: 10, minute: 0)),
+  growable: true,
 );
 
-final recentEntries = List<EntryInfo>.generate(
+var recentEntries = List<EntryInfo>.generate(
   1,
-  (index) => EntryInfo("Get Topiramate", "Daily", "Morning and Night", 2, const TimeOfDay(hour: 10, minute: 0)),
+  (index) => EntryInfo("Get Topiramate", "Medication", "Daily·Morning and Night, 2 pills", const TimeOfDay(hour: 10, minute: 0)),
+  growable: true,
 );
 
+// Data type for each reminder
 class EntryInfo {
+  
   String title;
-  String frequency;
-  String time;
-  int dose;
+  String type;
+  String notes;
   TimeOfDay reminderTime;
 
-  EntryInfo(this.title, this.frequency, this.time, this.dose, this.reminderTime);
+  EntryInfo(this.title, this.type, this.notes, this.reminderTime);
+
+  // TODO: Use these for comparison if needed
+  // @override
+  // bool operator ==(Object other) =>
+  //     identical(this, other) ||
+  //     other is EntryInfo &&
+  //         runtimeType == other.runtimeType &&
+  //         title == other.title &&
+  //         type == other.type &&
+  //         notes == other.notes &&
+  //         reminderTime == other.reminderTime;
+
+  // @override
+  // int get hashCode => hashValues(headline, content, link, publisheddate);
 }
 
 const List<String> optionText = <String>[
@@ -249,12 +297,11 @@ const List<String> optionText = <String>[
 // Widget for each entry in the list of reminders
 class ListEntry extends StatelessWidget {
   final String title;
-  final String frequency;
-  final String time;
-  final int dose;
+  final String type;
+  final String notes;
   final TimeOfDay reminderTime;
 
-  const ListEntry({super.key, required this.title, required this.frequency, required this.time, required this.dose, required this.reminderTime});
+  const ListEntry({super.key, required this.title, required this.type, required this.notes, required this.reminderTime});
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +328,7 @@ class ListEntry extends StatelessWidget {
                     PopupMenuItem(
                       value: 0,
                       height: 30,
+                      onTap: () => fetchAllReminder(),
                       child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(optionText[0]))
@@ -302,18 +350,9 @@ class ListEntry extends StatelessWidget {
             children: [
               Expanded(
                 flex: 3,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Text("$frequency · $time", style: const TextStyle(color: Colors.black),),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: Text("$dose pills", style: const TextStyle(color: Colors.black),),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10),
+                  child: Text(notes, style: const TextStyle(color: Colors.black))
                 ),
               ),
               Expanded(
@@ -331,7 +370,6 @@ class ListEntry extends StatelessWidget {
     );
   }
 }
-
 
 //-------------------------------------New Reminder Page------------------------------------//
 class NewReminder extends StatelessWidget {
@@ -471,6 +509,8 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
   }
 }
 
+//-------------------------------------Helpers for server communication------------------------------------//
+// Helper for post reminders to the server
 void addReminder(ReminderData reminder) async {
   print("enter");
   print(reminder.time);
@@ -495,5 +535,47 @@ void addReminder(ReminderData reminder) async {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
     throw Exception('failed to add reminder');
+  }
+}
+
+// Object for saving the time object from json temperarily for constructing a Date time
+class Timeobj {
+  Timeobj({required this.seconds, required this.nanoseconds});
+  final int seconds;
+  final int nanoseconds;
+
+  factory Timeobj.fromJson(Map<String, dynamic> data) {
+    // note the explicit cast to String
+    // this is required if robust lint rules are enabled
+    final seconds = data['seconds'] as int;
+    final nanoseconds = data['nanoseconds'] as int;
+    return Timeobj(seconds: seconds, nanoseconds: nanoseconds);
+  }
+}
+
+// Helper to fetch all reminders from server to local
+fetchAllReminder() async {
+  upcomingEntries.clear();
+  var response = await http.get(Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    var jsonList = jsonDecode(response.body)["userCalendarDocuments"];
+    // print(jsonList[0]);
+    for (var i = 0; i < jsonList.length; i++) {
+      // print(jsonList[i]["id"].runtimeType);
+      var timeobj = Timeobj.fromJson(jsonList[i]["date"]);
+      var time = DateTime.fromMillisecondsSinceEpoch((timeobj.seconds * 1000) + (timeobj.nanoseconds ~/ 1000000));
+      // print(time.hour);
+      var entry = EntryInfo(jsonList[i]["title"], jsonList[i]["type"], jsonList[i]["notes"], TimeOfDay(hour: time.hour, minute: time.minute));
+      upcomingEntries.add(entry);
+    }
+    
+    return upcomingEntries;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('failed to fetch reminders');
   }
 }
