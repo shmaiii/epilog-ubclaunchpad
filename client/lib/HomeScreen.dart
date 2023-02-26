@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'main.dart';
 import 'calendar_container.dart';
+import 'calendar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,18 +21,20 @@ class _HomeState extends State<HomeScreen> {
         automaticallyImplyLeading: false,
         elevation: 5.0,
         leading: IconButton(
-          icon: Icon(Icons.bar_chart_rounded),
-          iconSize: 35.0,
-          onPressed: () => {
-            if(_key.currentState!.isDrawerOpen){
-              _key.currentState!.closeDrawer()
-            //close drawer, if drawer is open
-            }else{
-              _key.currentState!.openDrawer()
-              //open drawer, if drawer is closed
-            }
-          }
-        ),
+            icon: Icon(Icons.bar_chart_rounded),
+            iconSize: 35.0,
+            onPressed: () => {
+                  if (_key.currentState!.isDrawerOpen)
+                    {
+                      _key.currentState!.closeDrawer()
+                      //close drawer, if drawer is open
+                    }
+                  else
+                    {
+                      _key.currentState!.openDrawer()
+                      //open drawer, if drawer is closed
+                    }
+                }),
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Column(
@@ -44,36 +47,36 @@ class _HomeState extends State<HomeScreen> {
             ),
           ),
           Text(
-                "Today is Sunday",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-              ),
-          Row(
-            children: [
-              Expanded (
+            "Today is Sunday",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+          ),
+          Row(children: [
+            Expanded(
               //start of component
               child: CalendarComponent(
-                  (Colors.amber[600])!,
-                  "Calendar",
-                  Icon(
-                            Icons.calendar_today,
-                            color: Color(0XFF0342E9),
-                            size: 50,
-                        )
+                (Colors.amber[600])!,
+                "Calendar",
+                const Icon(
+                  Icons.calendar_today,
+                  color: Color(0XFF0342E9),
+                  size: 50,
                 ),
+                1,
               ),
-              Expanded (
+            ),
+            Expanded(
               child: CalendarComponent(
-                  (Colors.blue[600])!,
-                  "Data visualization",
-                  Icon(
-                            Icons.leaderboard,
-                            color: (Colors.amber[600])!,
-                            size: 50,
-                        )
+                (Colors.blue[600])!,
+                "Data visualization",
+                Icon(
+                  Icons.leaderboard,
+                  color: (Colors.amber[600])!,
+                  size: 50,
                 ),
-              ), 
-            ]
-          ),
+                0,
+              ),
+            ),
+          ]),
           Row(
             children: [
               const Padding(
@@ -98,7 +101,7 @@ class _HomeState extends State<HomeScreen> {
                         color: Color(0XFF0342E9),
                       ),
                     )),
-              )
+              ),
             ],
           ),
         ],
@@ -113,19 +116,21 @@ class _HomeState extends State<HomeScreen> {
           children: [
             const SizedBox(
               height: 80.0,
-              child:
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+                child: Text('Settings',
+                    style:
+                        TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               ),
-              child: Text('Settings', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            ),
             ),
             ListTile(
               leading: Icon(
                 Icons.library_books,
               ),
-              title: const Text('Epilepsy resources', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              title: const Text('Epilepsy resources',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -137,7 +142,8 @@ class _HomeState extends State<HomeScreen> {
               leading: Icon(
                 Icons.settings,
               ),
-              title: const Text('Preferences', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              title: const Text('Preferences',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               onTap: () {
                 // Update the state of the app
                 // ...
@@ -149,7 +155,8 @@ class _HomeState extends State<HomeScreen> {
               leading: Icon(
                 Icons.account_circle,
               ),
-              title: const Text('Sign out', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              title: const Text('Sign out',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
               onTap: () {
                 // Update the state of the app
                 // ...
