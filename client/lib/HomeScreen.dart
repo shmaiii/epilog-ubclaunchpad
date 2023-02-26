@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:client/home_screen_controller.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -92,10 +94,23 @@ class _HomeState extends State<HomeScreen> {
               if (snapshot.hasData) {
                 List<HomepageReminderDocument> homepageReminderDocuments =
                     snapshot.data!;
+                if (homepageReminderDocuments.isEmpty) {
+                  return const Padding(
+                      padding: EdgeInsets.only(top: 40.0),
+                      child: Text("No reminders for today!",
+                          style:
+                              TextStyle(color: Colors.grey, fontSize: 20.0)));
+                }
 
                 void deleteItem(String id) {
                   setState(() {
                     deleteHomepageReminder(id);
+                  });
+                }
+
+                void rescheduleEntry(String id, String dateTime) {
+                  setState(() {
+                    editHomepageReminderDateTime(id, dateTime);
                   });
                 }
 
@@ -108,7 +123,7 @@ class _HomeState extends State<HomeScreen> {
                   // Convert each item into a widget based on the type of item it is.
                   itemBuilder: (context, index) {
                     final testEntry = homepageReminderDocuments[index];
-                    final time = Jiffy(testEntry?.date).format("h:mm a");
+                    final time = Jiffy(testEntry.date).format("h:mm a");
 
                     return Column(children: [
                       Row(
@@ -127,11 +142,12 @@ class _HomeState extends State<HomeScreen> {
                         Flexible(
                             child: Column(children: [
                           ListEntry(
-                              id: testEntry!.id,
-                              title: testEntry!.title,
+                              id: testEntry.id,
+                              title: testEntry.title,
                               notes: testEntry.notes,
                               type: testEntry.type,
-                              deleteItem: deleteItem),
+                              deleteItem: deleteItem,
+                              rescheduleEntry: rescheduleEntry),
                           const SizedBox(height: 50)
                         ]))
                       ])
@@ -147,6 +163,7 @@ class _HomeState extends State<HomeScreen> {
               return const CircularProgressIndicator();
             },
           )),
+          // SfDateRangePicker(),
         ]));
   }
 }
@@ -175,6 +192,7 @@ class ListEntry extends StatelessWidget {
   final String type;
   final String notes;
   final Function(String) deleteItem;
+  final Function(String, String) rescheduleEntry;
 
   const ListEntry(
       {super.key,
@@ -182,7 +200,8 @@ class ListEntry extends StatelessWidget {
       required this.title,
       required this.type,
       required this.notes,
-      required this.deleteItem});
+      required this.deleteItem,
+      required this.rescheduleEntry});
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +235,50 @@ class ListEntry extends StatelessWidget {
                       onSelected: (value) {
                         if (value == 0) {
                           // Perform action on click on Reschedule
+
+                          DatePicker.showDateTimePicker(context,
+                              theme: const DatePickerTheme(
+                                containerHeight: 210.0,
+                              ),
+                              showTitleActions: true, onConfirm: (dateTime) {
+                            rescheduleEntry(id, dateTime.toIso8601String());
+                          },
+                              currentTime: DateTime.now(),
+                              locale: LocaleType.en);
+
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) {
+                          //     return AlertDialog(
+                          //       title: Text('Select Date '),
+                          //       // content: Container(
+                          //       //   height: 300,
+                          //       //   width: 300,
+                          //       //   child: SfDateRangePicker(
+                          //       //     view: DateRangePickerView.month,
+                          //       //     monthViewSettings:
+                          //       //         DateRangePickerMonthViewSettings(
+                          //       //             showTrailingAndLeadingDates: true),
+                          //       //   ),
+                          //       actions: [
+                          //         TextButton(
+                          //           child: Text('Cancel'),
+                          //           onPressed: () {
+                          //             Navigator.of(context).pop();
+                          //           },
+                          //         ),
+                          //         TextButton(
+                          //           child: Text('OK'),
+                          //           onPressed: () {
+                          //             // Do something with the selected date range.
+
+                          //             Navigator.of(context).pop();
+                          //           },
+                          //         ),
+                          //       ],
+                          //     );
+                          //   },
+                          // );
                         }
                         if (value == 1) {
                           // Perform action on click on Delete
@@ -313,26 +376,62 @@ class _ToggleButtonState extends State<ToggleButton> {
   }
 }
 
+// @override
+// Widget build(BuildContext context) {
+//   return PopupMenuItem(
+//     child: FutureBuilder(
+//       future: _futureData,
+//       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return const CircularProgressIndicator();
+//         } else if (snapshot.hasData) {
+//           return Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: snapshot.data!.map((String item) => Text(item)).toList(),
+//           );
+//         } else if (snapshot.hasError) {
+//           return Text('Error: ${snapshot.error}');
+//         } else {
+//           return const Text('No data');
+//         }
+//       },
+//     ),
+//   );
+// }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return PopupMenuItem(
-  //     child: FutureBuilder(
-  //       future: _futureData,
-  //       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-  //         if (snapshot.connectionState == ConnectionState.waiting) {
-  //           return const CircularProgressIndicator();
-  //         } else if (snapshot.hasData) {
-  //           return Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: snapshot.data!.map((String item) => Text(item)).toList(),
-  //           );
-  //         } else if (snapshot.hasError) {
-  //           return Text('Error: ${snapshot.error}');
-  //         } else {
-  //           return const Text('No data');
-  //         }
-  //       },
-  //     ),
-  //   );
-  // }
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+      body: Container(
+    child: SfDateRangePicker(),
+  ));
+}
+
+class DateTimePicker extends StatefulWidget {
+  @override
+  _DateTimePickerState createState() => _DateTimePickerState();
+}
+
+class _DateTimePickerState extends State<DateTimePicker> {
+  @override
+  Widget build(BuildContext context) {
+    return SfDateRangePicker();
+  }
+}
+
+// class MyWidget extends StatefulWidget {
+//   @override
+//   _MyWidgetState createState() => _MyWidgetState();
+// }
+
+// class _MyWidgetState extends State<MyWidget> {
+//   DateRangePickerController _datePickerController;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     _datePickerController = DateRangePickerController();
+//   }
+
+//   // rest of the code
+// }

@@ -28,14 +28,41 @@ Future<List<HomepageReminderDocument>>
     result.sort((a, b) => a.date.compareTo(b.date));
 
     // fliter out entries that are past current time
-    result =
-        result.where((entry) => (entry.date).isAfter(DateTime.now())).toList();
+    DateTime now = DateTime.now();
+    // Calculate the time 8 hours from now
+    DateTime eightHoursLater = now.add(const Duration(hours: 8));
+    DateTime midnight = DateTime(now.year, now.month, now.day, 23, 59, 59);
+    result = result
+        .where((entry) =>
+            (entry.date).isAfter(now) &&
+            (entry.date).isBefore(eightHoursLater) &&
+            (entry.date).isBefore(midnight))
+        .toList();
 
     return result;
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
     throw Exception('Failed to load CalendarDocument');
+  }
+}
+
+Future<String> editHomepageReminderDateTime(
+    String reminderId, String dateTime) async {
+  final response = await http.patch(
+      Uri.parse(
+          'http://localhost:8080/homepageReminder/home_page_calendar/update/$reminderId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'date': dateTime}));
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to reschedule homepage reminder');
   }
 }
 
