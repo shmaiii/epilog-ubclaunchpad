@@ -1,6 +1,5 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
-
 import 'dart:collection';
 
 import 'package:table_calendar/table_calendar.dart';
@@ -16,7 +15,7 @@ class Event {
 }
 
 /// Example events.
-///
+/// Write code to grab the events from the database here
 /// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
 final kEvents = LinkedHashMap<DateTime, List<Event>>(
   equals: isSameDay,
@@ -48,5 +47,5 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
 }
 
 final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+final kFirstDay = DateTime(kToday.year, kToday.month - 12, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 144, kToday.day);
