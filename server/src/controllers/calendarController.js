@@ -15,7 +15,6 @@ const getAllCalendarDocuments = async (req, res, next) => {
 
     return res.json({userCalendarDocuments});
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -36,7 +35,6 @@ const getCalendarDocumentGivenId = async (req, res, next) => {
 
     return res.status(responseStatusCode).json(documentData);
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -58,7 +56,6 @@ const postCalendarDocument = async (req, res, next) => {
     const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), addDocFieldInputs); 
     return res.json({id: addedDocRef.id});
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -83,7 +80,6 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
     await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -93,7 +89,6 @@ const deleteCalendarDocumentGivenId = async (req, res, next) => {
     await deleteDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`)); 
     return res.sendStatus(200);
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
