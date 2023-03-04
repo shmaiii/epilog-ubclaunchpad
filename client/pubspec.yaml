@@ -54,6 +54,8 @@ dev_dependencies:
   dio: ^4.0.6
   gallery_saver: ^2.3.2
   image_gallery_saver: ^1.7.1
+  uri_to_file: ^0.2.0
+  content_resolver: ^0.3.0
 
 
 
