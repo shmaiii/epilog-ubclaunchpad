@@ -22,17 +22,17 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _controllerEmail.text, password: _controllerPassword.text);
 
       // This is for testing purposes only. Need to remove later.
-      var uid = await Auth().currentUser?.getIdToken() ?? 'none';
-      if (uid != 'none') {
-        var response = await http.get(
-          Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer ',
-          },
-        );
-        print(response.body);
-      }
+      // var uid = await Auth().currentUser?.getIdToken() ?? 'none';
+      // if (uid != 'none') {
+      //   var response = await http.get(
+      //     Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'),
+      //     headers: <String, String>{
+      //       'Content-Type': 'application/json; charset=UTF-8',
+      //       'Authorization': 'Bearer ' + uid,
+      //     },
+      //   );
+      //   print(response.body);
+      // }
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMsg = e.message ?? '';

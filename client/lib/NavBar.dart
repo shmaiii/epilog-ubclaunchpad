@@ -6,6 +6,8 @@ import 'screens/NotificationScreen.dart';
 import 'screens/ProfileScreen.dart';
 import 'screens/RecordScreen.dart';
 import 'screens/LoginScreen.dart';
+import 'firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -27,7 +29,29 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(title: 'Home Page'),
+      home: EntryController(),
+    );
+  }
+}
+
+class EntryController extends StatelessWidget {
+  const EntryController({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final Stream<User?> authStateChangesStream = Auth().authStateChanges;
+
+    return StreamBuilder(
+      stream: authStateChangesStream,
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final bool signedIn = snapshot.hasData;
+          return signedIn ? const HomePage(title: 'Home Page') : LoginScreen();
+        }
+        return Container(
+          color: Colors.black,
+        );
+      },
     );
   }
 }
