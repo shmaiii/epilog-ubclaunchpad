@@ -82,6 +82,22 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
               ],
             ),
           ),
+          Container(
+          margin: const EdgeInsets.all(20),
+          child: Column(
+            children: entry.checkUps.entries.map((entry) {
+              if (entry.value) {
+                return CheckboxListTile(
+                  title: Text(entry.key),
+                  value: true,
+                  onChanged: null,
+                );
+              } else {
+                return Container();
+              }
+            }).toList(),
+          ),
+          ),
         ],
       ),
     );

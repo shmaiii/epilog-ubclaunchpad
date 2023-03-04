@@ -41,6 +41,7 @@ class EntryManager {
           await storage.read(key: EntryFields.beforeEffects) ?? "N/A",
       afterEffects: await storage.read(key: EntryFields.afterEffects) ?? "N/A",
       symptoms: await storage.read(key: EntryFields.symptoms) ?? "N/A",
+      checkUps: new Map(),
     );
     return entry;
   }

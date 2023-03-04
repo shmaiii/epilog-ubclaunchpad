@@ -407,6 +407,7 @@ class _EntryEditPageState extends State<entryEdit> {
                           beforeEffects: _beforeEffectsController.text,
                           afterEffects: _afterEffectsController.text, 
                           symptoms: _symptomsController.text,
+                          checkUps: new Map(),
                         );
 
                         EntryManager.update(newEntry, userId);

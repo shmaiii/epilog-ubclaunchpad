@@ -19,6 +19,7 @@ class UserEntryModel {
       beforeEffects: json['beforeEffects'],
       afterEffects: json['afterEffects'],
       symptoms: json['symptoms'],
+      checkUps: Map<String, bool>.from(json['checkUps']),
     );
     return UserEntryModel(userId: userId, entry: model);
   }

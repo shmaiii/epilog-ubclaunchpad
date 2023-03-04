@@ -3,10 +3,6 @@ import 'dart:convert';
 import 'package:client/service/entryManager.dart';
 
 class EntriesModel {
-  // String title;
-  // int duration;
-  // String category;
-  
   final String title;
   final DateTime dateTime;
   final String duration;
@@ -16,6 +12,7 @@ class EntriesModel {
   final String beforeEffects;
   final String afterEffects;
   final String symptoms;
+  final Map<String, bool> checkUps;
 
   EntriesModel({
     required this.title,
@@ -26,7 +23,8 @@ class EntriesModel {
     required this.type,
     required this.beforeEffects,
     required this.afterEffects,
-    required this.symptoms
+    required this.symptoms,
+    required this.checkUps,
   });
 
   factory EntriesModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +38,10 @@ class EntriesModel {
       beforeEffects: json['beforeEffects'],
       afterEffects: json['afterEffects'],
       symptoms: json['symptoms'],
+      // checkUps: Map<String, bool>.from(json['checkUps']),
+      checkUps: (json['checkUps'] is Map<String, dynamic>)
+        ? Map<String, bool>.from(json['checkUps'])
+        : {},
     );
   }
 
@@ -53,15 +55,11 @@ class EntriesModel {
       'type': type,
       'beforeEffects': beforeEffects,
       'afterEffects': afterEffects,
+      'symptoms': symptoms,
+      'checkUps': checkUps,
     };
   }
 
-  //EntriesModel({required this.title, required this.category, required this.duration, required this.symptoms});
-
-  // factory EntriesModel.fromJson(Map<String, dynamic> json) {
-  //     return EntriesModel(title: json['title'], category: json['category'], duration: json['duration'], symptoms: json['symptoms']);
-  // }
-  //url: 'https://jsonplaceholder.typicode.com/todos',
   static Resource<List<EntriesModel>> get all {
     return Resource(
         url: 'http://localhost:8080/entries/all',
@@ -74,11 +72,4 @@ class EntriesModel {
         }
       );
   }
-
-  // Map toJson() => {
-  //   'title': title,
-  //   'duration': duration,
-  //   'category': category,
-  //   'symptoms': symptoms
-  // };
 }
