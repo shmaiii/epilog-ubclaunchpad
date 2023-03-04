@@ -52,6 +52,13 @@ const storage = FlutterSecureStorage();
 class _SeizureLogFormState extends State<SeizureLogForm> {
   int formPageInd = 0;
 
+  _exitForm(BuildContext context) {
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+    // clear all stored form values
+    storage.deleteAll();
+  }
+
   _showExitDialog() async {
     showDialog<void>(
       context: context,
@@ -78,10 +85,49 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
               child: const Text('EXIT'),
               onPressed: () {
                 // exit alert dialog and form page
+                _exitForm(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _showSuccessDialog() async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Entry Added!'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                // exit alert dialog and form page
+                _exitForm(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _showErrorDialog() async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Something went wrong.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                // exit alert dialog
                 Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                // clear all stored form values
-                storage.deleteAll();
               },
             ),
           ],
@@ -156,9 +202,11 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                         // attempt submit
                         EntriesModel entry =
                             await EntryManager.buildModel(storage);
-                        // EntryManager.post(entry);
+                        await EntryManager.post(entry);
+                        _showSuccessDialog();
                       } catch (e) {
                         debugPrint("Failed to post");
+                        _showErrorDialog();
                       }
                     }
                   }
