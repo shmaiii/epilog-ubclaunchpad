@@ -4,13 +4,13 @@ import { addDoc, collection, doc, getDoc, getFirestore, setDoc, updateDoc } from
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBcbi_fsjTKxKGRQzftQFY6jP-OoQhyAmI",
-    authDomain: "seizure-tracker-36d7b.firebaseapp.com",
-    projectId: "seizure-tracker-36d7b",
-    storageBucket: "seizure-tracker-36d7b.appspot.com",
-    messagingSenderId: "771221334216",
-    appId: "1:771221334216:web:0736d7905f5ddf63b49dfd",
-    measurementId: "G-5BYVCN2BYC"
+  apiKey: "AIzaSyCpoC0dvzTLnNtAE-gdO7RPQwyZ78EBAzQ",
+  authDomain: "epilog-1fa6c.firebaseapp.com",
+  projectId: "epilog-1fa6c",
+  storageBucket: "epilog-1fa6c.appspot.com",
+  messagingSenderId: "768848997584",
+  appId: "1:768848997584:web:5a943283446d64f8d942d5",
+  measurementId: "G-7FKJSC1P1L"
 };
 
 // Initialize Firebase
