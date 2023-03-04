@@ -12,6 +12,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   String _errorMsg = '';
+  bool _isRegister = false;
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
@@ -21,17 +22,17 @@ class _LoginScreenState extends State<LoginScreen> {
           email: _controllerEmail.text, password: _controllerPassword.text);
 
       // This is for testing purposes only. Need to remove later.
-      var uid = await Auth().currentUser?.getIdToken() ?? 'none';
-      if (uid != 'none') {
-        var response = await http.get(
-          Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer ' + uid,
-          },
-        );
-        print(response.body);
-      }
+      // var uid = await Auth().currentUser?.getIdToken() ?? 'none';
+      // if (uid != 'none') {
+      //   var response = await http.get(
+      //     Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'),
+      //     headers: <String, String>{
+      //       'Content-Type': 'application/json; charset=UTF-8',
+      //       'Authorization': 'Bearer ' + uid,
+      //     },
+      //   );
+      //   print(response.body);
+      // }
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMsg = e.message ?? '';
@@ -54,21 +55,56 @@ class _LoginScreenState extends State<LoginScreen> {
     String title,
     TextEditingController controller,
   ) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(labelText: title),
+    return Padding(
+      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(labelText: title),
+      ),
     );
   }
 
-  Widget _signInButton() {
-    return ElevatedButton(
-        onPressed: signInWithEmailAndPassword, child: const Text('Login'));
+  Widget _submitButton() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 100,
+        child: ElevatedButton(
+            onPressed: _isRegister
+                ? createUserWithEmailAndPassword
+                : signInWithEmailAndPassword,
+            child: Text(_isRegister ? 'Register' : 'Login')),
+      ),
+    );
   }
 
-  Widget _registerButton() {
-    return ElevatedButton(
-        onPressed: createUserWithEmailAndPassword,
-        child: const Text('Register'));
+  Widget _signinOrRegisterButton() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: SizedBox(
+        width: 150,
+        child: ElevatedButton(
+            onPressed: () => {
+                  setState(() {
+                    _isRegister = !_isRegister;
+                    _errorMsg = '';
+                    _controllerEmail.clear();
+                    _controllerPassword.clear();
+                  })
+                },
+            child: Text(_isRegister ? 'Login instead' : 'Register instead')),
+      ),
+    );
+  }
+
+  Widget _pageTitle() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Text(
+        _isRegister ? 'Sign Up' : 'Sign In',
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+      ),
+    );
   }
 
   @override
@@ -78,17 +114,25 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Container(
           height: double.infinity,
           width: double.infinity,
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(55),
           child: SingleChildScrollView(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              _pageTitle(),
               _entryField('email', _controllerEmail),
               _entryField('password', _controllerPassword),
-              _signInButton(),
-              _registerButton(),
-              Text(_errorMsg)
+              Row(
+                children: [
+                  _submitButton(),
+                  _signinOrRegisterButton(),
+                ],
+              ),
+              Text(
+                _errorMsg,
+                textAlign: TextAlign.center,
+              )
             ],
           ))),
     );
