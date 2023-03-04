@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import '../firebase/auth.dart';
 import '../main.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,6 +11,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeScreen> {
+  Future<void> signoutTest() async {
+    try {
+      await Auth().signOut();
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        print(e.message);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +54,10 @@ class _HomeState extends State<HomeScreen> {
           ),
           Row(
             children: [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(20.0),
-                child: Text(
-                  "Calender",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-                ),
+                child: ElevatedButton(
+                    onPressed: signoutTest, child: Text("Signout Test")),
               ),
               InkWell(
                 onTap: () {
