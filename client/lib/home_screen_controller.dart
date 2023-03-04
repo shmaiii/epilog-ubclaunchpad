@@ -5,16 +5,15 @@ import 'package:http/http.dart' as http;
 
 Future<List<HomepageReminderDocument>>
     readAllHomepageReminderDocuments() async {
-  final response = await http.get(
-      Uri.parse('http://localhost:8080/homepageReminder/home_page_calendar'));
-
+  final response = await http
+      .get(Uri.parse('http://localhost:8080/calendar/homepage_test_user'));
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     List<HomepageReminderDocument> result = [];
     var jsonResponse = jsonDecode(response.body);
 
-    for (var c in jsonResponse['userReminderDocuments']) {
+    for (var c in jsonResponse['userCalendarDocuments']) {
       c["date"] =
           Timestamp(c["date"]["seconds"], c["date"]["nanoseconds"]).toDate();
 
@@ -43,11 +42,11 @@ Future<List<HomepageReminderDocument>>
   }
 }
 
-Future<String> editHomepageReminderDateTime(
-    String reminderId, String dateTime) async {
+Future<String> updateHomepageReminderDateTime(
+    String calendarDocId, String dateTime) async {
   final response = await http.patch(
       Uri.parse(
-          'http://localhost:8080/homepageReminder/home_page_calendar/update/$reminderId'),
+          'http://localhost:8080/calendar/homepage_test_user/updateDateTime/$calendarDocId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -62,10 +61,28 @@ Future<String> editHomepageReminderDateTime(
   }
 }
 
-Future<String> deleteHomepageReminder(String reminderId) async {
-  print('anything here?????');
+Future<String> updateHomepageReminderTake(
+    String calendarDocId, bool take) async {
+  final response = await http.patch(
+      Uri.parse(
+          'http://localhost:8080/calendar/homepage_test_user/updateTake/$calendarDocId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, bool>{'take': take}));
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to reschedule homepage reminder');
+  }
+}
+
+Future<String> deleteHomepageReminder(String calendarDocId) async {
   final response = await http.delete(Uri.parse(
-      'http://localhost:8080/homepageReminder/home_page_calendar/delete/$reminderId'));
+      'http://localhost:8080/calendar/homepage_test_user/$calendarDocId'));
 
   if (response.statusCode == 200) {
     return response.body;
@@ -77,11 +94,6 @@ Future<String> deleteHomepageReminder(String reminderId) async {
 }
 
 class HomepageReminderDocument {
-  final String id;
-  final String title;
-  final String type;
-  final String notes;
-  final DateTime date;
   //final DateTime date;
 
   const HomepageReminderDocument({
@@ -101,6 +113,13 @@ class HomepageReminderDocument {
       date: json['date'],
     );
   }
+
+  final DateTime date;
+  final String id;
+  final String notes;
+  final String title;
+  final String type;
+
   // For testing purposes
   @override
   String toString() {
