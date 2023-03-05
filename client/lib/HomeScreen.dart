@@ -37,13 +37,18 @@ class _HomeState extends State<HomeScreen> {
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: Column(children: [
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              "Hi Julia!",
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-            ),
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Text(
+                  "Hi, Julia",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
+                ),
+              ),
+            ],
           ),
+
           Row(
             children: [
               const Padding(
@@ -78,7 +83,9 @@ class _HomeState extends State<HomeScreen> {
                 child: Text(
                   "Today ($date)",
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 30.0),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 26.0,
+                  ),
                 ),
               )
             ],
@@ -135,7 +142,7 @@ class _HomeState extends State<HomeScreen> {
                             child: Text(
                               time,
                               style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0),
+                                  fontWeight: FontWeight.w500, fontSize: 20.0),
                             ),
                           )
                         ],
@@ -153,7 +160,7 @@ class _HomeState extends State<HomeScreen> {
                             rescheduleEntry: rescheduleEntry,
                             updateEntryTake: updateEntryTake,
                           ),
-                          const SizedBox(height: 50)
+                          const SizedBox(height: 10)
                         ]))
                       ])
                     ]);
@@ -221,10 +228,14 @@ class ListEntry extends StatelessWidget {
           height: 100,
           child: Scaffold(
               appBar: AppBar(
+                centerTitle: false,
                 title: Text(
                   title,
                   style: const TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18),
+                  // textAlign: TextAlign.left,
                 ),
                 backgroundColor: const Color(0xfff3f3f3),
                 elevation: 0,
@@ -282,7 +293,7 @@ class ListEntry extends StatelessWidget {
               body: Row(
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex: 2,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -300,14 +311,17 @@ class ListEntry extends StatelessWidget {
                             style: const TextStyle(color: Colors.black),
                           ),
                         ),
+                        // const SizedBox(
+                        //   height: 40.0,
+                        // )
                       ],
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Container(
-                        alignment: const Alignment(0.5, 1),
-                        padding: const EdgeInsets.all(10.0),
+                        alignment: const Alignment(-1, 1),
+                        padding: const EdgeInsets.only(bottom: 10.0),
                         child: ToggleButton(
                           id: id,
                           take: take,
@@ -345,18 +359,24 @@ class _ToggleButtonState extends State<ToggleButton> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 83,
-        height: 34,
+    return Container(
+        width: 83.0,
+        height: 34.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          color: Colors.blue,
+        ),
         child: FilledButton(
           onPressed: _toggleButtonText,
           style: widget.take
-              ? TextButton.styleFrom(backgroundColor: Colors.purple)
-              : TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 156, 94, 167)),
+              ? TextButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 156, 94, 167))
+              : TextButton.styleFrom(backgroundColor: Colors.purple),
           child: widget.take
-              ? const Text('UNTAKE', style: TextStyle(fontSize: 10))
-              : const Text('TAKE', style: TextStyle(fontSize: 10)),
+              ? const Text('UNTAKE',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
+              : const Text('TAKE',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
         ));
   }
 }
