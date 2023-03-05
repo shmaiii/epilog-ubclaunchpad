@@ -14,13 +14,114 @@ DateTime now = DateTime.now();
 String date = Jiffy().format('MMMM do');
 
 class _HomeState extends State<HomeScreen> {
+  void deleteItem(String id) {
+    setState(() {
+      deleteHomepageReminder(id);
+    });
+  }
+
+  showDeleteAlertDialog(BuildContext context, String id) {
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.black,
+        backgroundColor: const Color(0XFFEEEEEE), // background color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // rounded corners
+        ),
+        minimumSize: const Size(95, 38), // minimum size
+        elevation: 10, // set elevation
+        shadowColor: Colors.grey, // set shadow color
+      ),
+      child: const Text(
+        "No",
+        style: TextStyle(
+          fontSize: 18.0,
+        ),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    Widget continueButton = TextButton(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.black,
+        backgroundColor: const Color(0XFFEEEEEE), // background color
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // rounded corners
+        ),
+        minimumSize: const Size(95, 38), // minimum size
+        elevation: 10, // set elevation
+        shadowColor: Colors.grey, // set shadow color
+      ),
+      child: const Text(
+        "Yes",
+        style: TextStyle(
+          fontSize: 18.0,
+        ),
+      ),
+      onPressed: () {
+        deleteItem(id);
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+        // title: Text(""),
+
+        // content:
+        title: Text("Delete medicine?",
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 20.0,
+            ),
+            textAlign: TextAlign.center),
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  continueButton,
+                  const SizedBox(width: 10),
+                  cancelButton,
+                ],
+              ))
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ));
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void rescheduleEntry(String id, String dateTime) {
+    setState(() {
+      updateHomepageReminderDateTime(id, dateTime);
+    });
+  }
+
+  void updateEntryTake(String id, bool take) {
+    setState(() {
+      updateHomepageReminderTake(id, take);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          elevation: 5.0,
+          elevation: 10.0,
           leading: const Icon(
             Icons.bar_chart_rounded,
             size: 35.0,
@@ -105,24 +206,6 @@ class _HomeState extends State<HomeScreen> {
                               TextStyle(color: Colors.grey, fontSize: 20.0)));
                 }
 
-                void deleteItem(String id) {
-                  setState(() {
-                    deleteHomepageReminder(id);
-                  });
-                }
-
-                void rescheduleEntry(String id, String dateTime) {
-                  setState(() {
-                    updateHomepageReminderDateTime(id, dateTime);
-                  });
-                }
-
-                void updateEntryTake(String id, bool take) {
-                  setState(() {
-                    updateHomepageReminderTake(id, take);
-                  });
-                }
-
                 return ListView.builder(
                   scrollDirection: Axis.vertical,
                   // Let the ListView know how many items it needs to build.
@@ -156,7 +239,8 @@ class _HomeState extends State<HomeScreen> {
                             title: testEntry.title,
                             notes: testEntry.notes,
                             type: testEntry.type,
-                            deleteItem: deleteItem,
+                            // deleteItem: deleteItem,
+                            showDeleteAlertDialog: showDeleteAlertDialog,
                             rescheduleEntry: rescheduleEntry,
                             updateEntryTake: updateEntryTake,
                           ),
@@ -204,7 +288,7 @@ class ListEntry extends StatelessWidget {
   final String title;
   final String type;
   final String notes;
-  final Function(String) deleteItem;
+  final Function(BuildContext, String) showDeleteAlertDialog;
   final Function(String, String) rescheduleEntry;
   final Function(String, bool) updateEntryTake;
 
@@ -215,7 +299,7 @@ class ListEntry extends StatelessWidget {
       required this.title,
       required this.type,
       required this.notes,
-      required this.deleteItem,
+      required this.showDeleteAlertDialog,
       required this.rescheduleEntry,
       required this.updateEntryTake});
 
@@ -268,7 +352,7 @@ class ListEntry extends StatelessWidget {
                         }
                         if (value == 1) {
                           // Perform action on click on Delete
-                          deleteItem(id);
+                          showDeleteAlertDialog(context, id);
                         }
                       },
                       itemBuilder: (context) => [
