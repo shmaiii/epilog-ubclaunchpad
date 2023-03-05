@@ -106,7 +106,13 @@ class _HomeState extends State<HomeScreen> {
 
                 void rescheduleEntry(String id, String dateTime) {
                   setState(() {
-                    editHomepageReminderDateTime(id, dateTime);
+                    updateHomepageReminderDateTime(id, dateTime);
+                  });
+                }
+
+                void updateEntryTake(String id, bool take) {
+                  setState(() {
+                    updateHomepageReminderTake(id, take);
                   });
                 }
 
@@ -138,12 +144,15 @@ class _HomeState extends State<HomeScreen> {
                         Flexible(
                             child: Column(children: [
                           ListEntry(
-                              id: testEntry.id,
-                              title: testEntry.title,
-                              notes: testEntry.notes,
-                              type: testEntry.type,
-                              deleteItem: deleteItem,
-                              rescheduleEntry: rescheduleEntry),
+                            id: testEntry.id,
+                            take: testEntry.take,
+                            title: testEntry.title,
+                            notes: testEntry.notes,
+                            type: testEntry.type,
+                            deleteItem: deleteItem,
+                            rescheduleEntry: rescheduleEntry,
+                            updateEntryTake: updateEntryTake,
+                          ),
                           const SizedBox(height: 50)
                         ]))
                       ])
@@ -184,20 +193,24 @@ class EntryInfo {
 // Widget for each entry in the list of reminders
 class ListEntry extends StatelessWidget {
   final String id;
+  final bool take;
   final String title;
   final String type;
   final String notes;
   final Function(String) deleteItem;
   final Function(String, String) rescheduleEntry;
+  final Function(String, bool) updateEntryTake;
 
   const ListEntry(
       {super.key,
       required this.id,
+      required this.take,
       required this.title,
       required this.type,
       required this.notes,
       required this.deleteItem,
-      required this.rescheduleEntry});
+      required this.rescheduleEntry,
+      required this.updateEntryTake});
 
   @override
   Widget build(BuildContext context) {
@@ -295,7 +308,11 @@ class ListEntry extends StatelessWidget {
                     child: Container(
                         alignment: const Alignment(0.5, 1),
                         padding: const EdgeInsets.all(10.0),
-                        child: ToggleButton()),
+                        child: ToggleButton(
+                          id: id,
+                          take: take,
+                          updateEntryTake: updateEntryTake,
+                        )),
                   ),
                 ],
               ),
@@ -305,18 +322,24 @@ class ListEntry extends StatelessWidget {
 }
 
 class ToggleButton extends StatefulWidget {
-  const ToggleButton({super.key});
+  String id;
+  bool take;
+  Function(String, bool) updateEntryTake;
+
+  ToggleButton(
+      {super.key,
+      required this.id,
+      required this.take,
+      required this.updateEntryTake});
 
   @override
   State<ToggleButton> createState() => _ToggleButtonState();
 }
 
 class _ToggleButtonState extends State<ToggleButton> {
-  bool pressed = false;
-
   void _toggleButtonText() {
     setState(() {
-      pressed = !pressed;
+      widget.updateEntryTake(widget.id, !widget.take);
     });
   }
 
@@ -327,11 +350,11 @@ class _ToggleButtonState extends State<ToggleButton> {
         height: 34,
         child: FilledButton(
           onPressed: _toggleButtonText,
-          style: pressed
+          style: widget.take
               ? TextButton.styleFrom(backgroundColor: Colors.purple)
               : TextButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 156, 94, 167)),
-          child: pressed
+          child: widget.take
               ? const Text('UNTAKE', style: TextStyle(fontSize: 10))
               : const Text('TAKE', style: TextStyle(fontSize: 10)),
         ));

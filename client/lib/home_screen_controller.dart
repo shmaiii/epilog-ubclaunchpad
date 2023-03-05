@@ -98,6 +98,7 @@ class HomepageReminderDocument {
 
   const HomepageReminderDocument({
     required this.id,
+    required this.take,
     required this.title,
     required this.type,
     required this.notes,
@@ -107,6 +108,7 @@ class HomepageReminderDocument {
   factory HomepageReminderDocument.fromJson(Map<String, dynamic> json) {
     return HomepageReminderDocument(
       id: json['id'],
+      take: json['take'],
       title: json['title'],
       type: json['type'],
       notes: json['notes'],
@@ -114,11 +116,12 @@ class HomepageReminderDocument {
     );
   }
 
-  final DateTime date;
   final String id;
+  final bool take;
   final String notes;
   final String title;
   final String type;
+  final DateTime date;
 
   // For testing purposes
   @override
