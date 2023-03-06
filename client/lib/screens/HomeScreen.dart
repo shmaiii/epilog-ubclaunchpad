@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeState extends State<HomeScreen> {
+  // Make sure to delete this test function later
   Future<void> signoutTest() async {
     try {
       await Auth().signOut();
@@ -56,6 +57,7 @@ class _HomeState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: EdgeInsets.all(20.0),
+                // Make sure to delete this test button later
                 child: ElevatedButton(
                     onPressed: signoutTest, child: Text("Signout Test")),
               ),
