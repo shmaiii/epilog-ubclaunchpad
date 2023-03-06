@@ -87,7 +87,7 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
 const updateCalendarDocumentDateGivenId = async (req, res, next) => {
   try {
     let updateDocFieldInputs =  req.body;
-    // TODO: check how reminders handle date
+ 
     if(updateDocFieldInputs.date){
      updateDocFieldInputs.date = Timestamp.fromDate(new Date(updateDocFieldInputs.date));
     }
