@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:client/home_screen_controller.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:client/delete_alert_dialog.dart';
+import 'reminder_entry.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,96 +12,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 DateTime now = DateTime.now();
-String date = Jiffy().format('MMMM do');
+String dateToday = Jiffy().format('MMMM do');
 
 class _HomeState extends State<HomeScreen> {
-  void deleteItem(String id) {
+  void deleteReminder(String id) {
     setState(() {
       deleteHomepageReminder(id);
     });
-  }
-
-  showDeleteAlertDialog(BuildContext context, String id) {
-    // set up the buttons
-    Widget cancelButton = TextButton(
-      style: TextButton.styleFrom(
-        foregroundColor: Colors.black,
-        backgroundColor: const Color(0XFFEEEEEE), // background color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // rounded corners
-        ),
-        minimumSize: const Size(95, 38), // minimum size
-        elevation: 10, // set elevation
-        shadowColor: Colors.grey, // set shadow color
-      ),
-      child: const Text(
-        "No",
-        style: TextStyle(
-          fontSize: 18.0,
-        ),
-      ),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    Widget continueButton = TextButton(
-      style: TextButton.styleFrom(
-        foregroundColor: Colors.black,
-        backgroundColor: const Color(0XFFEEEEEE), // background color
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // rounded corners
-        ),
-        minimumSize: const Size(95, 38), // minimum size
-        elevation: 10, // set elevation
-        shadowColor: Colors.grey, // set shadow color
-      ),
-      child: const Text(
-        "Yes",
-        style: TextStyle(
-          fontSize: 18.0,
-        ),
-      ),
-      onPressed: () {
-        deleteItem(id);
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-        // title: Text(""),
-
-        // content:
-        title: Text("Delete medicine?",
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 20.0,
-            ),
-            textAlign: TextAlign.center),
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  continueButton,
-                  const SizedBox(width: 10),
-                  cancelButton,
-                ],
-              ))
-        ],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ));
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
   }
 
   void rescheduleEntry(String id, String dateTime) {
@@ -138,18 +56,15 @@ class _HomeState extends State<HomeScreen> {
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: Column(children: [
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                child: Text(
-                  "Hi, Julia",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
-                ),
+          Row(children: const [
+            Padding(
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: Text(
+                "Hi, Julia",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
               ),
-            ],
-          ),
-
+            ),
+          ]),
           Row(
             children: [
               const Padding(
@@ -182,7 +97,7 @@ class _HomeState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  "Today ($date)",
+                  "Today ($dateToday)",
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 26.0,
@@ -233,14 +148,14 @@ class _HomeState extends State<HomeScreen> {
                       Row(children: [
                         Flexible(
                             child: Column(children: [
-                          ListEntry(
+                          ReminderEntry(
                             id: testEntry.id,
                             take: testEntry.take,
                             title: testEntry.title,
                             notes: testEntry.notes,
                             type: testEntry.type,
-                            // deleteItem: deleteItem,
                             showDeleteAlertDialog: showDeleteAlertDialog,
+                            deleteReminder: deleteReminder,
                             rescheduleEntry: rescheduleEntry,
                             updateEntryTake: updateEntryTake,
                           ),
@@ -254,213 +169,10 @@ class _HomeState extends State<HomeScreen> {
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
-
               // By default, show a loading spinner.
               return const CircularProgressIndicator();
             },
           )),
-          // SfDateRangePicker(),
         ]));
-  }
-}
-
-const List<String> optionText = <String>[
-  "Reschedule",
-  "Delete",
-];
-
-class EntryInfo {
-  EntryInfo(this.title, this.frequency, this.time, this.dose, this.reminderTime,
-      this.textButton);
-
-  int dose;
-  String frequency;
-  TimeOfDay reminderTime;
-  FilledButton textButton;
-  String time;
-  String title;
-}
-
-// Widget for each entry in the list of reminders
-class ListEntry extends StatelessWidget {
-  final String id;
-  final bool take;
-  final String title;
-  final String type;
-  final String notes;
-  final Function(BuildContext, String) showDeleteAlertDialog;
-  final Function(String, String) rescheduleEntry;
-  final Function(String, bool) updateEntryTake;
-
-  const ListEntry(
-      {super.key,
-      required this.id,
-      required this.take,
-      required this.title,
-      required this.type,
-      required this.notes,
-      required this.showDeleteAlertDialog,
-      required this.rescheduleEntry,
-      required this.updateEntryTake});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 100,
-          child: Scaffold(
-              appBar: AppBar(
-                centerTitle: false,
-                title: Text(
-                  title,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18),
-                  // textAlign: TextAlign.left,
-                ),
-                backgroundColor: const Color(0xfff3f3f3),
-                elevation: 0,
-                automaticallyImplyLeading: false,
-                actions: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: PopupMenuButton<int>(
-                      constraints:
-                          const BoxConstraints.expand(width: 140, height: 90),
-                      icon: const Icon(
-                        Icons.more_vert_rounded,
-                        color: Colors.black,
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                      onSelected: (value) {
-                        if (value == 0) {
-                          // Perform action on click on Reschedule
-
-                          DatePicker.showDateTimePicker(context,
-                              theme: const DatePickerTheme(
-                                containerHeight: 210.0,
-                              ),
-                              showTitleActions: true, onConfirm: (dateTime) {
-                            rescheduleEntry(id, dateTime.toIso8601String());
-                          },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.en);
-                        }
-                        if (value == 1) {
-                          // Perform action on click on Delete
-                          showDeleteAlertDialog(context, id);
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                            value: 0,
-                            height: 30,
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(optionText[0]))),
-                        const PopupMenuDivider(),
-                        PopupMenuItem(
-                            value: 1,
-                            height: 20,
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Text(optionText[1]))),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              body: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: Text(
-                            type,
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0),
-                          child: Text(
-                            notes,
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
-                        // const SizedBox(
-                        //   height: 40.0,
-                        // )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                        alignment: const Alignment(-1, 1),
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: ToggleButton(
-                          id: id,
-                          take: take,
-                          updateEntryTake: updateEntryTake,
-                        )),
-                  ),
-                ],
-              ),
-              backgroundColor: const Color(0xfff3f3f3))),
-    );
-  }
-}
-
-class ToggleButton extends StatefulWidget {
-  String id;
-  bool take;
-  Function(String, bool) updateEntryTake;
-
-  ToggleButton(
-      {super.key,
-      required this.id,
-      required this.take,
-      required this.updateEntryTake});
-
-  @override
-  State<ToggleButton> createState() => _ToggleButtonState();
-}
-
-class _ToggleButtonState extends State<ToggleButton> {
-  void _toggleButtonText() {
-    setState(() {
-      widget.updateEntryTake(widget.id, !widget.take);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: 83.0,
-        height: 34.0,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          color: Colors.blue,
-        ),
-        child: FilledButton(
-          onPressed: _toggleButtonText,
-          style: widget.take
-              ? TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 156, 94, 167))
-              : TextButton.styleFrom(backgroundColor: Colors.purple),
-          child: widget.take
-              ? const Text('UNTAKE',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))
-              : const Text('TAKE',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-        ));
   }
 }
