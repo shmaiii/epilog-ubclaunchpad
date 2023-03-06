@@ -21,13 +21,13 @@ class _HomeState extends State<HomeScreen> {
     });
   }
 
-  void rescheduleEntry(String id, String dateTime) {
+  void rescheduleReminder(String id, String dateTime) {
     setState(() {
       updateHomepageReminderDateTime(id, dateTime);
     });
   }
 
-  void updateEntryTake(String id, bool take) {
+  void updateReminderTake(String id, bool take) {
     setState(() {
       updateHomepageReminderTake(id, take);
     });
@@ -129,8 +129,8 @@ class _HomeState extends State<HomeScreen> {
                   // Provide a builder function. This is where the magic happens.
                   // Convert each item into a widget based on the type of item it is.
                   itemBuilder: (context, index) {
-                    final testEntry = homepageReminderDocuments[index];
-                    final time = Jiffy(testEntry.date).format("h:mm a");
+                    final entry = homepageReminderDocuments[index];
+                    final time = Jiffy(entry.date).format("h:mm a");
 
                     return Column(children: [
                       Row(
@@ -149,15 +149,15 @@ class _HomeState extends State<HomeScreen> {
                         Flexible(
                             child: Column(children: [
                           ReminderEntry(
-                            id: testEntry.id,
-                            take: testEntry.take,
-                            title: testEntry.title,
-                            notes: testEntry.notes,
-                            type: testEntry.type,
+                            id: entry.id,
+                            take: entry.take,
+                            title: entry.title,
+                            notes: entry.notes,
+                            type: entry.type,
                             showDeleteAlertDialog: showDeleteAlertDialog,
                             deleteReminder: deleteReminder,
-                            rescheduleEntry: rescheduleEntry,
-                            updateEntryTake: updateEntryTake,
+                            rescheduleReminder: rescheduleReminder,
+                            updateReminderTake: updateReminderTake,
                           ),
                           const SizedBox(height: 10)
                         ]))

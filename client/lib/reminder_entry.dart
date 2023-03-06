@@ -17,8 +17,8 @@ class ReminderEntry extends StatelessWidget {
   final Function(BuildContext, String, void Function(String))
       showDeleteAlertDialog;
   final Function(String) deleteReminder;
-  final Function(String, String) rescheduleEntry;
-  final Function(String, bool) updateEntryTake;
+  final Function(String, String) rescheduleReminder;
+  final Function(String, bool) updateReminderTake;
 
   const ReminderEntry(
       {super.key,
@@ -29,8 +29,8 @@ class ReminderEntry extends StatelessWidget {
       required this.notes,
       required this.showDeleteAlertDialog,
       required this.deleteReminder,
-      required this.rescheduleEntry,
-      required this.updateEntryTake});
+      required this.rescheduleReminder,
+      required this.updateReminderTake});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class ReminderEntry extends StatelessWidget {
                                 containerHeight: 210.0,
                               ),
                               showTitleActions: true, onConfirm: (dateTime) {
-                            rescheduleEntry(id, dateTime.toIso8601String());
+                            rescheduleReminder(id, dateTime.toIso8601String());
                           },
                               currentTime: DateTime.now(),
                               locale: LocaleType.en);
@@ -134,7 +134,7 @@ class ReminderEntry extends StatelessWidget {
                         child: TakeToggleButton(
                           id: id,
                           take: take,
-                          updateEntryTake: updateEntryTake,
+                          updateReminderTake: updateReminderTake,
                         )),
                   ),
                 ],

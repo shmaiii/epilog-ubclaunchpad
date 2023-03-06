@@ -22,9 +22,8 @@ Future<List<HomepageReminderDocument>>
     // sort entries based on date and time
     result.sort((a, b) => a.date.compareTo(b.date));
 
-    // fliter out entries that are past current time
+    // fliter out reminder entries that occur past current time, after 8 hours from now, or not on the current date
     DateTime now = DateTime.now();
-    // Calculate the time 8 hours from now
     DateTime eightHoursLater = now.add(const Duration(hours: 8));
     DateTime midnight = DateTime(now.year, now.month, now.day, 23, 59, 59);
     result = result
@@ -46,7 +45,7 @@ Future<String> updateHomepageReminderDateTime(
     String calendarDocId, String dateTime) async {
   final response = await http.patch(
       Uri.parse(
-          'http://localhost:8080/calendar/homepage_test_user/updateDateTime/$calendarDocId'),
+          'http://localhost:8080/calendar/homepage_test_user/updateDate/$calendarDocId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -76,7 +75,7 @@ Future<String> updateHomepageReminderTake(
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to reschedule homepage reminder');
+    throw Exception('Failed to update status of homepage reminder');
   }
 }
 
@@ -94,8 +93,6 @@ Future<String> deleteHomepageReminder(String calendarDocId) async {
 }
 
 class HomepageReminderDocument {
-  //final DateTime date;
-
   const HomepageReminderDocument({
     required this.id,
     required this.take,
@@ -122,10 +119,4 @@ class HomepageReminderDocument {
   final String title;
   final String type;
   final DateTime date;
-
-  // For testing purposes
-  @override
-  String toString() {
-    return 'HomepageReminderDocument(title: $title, date: $date)';
-  }
 }

@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class TakeToggleButton extends StatefulWidget {
   final String id;
   final bool take;
-  final Function(String, bool) updateEntryTake;
+  final Function(String, bool) updateReminderTake;
 
   const TakeToggleButton(
       {super.key,
       required this.id,
       required this.take,
-      required this.updateEntryTake});
+      required this.updateReminderTake});
 
   @override
   State<TakeToggleButton> createState() => _TakeToggleButtonState();
@@ -18,7 +18,7 @@ class TakeToggleButton extends StatefulWidget {
 class _TakeToggleButtonState extends State<TakeToggleButton> {
   void _toggleButtonText() {
     setState(() {
-      widget.updateEntryTake(widget.id, !widget.take);
+      widget.updateReminderTake(widget.id, !widget.take);
     });
   }
 

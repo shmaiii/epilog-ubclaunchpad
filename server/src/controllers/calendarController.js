@@ -84,7 +84,7 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
   }
 };
 
-const updateCalendarDocumentDateTimetGivenId = async (req, res, next) => {
+const updateCalendarDocumentDateGivenId = async (req, res, next) => {
   try {
     let updateDocFieldInputs =  req.body;
     // TODO: check how reminders handle date
@@ -129,7 +129,7 @@ export default {
   getCalendarDocumentGivenId,
   postCalendarDocument,
   updateCalendarDocumentGivenId,
-  updateCalendarDocumentDateTimetGivenId,
+  updateCalendarDocumentDateGivenId,
   updateCalendarDocumentTakeGivenId,
   deleteCalendarDocumentGivenId
 };

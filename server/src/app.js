@@ -1,14 +1,12 @@
 import express from 'express';
 import cors from 'cors';
 import calendarRoutes from './routes/calendarRoutes.js';
-import homepageReminderRoutes from './routes/homepageReminderRoutes.js';
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
 app.use('/calendar', calendarRoutes);
-app.use('/homepageReminder', homepageReminderRoutes)
 
 app.get('/ping', (req, res) => {
     console.log("pong");
