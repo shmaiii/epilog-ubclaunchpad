@@ -41,7 +41,7 @@ Future<List<HomepageReminderDocument>>
   }
 }
 
-Future<String> updateHomepageReminderDateTime(
+Future<String> updateHomepageReminderDate(
     String calendarDocId, String dateTime) async {
   final response = await http.patch(
       Uri.parse(

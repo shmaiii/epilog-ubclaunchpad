@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:client/home_screen_controller.dart';
-import 'package:client/delete_alert_dialog.dart';
+import 'package:client/HomeScreen/home_screen_controller.dart';
+import 'delete_alert_dialog.dart';
 import 'reminder_entry.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +23,7 @@ class _HomeState extends State<HomeScreen> {
 
   void rescheduleReminder(String id, String dateTime) {
     setState(() {
-      updateHomepageReminderDateTime(id, dateTime);
+      updateHomepageReminderDate(id, dateTime);
     });
   }
 
