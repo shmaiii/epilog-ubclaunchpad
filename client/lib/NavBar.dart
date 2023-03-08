@@ -37,6 +37,8 @@ class MyApp extends StatelessWidget {
 class EntryController extends StatelessWidget {
   const EntryController({super.key});
 
+  // This widget will direct you to Login Screen if you are not signed in. Otherwise
+  // it will direct you to the Home Page.
   @override
   Widget build(BuildContext context) {
     final Stream<User?> authStateChangesStream = Auth().authStateChanges;
@@ -87,7 +89,6 @@ class _HomePageState extends State<HomePage> {
     const RecordScreen(),
     const NotificationScreen(),
     ProfileScreen(),
-    const LoginScreen(),
   ];
 
   // Helper function for change the states
@@ -139,11 +140,6 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.person_outline_rounded),
             activeIcon: Icon(Icons.person_sharp),
             label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.circle),
-            activeIcon: Icon(Icons.circle),
-            label: 'Login',
           ),
         ],
         currentIndex: _selectedIndex,

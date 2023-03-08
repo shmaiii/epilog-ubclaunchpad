@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
-
+import '../../../firebase/authenticatedRequest.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Medication>> readMedications() async {
-  final response = await http.get(Uri.parse(
-      'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/read'));
+  final response = await AuthenticatedRequest.get(
+      url:
+          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/read');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -22,7 +23,8 @@ Future<List<Medication>> readMedications() async {
   }
 }
 
-Future<String> addMedication(String name, String administrationMethod, String dosage) async {
+Future<String> addMedication(
+    String name, String administrationMethod, String dosage) async {
   final response = await http.post(
       Uri.parse(
           'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/add'),
@@ -44,7 +46,8 @@ Future<String> addMedication(String name, String administrationMethod, String do
   }
 }
 
-Future<String> editMedication(String name, String administrationMethod, String dosage, String medicationId) async {
+Future<String> editMedication(String name, String administrationMethod,
+    String dosage, String medicationId) async {
   final response = await http.post(
       Uri.parse(
           'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit'),
@@ -67,9 +70,8 @@ Future<String> editMedication(String name, String administrationMethod, String d
 }
 
 Future<String> deleteMedication(String medicationId) async {
-  final response = await http.post(
-      Uri.parse(
-          'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
+  final response = await http.post(Uri.parse(
+      'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
 
   if (response.statusCode == 200) {
     return response.body;

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import '../../firebase/authenticatedRequest.dart';
 
 Future<Album> fetchAlbum() async {
-  final response = await http.get(Uri.parse('http://localhost:8080/'));
+  final response = await AuthenticatedRequest.get(url: 'http://10.0.2.2/');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

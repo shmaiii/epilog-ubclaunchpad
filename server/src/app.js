@@ -29,7 +29,7 @@ app.use(async (req, res, next) => {
         next()
     } catch (err){
         let error = err
-        if (err.errorInfo.code === 'auth/argument-error') {
+        if (err.errorInfo?.code === 'auth/argument-error') {
             error = new Error("request does not have valid authorization header");
             error.code = 401;
         }
