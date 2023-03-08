@@ -63,13 +63,15 @@ class _HomeState extends State<HomeScreen> {
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: Column(children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-            child: Text(
-              "Hi, Julia",
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
-            ),
-          ),
+          Row(children: const [
+            Padding(
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: Text(
+                "Hi, Julia",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
+              ),
+            )
+          ]),
           Row(children: [
             Expanded(
               //start of component
