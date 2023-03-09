@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:client/HomeScreen/home_screen_controller.dart';
+import 'package:client/calendar_container.dart';
 import 'delete_alert_dialog.dart';
+import 'home_screen_drawer.dart';
 import 'reminder_entry.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,6 +17,8 @@ DateTime now = DateTime.now();
 String dateToday = Jiffy().format('MMMM do');
 
 class _HomeState extends State<HomeScreen> {
+  final _key = GlobalKey<ScaffoldState>(); // Create a key
+
   void deleteReminder(String id) {
     setState(() {
       deleteHomepageReminder(id);
@@ -36,23 +40,26 @@ class _HomeState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _key,
         appBar: AppBar(
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
-          elevation: 10.0,
-          leading: const Icon(
-            Icons.bar_chart_rounded,
-            size: 35.0,
-          ),
-          actions: const <Widget>[
-            Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: Icon(
-                Icons.search,
-                size: 35.0,
-              ),
-            ),
-          ],
+          elevation: 5.0,
+          leading: IconButton(
+              icon: const Icon(Icons.bar_chart_rounded),
+              iconSize: 35.0,
+              onPressed: () => {
+                    if (_key.currentState!.isDrawerOpen)
+                      {
+                        _key.currentState!.closeDrawer()
+                        //close drawer, if drawer is open
+                      }
+                    else
+                      {
+                        _key.currentState!.openDrawer()
+                        //open drawer, if drawer is closed
+                      }
+                  }),
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: Column(children: [
@@ -63,35 +70,31 @@ class _HomeState extends State<HomeScreen> {
                 "Hi, Julia",
                 style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
               ),
+            )
+          ]),
+          Row(children: [
+            Expanded(
+              //start of component
+              child: CalendarComponent(
+                  (Colors.amber[600])!,
+                  "Calendar",
+                  const Icon(
+                    Icons.calendar_today,
+                    color: Color(0XFF0342E9),
+                    size: 50,
+                  )),
+            ),
+            Expanded(
+              child: CalendarComponent(
+                  (Colors.blue[600])!,
+                  "Data visualization",
+                  Icon(
+                    Icons.leaderboard,
+                    color: (Colors.amber[600])!,
+                    size: 50,
+                  )),
             ),
           ]),
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Text(
-                  "Calender",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  print("testing");
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                        color: const Color(0XFFEDF3FF),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.calendar_today,
-                        color: Color(0XFF0342E9),
-                      ),
-                    )),
-              )
-            ],
-          ),
           Row(
             children: [
               Padding(
@@ -173,6 +176,7 @@ class _HomeState extends State<HomeScreen> {
               return const CircularProgressIndicator();
             },
           )),
-        ]));
+        ]),
+        drawer: const HomeScreenDrawer());
   }
 }
