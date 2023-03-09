@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import '../../../firebase/authenticatedRequest.dart';
+import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<Contact>> readContacts() async {
   final response = await AuthenticatedRequest.get(
-      url:
-          'http://10.0.2.2:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/read');
-  print(response.body);
+      url: Uri.parse(
+          'http://10.0.2.2:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/read'));
+
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

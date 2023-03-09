@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import '../../firebase/authenticatedRequest.dart';
+
+import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:flutter/material.dart';
 
 Future<ProfileInfo> fetchProfile() async {
   final response = await AuthenticatedRequest.get(
-      url:
-          'http://10.0.2.2:8080/user/pw8swdwzWDz4HrsB1dWC/personal-information/read');
+      url: Uri.parse(
+          'http://10.0.2.2:8080/user/pw8swdwzWDz4HrsB1dWC/personal-information/read'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

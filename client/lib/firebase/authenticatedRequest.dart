@@ -2,11 +2,16 @@ import './auth.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticatedRequest {
-  static Future<http.Response> get({required String url}) async {
+  static final Map<String, String> _defaultHeader = <String, String>{
+    'Content-Type': 'application/json; charset=UTF-8',
+  };
+
+  static Future<http.Response> get(
+      {required Uri url, Map<String, String>? headers}) async {
     String uid = await Auth().currentUser?.getIdToken() ?? 'none';
-    return http.get(Uri.parse(url), headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer ' + uid,
-    });
+    Map<String, String> headersWithAuth = headers ?? _defaultHeader;
+    headersWithAuth['Authorization'] = 'Bearer $uid';
+
+    return http.get(url, headers: headersWithAuth);
   }
 }
