@@ -2,7 +2,6 @@ import 'package:client/widgets/profile/ContactInfo/contact_info_page.dart';
 import 'package:client/widgets/profile/MedicalInfo/medical_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-
 import 'ProfileSettingsPage.dart';
 import 'setting.dart';
 import 'package:http/http.dart' as http;
