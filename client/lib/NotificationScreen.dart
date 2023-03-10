@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datepicker_dropdown/datepicker_dropdown.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 //-------------------------------------Reminder Main Pages------------------------------------//
 class NotificationScreen extends StatefulWidget {
@@ -17,35 +19,52 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationState extends State<NotificationScreen> {
+  bool isLoading = true;
+
   @override
   void initState() {
     super.initState();
-    upcomingEntries.clear();
+    loadData();
   }
+
+  Future<void> loadData() async {
+    await fetchAllReminder();
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reminders', style: TextStyle(color: Colors.black, fontSize: 35),),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: 100,
-        actions: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/reminder/new');
-              },
-              child: Container(
-                alignment: Alignment.center,
-                child: const Icon(Calendar_Add.apply, color: Colors.black,),
-              ),
-            )
-          ),
-        ],
-      ),
-      body: const ReminderBody(),
-    );
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Reminders', style: TextStyle(color: Colors.black, fontSize: 35),),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          toolbarHeight: 100,
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/reminder/new');
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: const Icon(Calendar_Add.apply, color: Colors.black,),
+                ),
+              )
+            ),
+          ],
+        ),
+        body: const ReminderBody(),
+      );
+    }
   }
 }
 
@@ -96,27 +115,17 @@ class UpComing extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: fetchAllReminder(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return ListView.builder(                    
-              // Let the ListView know how many items it needs to build.
-              itemCount: upcomingEntries.length,
-              // Provide a builder function. This is where the magic happens.
-              // Convert each item into a widget based on the type of item it is.
-              itemBuilder: (context, index) {
-                final testEntry = upcomingEntries[index];
+      body: ListView.builder(                    
+        // Let the ListView know how many items it needs to build.
+        itemCount: upcomingEntries.length,
+        // Provide a builder function. This is where the magic happens.
+        // Convert each item into a widget based on the type of item it is.
+        itemBuilder: (context, index) {
+          final testEntry = upcomingEntries[index];
 
-                return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
-              },
-              padding: const EdgeInsets.only(right: 25.0, left: 25.0),
-
-            );
-          }
-        }
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+        },
+        padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       ),
     );
   }
@@ -187,27 +196,17 @@ class Recent extends StatelessWidget {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: fetchAllReminder(),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
-          } else {
-            return ListView.builder(                    
-              // Let the ListView know how many items it needs to build.
-              itemCount: upcomingEntries.length,
-              // Provide a builder function. This is where the magic happens.
-              // Convert each item into a widget based on the type of item it is.
-              itemBuilder: (context, index) {
-                final testEntry = upcomingEntries[index];
+      body: ListView.builder(                    
+        // Let the ListView know how many items it needs to build.
+        itemCount: recentEntries.length,
+        // Provide a builder function. This is where the magic happens.
+        // Convert each item into a widget based on the type of item it is.
+        itemBuilder: (context, index) {
+          final testEntry = recentEntries[index];
 
-                return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
-              },
-              padding: const EdgeInsets.only(right: 25.0, left: 25.0),
-
-            );
-          }
-        }
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+        },
+        padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       ),
     );
   }
@@ -236,11 +235,11 @@ class RecentScreen extends StatelessWidget {
       ),
       body: ListView.builder(
         // Let the ListView know how many items it needs to build.
-        itemCount: upcomingEntries.length,
+        itemCount: recentEntries.length,
         // Provide a builder function. This is where the magic happens.
         // Convert each item into a widget based on the type of item it is.
         itemBuilder: (context, index) {
-          final testEntry = upcomingEntries[index];
+          final testEntry = recentEntries[index];
 
           return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
         },
@@ -328,7 +327,6 @@ class ListEntry extends StatelessWidget {
                     PopupMenuItem(
                       value: 0,
                       height: 30,
-                      onTap: () => fetchAllReminder(),
                       child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: Text(optionText[0]))
@@ -372,6 +370,8 @@ class ListEntry extends StatelessWidget {
 }
 
 //-------------------------------------New Reminder Page------------------------------------//
+String _dateString = "Not set";
+String _time = "Not set";
 class NewReminder extends StatelessWidget {
   const NewReminder({super.key});
 
@@ -416,7 +416,101 @@ class NewReminder extends StatelessWidget {
                 const Expanded(child: Text("Title", style: TextStyle(color: Colors.black, fontSize: 20),)),
                 const Expanded(child: TextField()),
                 const Expanded(child: Text("Date", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                Expanded(
+                    child: DropdownDatePicker(
+                    locale: "en",
+                    inputDecoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 1.0),
+                        ),
+                        helperText: '',
+                        contentPadding: const EdgeInsets.all(3),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(10))), // optional
+                    isDropdownHideUnderline: true, // optional
+                    isFormValidator: true, // optional
+                    startYear: 1900, // optional
+                    endYear: 2030, // optional
+                    width: 0.0, // optional
+                    monthFlex: 1,
+                    dayFlex: 1,
+                    yearFlex: 1,
+                    onChangedDay: (value) => print('onChangedDay: $value'),
+                    onChangedMonth: (value) => print('onChangedMonth: $value'),
+                    onChangedYear: (value) => print('onChangedYear: $value'),
+                    //boxDecoration: BoxDecoration(
+                    // border: Border.all(color: Colors.grey, width: 1.0)), // optional
+                    // showDay: false,// optional
+                    // dayFlex: 2,// optional
+                    // locale: "zh_CN",// optional
+                    // selectedDay: 3, // optional
+                    // selectedMonth: 3, // optional
+                    // selectedYear: 2023, // optional
+                    // hintDay: 'Day', // optional
+                    // hintMonth: 'Month', // optional
+                    // hintYear: 'Year', // optional
+                    // hintTextStyle: TextStyle(color: Colors.grey), // optional
+                  )),
                 const Expanded(child: Text("Time", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                Expanded(child: ElevatedButton(
+                style: raisedButtonStyle,
+                onPressed: () {
+                  DatePicker.showDatePicker(context,
+                    theme: const DatePickerTheme(
+                      containerHeight: 210.0,
+                    ),
+                    showTitleActions: true,
+                    minTime: DateTime(2000, 1, 1),
+                    maxTime: DateTime(2022, 12, 31),
+                    onConfirm: (date) {
+                      print('confirm $date');
+                      _dateString = '${date.year} - ${date.month} - ${date.day}';
+                    },
+                    currentTime: DateTime.now(),
+                    locale: LocaleType.en
+                  );
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 50.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            child: Row(
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.date_range,
+                                  size: 18.0,
+                                  color: Colors.teal,
+                                ),
+                                Text(
+                                  " $_dateString",
+                                  style: const TextStyle(
+                                      color: Colors.teal,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      const Text(
+                        "  Change",
+                        style: TextStyle(
+                            color: Colors.teal,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18.0),
+                      ),
+                    ],
+                  ),
+                ),
+              ),),
                 const Expanded(child: Text("Notes", style: TextStyle(color: Colors.black, fontSize: 20),)),
                 Expanded(child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -454,6 +548,13 @@ class NewReminder extends StatelessWidget {
     );
   }
 }
+
+final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+  shape: RoundedRectangleBorder(
+  borderRadius: BorderRadius.circular(5.0)),
+  elevation: 4.0,
+  backgroundColor: Colors.white,
+);
 
 // List for the reminder types
 const List<String> list = <String>['Medication', 'Appointment', 'Restock'];
@@ -556,6 +657,7 @@ class Timeobj {
 // Helper to fetch all reminders from server to local
 fetchAllReminder() async {
   upcomingEntries.clear();
+  recentEntries.clear();
   var response = await http.get(Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'));
 
   if (response.statusCode == 200) {
@@ -569,10 +671,12 @@ fetchAllReminder() async {
       var time = DateTime.fromMillisecondsSinceEpoch((timeobj.seconds * 1000) + (timeobj.nanoseconds ~/ 1000000));
       // print(time.hour);
       var entry = EntryInfo(jsonList[i]["title"], jsonList[i]["type"], jsonList[i]["notes"], TimeOfDay(hour: time.hour, minute: time.minute));
-      upcomingEntries.add(entry);
+      if (time.compareTo(DateTime.now()) < 0) {
+        recentEntries.add(entry);
+      } else {
+        upcomingEntries.add(entry);
+      }
     }
-    
-    return upcomingEntries;
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
