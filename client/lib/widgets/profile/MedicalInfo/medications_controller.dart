@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:client/firebase/authenticatedRequest.dart';
-import 'package:http/http.dart' as http;
 
 Future<List<Medication>> readMedications() async {
   final response = await AuthenticatedRequest.get(

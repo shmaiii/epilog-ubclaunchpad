@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase/auth.dart';
-import 'package:http/http.dart' as http;
 
 class TestLoginScreen extends StatefulWidget {
   const TestLoginScreen({super.key});
