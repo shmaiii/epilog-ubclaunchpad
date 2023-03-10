@@ -4,6 +4,7 @@ import userRoutes from './routes/userRoutes.js';
 import medicationsRoutes from './routes/medicationsRoutes.js';
 import contactsRoutes from './routes/contactsRoutes.js';
 import calendarRoutes from './routes/calendarRoutes.js';
+
 const app = express();
 
 app.use(express.json());
