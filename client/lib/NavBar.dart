@@ -5,7 +5,7 @@ import 'screens/HomeScreen.dart';
 import 'screens/NotificationScreen.dart';
 import 'screens/ProfileScreen.dart';
 import 'screens/RecordScreen.dart';
-import 'screens/LoginScreen.dart';
+import 'screens/TestLoginScreen.dart';
 import 'firebase/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -48,7 +48,9 @@ class EntryController extends StatelessWidget {
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
-          return signedIn ? const HomePage(title: 'Home Page') : LoginScreen();
+          return signedIn
+              ? const HomePage(title: 'Home Page')
+              : TestLoginScreen();
         }
         return Container(
           color: Colors.black,

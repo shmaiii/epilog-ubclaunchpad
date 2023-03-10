@@ -3,14 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase/auth.dart';
 import 'package:http/http.dart' as http;
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class TestLoginScreen extends StatefulWidget {
+  const TestLoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<TestLoginScreen> createState() => _TestLoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _TestLoginScreenState extends State<TestLoginScreen> {
   String _errorMsg = '';
   bool _isRegister = false;
   final TextEditingController _controllerEmail = TextEditingController();

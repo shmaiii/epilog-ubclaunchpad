@@ -25,9 +25,9 @@ Future<List<Medication>> readMedications() async {
 
 Future<String> addMedication(
     String name, String administrationMethod, String dosage) async {
-  final response = await http.post(
-      Uri.parse(
-          'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/add'),
+  final response = await AuthenticatedRequest.post(
+      url: Uri.parse(
+          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -48,9 +48,9 @@ Future<String> addMedication(
 
 Future<String> editMedication(String name, String administrationMethod,
     String dosage, String medicationId) async {
-  final response = await http.post(
-      Uri.parse(
-          'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit'),
+  final response = await AuthenticatedRequest.post(
+      url: Uri.parse(
+          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -70,8 +70,9 @@ Future<String> editMedication(String name, String administrationMethod,
 }
 
 Future<String> deleteMedication(String medicationId) async {
-  final response = await http.post(Uri.parse(
-      'http://localhost:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
+  final response = await AuthenticatedRequest.post(
+      url: Uri.parse(
+          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
 
   if (response.statusCode == 200) {
     return response.body;

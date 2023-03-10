@@ -24,9 +24,9 @@ Future<List<Contact>> readContacts() async {
 }
 
 Future<String> addContact(String name, String phoneNumber, String type) async {
-  final response = await http.post(
-      Uri.parse(
-          'http://localhost:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/add'),
+  final response = await AuthenticatedRequest.post(
+      url: Uri.parse(
+          'http://10.0.2.2:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -47,9 +47,9 @@ Future<String> addContact(String name, String phoneNumber, String type) async {
 
 Future<String> editContact(
     String name, String phoneNumber, String type, String contactId) async {
-  final response = await http.post(
-      Uri.parse(
-          'http://localhost:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/$contactId/edit'),
+  final response = await AuthenticatedRequest.post(
+      url: Uri.parse(
+          'http://10.0.2.2:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/$contactId/edit'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -69,8 +69,9 @@ Future<String> editContact(
 }
 
 Future<String> deleteContact(String contactId) async {
-  final response = await http.post(Uri.parse(
-      'http://localhost:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/$contactId/delete'));
+  final response = await AuthenticatedRequest.post(
+      url: Uri.parse(
+          'http://10.0.2.2:8080/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/$contactId/delete'));
 
   if (response.statusCode == 200) {
     return response.body;
