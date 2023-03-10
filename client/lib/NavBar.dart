@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
 import 'screens/EntryScreen.dart';
-import 'HomeScreen/HomeScreen.dart';
+import 'screens/HomeScreen.dart';
 import 'screens/NotificationScreen.dart';
 import 'screens/ProfileScreen.dart';
 import 'screens/RecordScreen.dart';
