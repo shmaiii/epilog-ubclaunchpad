@@ -82,7 +82,8 @@ class _HomeState extends State<HomeScreen> {
                     Icons.calendar_today,
                     color: Color(0XFF0342E9),
                     size: 50,
-                  )),
+                  ),
+                  1),
             ),
             Expanded(
               child: CalendarComponent(
@@ -92,7 +93,8 @@ class _HomeState extends State<HomeScreen> {
                     Icons.leaderboard,
                     color: (Colors.amber[600])!,
                     size: 50,
-                  )),
+                  ),
+                  0),
             ),
           ]),
           Row(
