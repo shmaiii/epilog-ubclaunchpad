@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'calendar__add_icons.dart';
@@ -24,10 +26,10 @@ class _NotificationState extends State<NotificationScreen> {
   @override
   void initState() {
     super.initState();
-    loadData();
+    loadData(null);
   }
 
-  Future<void> loadData() async {
+  FutureOr loadData(dynamic value) async {
     await fetchAllReminder();
     setState(() {
       isLoading = false;
@@ -52,7 +54,8 @@ class _NotificationState extends State<NotificationScreen> {
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/reminder/new');
+                  Route route = MaterialPageRoute(builder: (context) => const NewReminder());
+                  Navigator.push(context, route).then((value) async {setState(() {isLoading = true;});await loadData(value);});
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -370,10 +373,28 @@ class ListEntry extends StatelessWidget {
 }
 
 //-------------------------------------New Reminder Page------------------------------------//
-String _dateString = "Not set";
-String _time = "Not set";
-class NewReminder extends StatelessWidget {
+class NewReminder extends StatefulWidget {
   const NewReminder({super.key});
+
+  @override
+  NewReminderState createState() => NewReminderState();
+}
+
+class NewReminderState extends State<NewReminder> {
+  String _dateString = "Select Date";
+  String _timeString = "Select Time";
+  ReminderData tempData = ReminderData(type: "type", title: "title", time: DateTime.now(), notes: "notes");
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void _setDataFromChild(String data) {
+    setState(() {
+      tempData.type = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -410,108 +431,154 @@ class NewReminder extends StatelessWidget {
                     child: Text("Type", style: TextStyle(color: Colors.black, fontSize: 20),),
                   )
                 ),
-                const Expanded(
-                  child: ReminderTypeDropDown()
+                Expanded(
+                  child: ReminderTypeDropDown(callback: _setDataFromChild)
                 ),
                 const Expanded(child: Text("Title", style: TextStyle(color: Colors.black, fontSize: 20),)),
-                const Expanded(child: TextField()),
+                Expanded(
+                  child: TextField(
+                    onChanged:(text) {
+                      tempData.title = text;
+                      setState(() {});
+                    },
+                  )
+                ),
                 const Expanded(child: Text("Date", style: TextStyle(color: Colors.black, fontSize: 20),)),
                 Expanded(
-                    child: DropdownDatePicker(
-                    locale: "en",
-                    inputDecoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.grey, width: 1.0),
+                  child: ElevatedButton(
+                    style: raisedButtonStyle,
+                    onPressed: () {
+                      DatePicker.showDatePicker(context,
+                        theme: const DatePickerTheme(
+                          containerHeight: 210.0,
                         ),
-                        helperText: '',
-                        contentPadding: const EdgeInsets.all(3),
-                        border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.circular(10))), // optional
-                    isDropdownHideUnderline: true, // optional
-                    isFormValidator: true, // optional
-                    startYear: 1900, // optional
-                    endYear: 2030, // optional
-                    width: 0.0, // optional
-                    monthFlex: 1,
-                    dayFlex: 1,
-                    yearFlex: 1,
-                    onChangedDay: (value) => print('onChangedDay: $value'),
-                    onChangedMonth: (value) => print('onChangedMonth: $value'),
-                    onChangedYear: (value) => print('onChangedYear: $value'),
-                    //boxDecoration: BoxDecoration(
-                    // border: Border.all(color: Colors.grey, width: 1.0)), // optional
-                    // showDay: false,// optional
-                    // dayFlex: 2,// optional
-                    // locale: "zh_CN",// optional
-                    // selectedDay: 3, // optional
-                    // selectedMonth: 3, // optional
-                    // selectedYear: 2023, // optional
-                    // hintDay: 'Day', // optional
-                    // hintMonth: 'Month', // optional
-                    // hintYear: 'Year', // optional
-                    // hintTextStyle: TextStyle(color: Colors.grey), // optional
-                  )),
-                const Expanded(child: Text("Time", style: TextStyle(color: Colors.black, fontSize: 20),)),
-                Expanded(child: ElevatedButton(
-                style: raisedButtonStyle,
-                onPressed: () {
-                  DatePicker.showDatePicker(context,
-                    theme: const DatePickerTheme(
-                      containerHeight: 210.0,
-                    ),
-                    showTitleActions: true,
-                    minTime: DateTime(2000, 1, 1),
-                    maxTime: DateTime(2022, 12, 31),
-                    onConfirm: (date) {
-                      print('confirm $date');
-                      _dateString = '${date.year} - ${date.month} - ${date.day}';
+                        showTitleActions: true,
+                        minTime: DateTime(2000, 1, 1),
+                        maxTime: DateTime(2022, 12, 31),
+                        onConfirm: (date) {
+                          print('confirm $date');
+                          _dateString = '${date.year} - ${date.month} - ${date.day}';
+                          DateTime newDate = DateTime(date.year, date.month, date.day, tempData.time.hour, tempData.time.minute, tempData.time.second, tempData.time.millisecond, tempData.time.microsecond);
+                          tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
+                          setState(() {});
+                        },
+                        currentTime: DateTime.now(),
+                        locale: LocaleType.en
+                      );
                     },
-                    currentTime: DateTime.now(),
-                    locale: LocaleType.en
-                  );
-                },
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 50.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Container(
-                            child: Row(
-                              children: <Widget>[
-                                const Icon(
-                                  Icons.date_range,
-                                  size: 18.0,
-                                  color: Colors.teal,
-                                ),
-                                Text(
-                                  " $_dateString",
-                                  style: const TextStyle(
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                child: Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.date_range,
+                                      size: 18.0,
                                       color: Colors.teal,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18.0),
+                                    ),
+                                    Text(
+                                      " $_dateString",
+                                      style: const TextStyle(
+                                          color: Colors.teal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18.0),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              )
+                            ],
+                          ),
+                          const Text(
+                            "  Edit",
+                            style: TextStyle(
+                              color: Colors.teal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0
                             ),
-                          )
+                          ),
                         ],
                       ),
-                      const Text(
-                        "  Change",
-                        style: TextStyle(
-                            color: Colors.teal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18.0),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),),
+                const Expanded(child: Text("Time", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                Expanded(
+                  child: ElevatedButton(
+                    style: raisedButtonStyle,
+                    onPressed: () {
+                      DatePicker.showTimePicker(context,
+                          theme: const DatePickerTheme(
+                            containerHeight: 210.0,
+                          ),
+                          showTitleActions: true, onConfirm: (time) {
+                        print('confirm $time');
+                        _timeString = '${time.hour} : ${time.minute} : ${time.second}';
+                        DateTime newDate = DateTime(tempData.time.year, tempData.time.month, tempData.time.day, time.hour, time.minute, time.second, tempData.time.millisecond, tempData.time.microsecond);
+                        tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
+                        setState(() {});
+                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50.0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Container(
+                                child: Row(
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.access_time,
+                                      size: 18.0,
+                                      color: Colors.teal,
+                                    ),
+                                    Text(
+                                      " $_timeString",
+                                      style: const TextStyle(
+                                          color: Colors.teal,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18.0),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                          const Text(
+                            "  Edit",
+                            style: TextStyle(
+                              color: Colors.teal,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ),
                 const Expanded(child: Text("Notes", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                Expanded(
+                  child: TextField(
+                    maxLines: 3, // set the maximum number of lines to 3
+                    decoration: const InputDecoration(
+                      hintText: 'Enter your notes here', // optional hint text
+                      border: OutlineInputBorder(), // optional border decoration
+                    ),
+                    onChanged:(text) {
+                      tempData.notes = text;
+                      setState(() {});
+                    },
+                  )
+                ),
                 Expanded(child: Row(
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
@@ -528,7 +595,12 @@ class NewReminder extends StatelessWidget {
                       ),
                     ),
                     Expanded(child: TextButton(
-                        onPressed: () => addReminder(input),
+                        onPressed: () async {
+                          await addReminder(tempData);
+                          Navigator.pop(context);
+                          // Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen(),),);
+                          // Navigator.pushNamed(context, '/reminder');
+                        },
                         child: Container(
                           color: Colors.grey,
                           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -574,14 +646,16 @@ var input = ReminderData(type: "Appointment", title: "Meet Aryan", time: DateTim
 
 // Widget for reminder type dropdown
 class ReminderTypeDropDown extends StatefulWidget {
-  const ReminderTypeDropDown({super.key});
+  final Function(String) callback;
+  
+  const ReminderTypeDropDown({super.key, required this.callback});
 
   @override
-  State<ReminderTypeDropDown> createState() => _ReminderTypeDropDownState();
+  ReminderTypeDropDownState createState() => ReminderTypeDropDownState();
 }
 
-// State changes to the reminder type dropdown
-class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
+// Widget state for reminder type dropdown
+class ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
   String? dropdownValue;
 
   @override
@@ -596,7 +670,7 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
           // This is called when the user selects an item.
           setState(() {
             dropdownValue = value!;
-            input.type = value;
+            widget.callback(value);
           });
         },
         items: list.map<DropdownMenuItem<String>>((String value) {
@@ -612,7 +686,7 @@ class _ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
 
 //-------------------------------------Helpers for server communication------------------------------------//
 // Helper for post reminders to the server
-void addReminder(ReminderData reminder) async {
+Future addReminder(ReminderData reminder) async {
   print("enter");
   print(reminder.time);
 
