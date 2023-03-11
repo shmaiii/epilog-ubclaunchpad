@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:client/HomeScreen/home_screen_controller.dart';
+import 'package:client/HomeScreenComponents/home_screen_controller.dart';
 import 'package:client/calendar_container.dart';
-import 'delete_alert_dialog.dart';
-import 'home_screen_drawer.dart';
-import 'reminder_entry.dart';
+import '../HomeScreenComponents/delete_alert_dialog.dart';
+import '../HomeScreenComponents/home_screen_drawer.dart';
+import '../HomeScreenComponents/reminder_entry.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
