@@ -13,19 +13,19 @@ app.use(cors());
 
 app.use(async (req, res, next) => {
     try {
-        const idToken = getBearerTokenFromHeader(req);
+        // const idToken = getBearerTokenFromHeader(req);
 
-        if (idToken === null) {
-            const error = new Error("request does not have valid authorization header");
-            error.code = 401;
-            throw error;
-        }
+        // if (idToken === null) {
+        //     const error = new Error("request does not have valid authorization header");
+        //     error.code = 401;
+        //     throw error;
+        // }
 
-        const decodedIdToken = await auth.verifyIdToken(idToken);
-        req.firebaseUserId = decodedIdToken.uid;
+        // const decodedIdToken = await auth.verifyIdToken(idToken);
+        // req.firebaseUserId = decodedIdToken.uid;
 
-        // Console log for testing. Need to remove later
-        console.log(`uid is: ${req.firebaseUserId}`)
+        // // Console log for testing. Need to remove later
+        // console.log(`uid is: ${req.firebaseUserId}`)
         next()
     } catch (err){
         let error = err

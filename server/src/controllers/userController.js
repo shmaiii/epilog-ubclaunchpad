@@ -21,6 +21,23 @@ const getPersonalInformation = async (req, res) => {
 
 };
 
+const storePersonalInformation = async(req,res)=>{
+    const fullName = req.body.fullName;
+    const docData = {
+        name : fullName
+    }
+    try{
+        const contactDoc = await addDoc(collection(db, '/users/'), docData);
+        res.status(200).send(JSON.stringify(contactDoc));
+            
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+        
+    }
+}
+
 export default {
-  getPersonalInformation
+  getPersonalInformation,
+  storePersonalInformation
 };
