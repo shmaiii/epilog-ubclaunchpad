@@ -1,9 +1,13 @@
-import {db, doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc} from "../config.js"
+import {db, doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, setDoc} from "../config.js"
 
 const list_all = async(req, res) => {
+    console.log(req);
+    //const userId = req.query.userId;
+    // todo: revert the hardcoded user and add the token that is the id here
+    const userId = "82xC4tPM2xVBRUDBeWUs"
     try {
         // fetching the list from the database
-        const querySnapshot = await getDocs(collection(db, "/Users"));
+        const querySnapshot = await getDocs(collection(db, "/Users/" + userId + "/Entries"));
         console.log(querySnapshot)
         let all = []
         querySnapshot.forEach((doc) => {
@@ -23,10 +27,16 @@ const list_all = async(req, res) => {
 }
 
 const create = async (req, res) => {
+    const userId = req.query.userId;
     try {
         const data = req.body;
-        const docRef = await addDoc(collection(db, "Users"), data)
-        //console.log("Here is the reference to the documnet", docRef)
+        const collectionAddress = "Users/" + userId + "/Entries"
+        const {id: docId} = await addDoc(collection(db, collectionAddress), data)
+        console.log("Here is the id", docId)
+        // we don't need to keep the id in the document, we can pass it in the get response
+        // const collectionRef = collection(db, collectionAddress);
+        // const entryWithId = { ...data, id: docId };
+        // await setDoc(doc(collectionRef, docId), entryWithId);
         res.status(200).json({
             msg: "User Added"
         });
@@ -39,11 +49,12 @@ const create = async (req, res) => {
 }
 
 const update = async (req, res) => {
+    const userId = req.query.userId;
     try {
         console.log("Received an update request: ---------- ", req.body)
         const entryInfo = req.body;
         console.log("Request body: ", entryInfo)
-        const docRef = doc(db, "Users", entryInfo.userId)
+        const docRef = doc(db, "Users/" + userId + "/Entries", entryInfo.userId)
         await updateDoc(docRef, entryInfo.entry);
         res.status(200).json({
             msg: "User Updated"

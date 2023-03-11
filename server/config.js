@@ -73,4 +73,4 @@ async function testNewDoc() {
 // testGet();
 // console.log("Testing");
 
-export { db, collection, addDoc, getDoc, doc, query, where, getDocs, updateDoc};
+export { db, collection, addDoc, getDoc, doc, query, where, getDocs, updateDoc, setDoc};
