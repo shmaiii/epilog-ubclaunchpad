@@ -1,4 +1,4 @@
-import 'package:client/screens/LoginScreen.dart';
+import 'package:client/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'firebase/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +16,7 @@ class EntryController extends StatelessWidget {
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
-          return signedIn ? const MyApp() : const LoginScreen();
+          return signedIn ? const MyApp() : LoginScreen();
         }
         return Container(
           color: Colors.black,

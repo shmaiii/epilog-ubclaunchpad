@@ -13,19 +13,20 @@ app.use(cors());
 
 app.use(async (req, res, next) => {
     try {
-        // const idToken = getBearerTokenFromHeader(req);
+        console.log(req.headers.authorization)
+        const idToken = getBearerTokenFromHeader(req);
 
-        // if (idToken === null) {
-        //     const error = new Error("request does not have valid authorization header");
-        //     error.code = 401;
-        //     throw error;
-        // }
+        if (idToken === null) {
+            const error = new Error("request does not have valid authorization header");
+            error.code = 401;
+            throw error;
+        }
 
-        // const decodedIdToken = await auth.verifyIdToken(idToken);
-        // req.firebaseUserId = decodedIdToken.uid;
+        const decodedIdToken = await auth.verifyIdToken(idToken);
+        req.firebaseUserId = decodedIdToken.uid;
 
-        // // Console log for testing. Need to remove later
-        // console.log(`uid is: ${req.firebaseUserId}`)
+        // Console log for testing. Need to remove later
+        console.log(`uid is: ${req.firebaseUserId}`)
         next()
     } catch (err){
         let error = err
@@ -52,7 +53,7 @@ app.use((error, req, res, next) => {
     return res.status(error.code ?? 400).json({err: error.message})
 });
 
-const PORT = 8080;
+const PORT = process.env.port || 8080;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 });

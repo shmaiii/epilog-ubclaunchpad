@@ -1,3 +1,4 @@
+import 'package:client/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
 import 'screens/EntryScreen.dart';
@@ -5,7 +6,6 @@ import 'screens/HomeScreen.dart';
 import 'screens/NotificationScreen.dart';
 import 'screens/ProfileScreen.dart';
 import 'screens/RecordScreen.dart';
-import 'screens/TestLoginScreen.dart';
 import 'firebase/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -48,9 +48,7 @@ class EntryController extends StatelessWidget {
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
-          return signedIn
-              ? const HomePage(title: 'Home Page')
-              : TestLoginScreen();
+          return signedIn ? const HomePage(title: 'Home Page') : LoginScreen();
         }
         return Container(
           color: Colors.black,
