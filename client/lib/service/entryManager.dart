@@ -24,6 +24,8 @@ class EntryFields {
   static const String beforeEffects = "entry_before_effects";
   static const String afterEffects = "entry_after_effects";
   static const String symptoms = "entry_symptoms";
+  static const String checkUps = "check_ups";
+  static const String additionalInfo = "additional_info";
 }
 
 class EntryManager {
@@ -42,6 +44,7 @@ class EntryManager {
       afterEffects: await storage.read(key: EntryFields.afterEffects) ?? "N/A",
       symptoms: await storage.read(key: EntryFields.symptoms) ?? "N/A",
       checkUps: new Map(),
+      additionalInfo: await storage.read(key: EntryFields.additionalInfo) ?? "N/A",
     );
     return entry;
   }

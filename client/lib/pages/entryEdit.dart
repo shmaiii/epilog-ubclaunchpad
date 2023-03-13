@@ -198,6 +198,8 @@ class _EntryEditPageState extends State<entryEdit> {
   late DateTime _selectedDate;
   late TimeOfDay _selectedTime;
   late final String userId;
+  final _checkUpsController = TextEditingController();
+  final _additionalInfo = TextEditingController();
 
   @override
   void initState() {
@@ -212,6 +214,8 @@ class _EntryEditPageState extends State<entryEdit> {
     _symptomsController.text = widget.entry.afterEffects;
     _selectedDate = widget.entry.dateTime;
     _selectedTime = TimeOfDay.fromDateTime(widget.entry.dateTime);
+    _checkUpsController.text = widget.entry.checkUps as String;
+    _additionalInfo.text = widget.entry.additionalInfo;
     userId = widget.userId;
   }
 
@@ -383,6 +387,20 @@ class _EntryEditPageState extends State<entryEdit> {
 
               _buildTextFormField(_symptomsController, 'Symptoms', 'Please enter your symptoms'),
 
+              // checkups
+              _buildTextFormField(
+                _checkUpsController,
+                'Check ups',
+                'Please edit check-ups'
+              ),
+
+              // additional info
+              _buildTextFormField(
+                _activitiesController,
+                'Additional Info',
+                'Please enter addional info'
+              ),
+
               // Save Button
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -408,6 +426,7 @@ class _EntryEditPageState extends State<entryEdit> {
                           afterEffects: _afterEffectsController.text, 
                           symptoms: _symptomsController.text,
                           checkUps: new Map(),
+                          additionalInfo: _additionalInfo.text,
                         );
 
                         EntryManager.update(newEntry, userId);

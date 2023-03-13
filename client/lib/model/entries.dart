@@ -13,6 +13,7 @@ class EntriesModel {
   final String afterEffects;
   final String symptoms;
   final Map<String, bool> checkUps;
+  final String additionalInfo;
 
   EntriesModel({
     required this.title,
@@ -25,6 +26,7 @@ class EntriesModel {
     required this.afterEffects,
     required this.symptoms,
     required this.checkUps,
+    required this.additionalInfo,
   });
 
   factory EntriesModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +44,7 @@ class EntriesModel {
       checkUps: (json['checkUps'] is Map<String, dynamic>)
         ? Map<String, bool>.from(json['checkUps'])
         : {},
+      additionalInfo: json['additionalInfo'],  
     );
   }
 
@@ -57,6 +60,7 @@ class EntriesModel {
       'afterEffects': afterEffects,
       'symptoms': symptoms,
       'checkUps': checkUps,
+      'additionalInfo': additionalInfo,
     };
   }
 
