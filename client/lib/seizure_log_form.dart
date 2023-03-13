@@ -1,4 +1,6 @@
 import 'package:client/EntryFormPages/CategoryType.dart';
+import 'package:client/EntryFormPages/additional_info.dart';
+import 'package:client/EntryFormPages/check_up.dart';
 import 'package:client/EntryFormPages/Symptoms.dart';
 import 'package:client/service/entryManager.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +41,16 @@ List<Widget> formPages = [
   NewEntry(formKey: formKeys[0], storage: storage),
   CategoryType(formKey: formKeys[1], storage: storage),
   Symptoms(formKey: formKeys[2], storage: storage),
+  Checkup(formKey: formKeys[3], storage: storage),
+  AdditionalInfo(formKey: formKeys[4], storage: storage)
 ];
 
 List<String> pageTitles = [
   "New Seizure Log",
   "Category and Type",
   "Symptoms",
+  "Check-up",
+  "Additional Information"
 ];
 
 const storage = FlutterSecureStorage();
