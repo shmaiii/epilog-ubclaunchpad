@@ -152,6 +152,7 @@ class _CheckupState extends State<Checkup> {
 
   void _loadInitialData() async {
     final prefs = await widget.storage.readAll();
+    String? checkUpString = await widget.storage.read(key: 'check_ups');
     setState(() {
       checkUpData = {
         'missed_medicine': prefs['missed_medicine'] == 'true',
