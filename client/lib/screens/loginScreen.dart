@@ -137,7 +137,9 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMsg = e.message ?? '';
+        _errorMsg = e.code == 'unknown'
+            ? 'Email and/or password is empty'
+            : e.message ?? 'Invalid email and/or password';
       });
     }
   }
@@ -196,6 +198,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget buildErrorMessageText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 0),
+      child: Text(
+        _errorMsg,
+        style: TextStyle(
+            color: Colors.red.withOpacity(1.0),
+            fontSize: 16,
+            fontWeight: FontWeight.normal),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -221,6 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 50),
                       buildPassword(),
                       buildForgotPassBtn(),
+                      buildErrorMessageText(),
                       buildLoginBtn(),
                       SizedBox(height: 70),
                       buildSignUpBtn(),

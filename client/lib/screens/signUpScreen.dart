@@ -193,16 +193,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth().createUserWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      await AuthenticatedRequest.post(
-          url:
-              Uri.parse('http://10.0.2.2:8080/user/personal-information/store'),
-          body: jsonEncode(<String, String>{'fullName': nameController.text}));
-      Navigator.pop(context);
+      if (nameController.text.isEmpty) {
+        setState(() {
+          _errorMsg = 'Full Name is empty ';
+        });
+      } else if (passwordController.text != confirmPasswordController.text) {
+        setState(() {
+          _errorMsg = 'Passwords do not match';
+        });
+      } else {
+        await Auth().createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        await AuthenticatedRequest.post(
+            url: Uri.parse(
+                'http://10.0.2.2:8080/user/personal-information/store'),
+            body:
+                jsonEncode(<String, String>{'fullName': nameController.text}));
+        setState(() {
+          _errorMsg = '';
+        });
+        Navigator.pop(context);
+      }
     } on FirebaseAuthException catch (e) {
       setState(() {
-        _errorMsg = e.message ?? '';
+        _errorMsg = e.code == 'unknown'
+            ? 'Email and/or password is empty'
+            : e.message ?? 'Invalid email and/or password';
       });
     }
   }
@@ -260,6 +276,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Widget buildErrorMessageText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 0),
+      child: Text(
+        _errorMsg,
+        style: TextStyle(
+            color: Colors.red.withOpacity(1.0),
+            fontSize: 16,
+            fontWeight: FontWeight.normal),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -287,6 +316,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       buildPassword(),
                       SizedBox(height: 30),
                       buildConfirmPassword(),
+                      buildErrorMessageText(),
                       buildSignUpBtn(),
                       buildSignInBtn(),
                     ],
