@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore"; 
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, Timestamp } from "firebase/firestore"; 
 import { db } from "../firebase/db.js";
 
 // Note: comments below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUserId
@@ -84,6 +84,36 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
   }
 };
 
+const updateCalendarDocumentDateGivenId = async (req, res, next) => {
+  try {
+    let updateDocFieldInputs =  req.body;
+ 
+    if(updateDocFieldInputs.date){
+     updateDocFieldInputs.date = Timestamp.fromDate(new Date(updateDocFieldInputs.date));
+    }
+    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
+    return res.json({id: req.params.calendarDocId});
+  } catch (err) {
+    err.code = err.code ?? 500;
+    next(err);
+  }
+};
+
+
+const updateCalendarDocumentTakeGivenId = async (req, res, next) => {
+  try {
+    let updateDocFieldInputs =  req.body;
+    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
+    return res.json({id: req.params.calendarDocId});
+  } catch (err) {
+    err.code = err.code ?? 500;
+    next(err);
+  }
+};
+
+
+
+
 const deleteCalendarDocumentGivenId = async (req, res, next) => {
   try {
     await deleteDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`)); 
@@ -99,5 +129,7 @@ export default {
   getCalendarDocumentGivenId,
   postCalendarDocument,
   updateCalendarDocumentGivenId,
+  updateCalendarDocumentDateGivenId,
+  updateCalendarDocumentTakeGivenId,
   deleteCalendarDocumentGivenId
 };
