@@ -11,6 +11,5 @@ const TextStyle demotextstyle =
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await Auth().signOut();
   runApp(MyApp());
 }

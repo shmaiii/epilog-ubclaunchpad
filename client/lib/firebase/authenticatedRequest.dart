@@ -45,6 +45,19 @@ class AuthenticatedRequest {
         headers: headersWithAuth, body: body, encoding: encoding);
   }
 
+  static Future<http.Response> patch(
+      {required Uri url,
+      Map<String, String>? headers,
+      Object? body,
+      Encoding? encoding}) async {
+    String uid = await Auth().currentUser?.getIdToken() ?? 'none';
+    Map<String, String> headersWithAuth = headers ?? _defaultHeader;
+    headersWithAuth['Authorization'] = 'Bearer $uid';
+
+    return http.patch(url,
+        headers: headersWithAuth, body: body, encoding: encoding);
+  }
+
   static Future<http.Response> delete(
       {required Uri url,
       Map<String, String>? headers,
