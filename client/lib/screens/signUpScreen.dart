@@ -70,7 +70,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.person,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -106,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.email_outlined,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -142,7 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.lock,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -178,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.lock,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -232,17 +232,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('   SIGN UP   '),
-            Icon(
-              Icons.arrow_forward,
-              size: 50,
-              color: Color.fromARGB(146, 123, 7, 191),
-            )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '   SIGN UP   ',
+                style: TextStyle(color: Color(0xFFFFFFFF)),
+              ),
+            ),
           ],
         ),
         onPressed: createUserWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 238, 238, 232),
+            backgroundColor: Color(0xff6247AA),
             foregroundColor: Colors.black87,
             elevation: 5,
             padding: EdgeInsets.all(5),
@@ -268,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
           child: Text('Sign In',
               style: TextStyle(
-                  color: Color.fromARGB(146, 123, 7, 191),
+                  color: Color(0xff6247AA),
                   fontSize: 14,
                   fontWeight: FontWeight.w500)),
         )
