@@ -31,16 +31,15 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.pushNamed(context, '/entryEdit', arguments: {
-                "userId": this.userId, 
-                "entry": this.entry
-              }).then((updatedEntry) {
+              Navigator.pushNamed(context, '/entryEdit',
+                      arguments: {"userId": this.userId, "entry": this.entry})
+                  .then((updatedEntry) {
                 if (updatedEntry != null) {
-                      setState(() {
-                        entry =  updatedEntry as EntriesModel;
-                      });
-                }
+                  setState(() {
+                    entry = updatedEntry as EntriesModel;
                   });
+                }
+              });
             },
           ),
         ],
@@ -58,45 +57,138 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
               ),
             ),
           ),
+          // SingleChildScrollView(
+          //   child: Column(
+          //     children: [
+          //       Flexible(
+          //         child: GridView.count(
+          //           crossAxisCount: 2,
+          //           childAspectRatio: 3 / 1,
+          //           shrinkWrap: true,
+          //           children: <Widget>[
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Time:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(
+          //                   DateFormat.yMMMMd().format(entry.dateTime)),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Duration:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.duration),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Activities:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.activities),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Category:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.category),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Type:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.type),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Before Effect:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.beforeEffects),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("After Effect:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.afterEffects),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerKey("Symptoms:"),
+          //             ),
+          //             Flexible(
+          //               child: _gridChildrenContainerValue(entry.symptoms),
+          //             ),
+          //             Flexible(
+          //               child: Container(
+          //                 margin: const EdgeInsets.all(20),
+          //                 child: Column(
+          //                   children: entry.checkUps.entries.map((entry) {
+          //                     if (entry.value) {
+          //                       return CheckboxListTile(
+          //                         title: Text(entry.key),
+          //                         value: true,
+          //                         onChanged: null,
+          //                       );
+          //                     } else {
+          //                       return Container();
+          //                     }
+          //                   }).toList(),
+          //                 ),
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 1,
-              children: <Widget>[
-                _gridChildrenContainerKey("Time:"),
-                _gridChildrenContainerValue(DateFormat.yMMMMd().format(entry.dateTime)),
-                _gridChildrenContainerKey("Duration:"),
-                _gridChildrenContainerValue(entry.duration),
-                _gridChildrenContainerKey("Activities:"),
-                _gridChildrenContainerValue(entry.activities),
-                _gridChildrenContainerKey("Category:"),
-                _gridChildrenContainerValue(entry.category),
-                _gridChildrenContainerKey("Type:"),
-                _gridChildrenContainerValue(entry.type),
-                _gridChildrenContainerKey("Before Effect:"),
-                _gridChildrenContainerValue(entry.beforeEffects),
-                _gridChildrenContainerKey("After Effect:"),
-                _gridChildrenContainerValue(entry.afterEffects),
-                _gridChildrenContainerKey("Symptoms:"),
-                _gridChildrenContainerValue(entry.symptoms),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  GridView.count(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 1,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: <Widget>[
+                      _gridChildrenContainerKey("Time:"),
+                      _gridChildrenContainerValue(
+                          DateFormat.yMMMMd().format(entry.dateTime)),
+                      _gridChildrenContainerKey("Duration:"),
+                      _gridChildrenContainerValue(entry.duration),
+                      _gridChildrenContainerKey("Activities:"),
+                      _gridChildrenContainerValue(entry.activities),
+                      _gridChildrenContainerKey("Category:"),
+                      _gridChildrenContainerValue(entry.category),
+                      _gridChildrenContainerKey("Type:"),
+                      _gridChildrenContainerValue(entry.type),
+                      _gridChildrenContainerKey("Before Effect:"),
+                      _gridChildrenContainerValue(entry.beforeEffects),
+                      _gridChildrenContainerKey("After Effect:"),
+                      _gridChildrenContainerValue(entry.afterEffects),
+                      _gridChildrenContainerKey("Symptoms:"),
+                      _gridChildrenContainerValue(entry.symptoms),
+                      _gridChildrenContainerKey("Check Ups:"),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(
+                      children: entry.checkUps.entries.map((entry) {
+                        if (entry.value) {
+                          return CheckboxListTile(
+                            title: Text(entry.key),
+                            value: true,
+                            onChanged: null,
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-          margin: const EdgeInsets.all(20),
-          child: Column(
-            children: entry.checkUps.entries.map((entry) {
-              if (entry.value) {
-                return CheckboxListTile(
-                  title: Text(entry.key),
-                  value: true,
-                  onChanged: null,
-                );
-              } else {
-                return Container();
-              }
-            }).toList(),
-          ),
           ),
         ],
       ),

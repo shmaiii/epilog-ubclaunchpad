@@ -37,7 +37,6 @@
 //   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 //   _EntryEditFormState({required this.entry, required this.userId});
 
-  
 //   @override
 //   Widget build(BuildContext context) {
 //     var seizureKeyList = ["Title", "Duration", "Category", "Symptoms"];
@@ -110,13 +109,12 @@
 //   Map<String, String> updatedValues;
 //   final double itemWidth = 9;
 //   final double itemHeight = 3;
-  
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Padding(
 //         padding: const EdgeInsets.only(top: 30),
-//         child: 
+//         child:
 //         //Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 //               GridView.count(
 //                 crossAxisCount: 2,
@@ -130,7 +128,7 @@
 //                   gridKey("Category"),
 //                   gridValue(entry.category, entry, "Category"),
 //                   gridKey("Symptoms"),
-//                   gridValue(entry.symptoms, entry, "Symptoms"),        
+//                   gridValue(entry.symptoms, entry, "Symptoms"),
 //                 ]
 //               )
 //             );
@@ -173,7 +171,6 @@ import 'package:flutter/material.dart';
 
 import '../model/entries.dart';
 
-
 class entryEdit extends StatefulWidget {
   EntriesModel entry;
   String userId;
@@ -198,8 +195,8 @@ class _EntryEditPageState extends State<entryEdit> {
   late DateTime _selectedDate;
   late TimeOfDay _selectedTime;
   late final String userId;
-  final _checkUpsController = TextEditingController();
-  final _additionalInfo = TextEditingController();
+  Map<String, bool> _checkUpsValues = {};
+  final _additionalInfoController = TextEditingController();
 
   @override
   void initState() {
@@ -214,8 +211,10 @@ class _EntryEditPageState extends State<entryEdit> {
     _symptomsController.text = widget.entry.afterEffects;
     _selectedDate = widget.entry.dateTime;
     _selectedTime = TimeOfDay.fromDateTime(widget.entry.dateTime);
-    _checkUpsController.text = widget.entry.checkUps as String;
-    _additionalInfo.text = widget.entry.additionalInfo;
+    for (var checkUp in widget.entry.checkUps.keys) {
+      _checkUpsValues[checkUp] = widget.entry.checkUps[checkUp]!;
+    }
+    _additionalInfoController.text = widget.entry.additionalInfo;
     userId = widget.userId;
   }
 
@@ -265,7 +264,20 @@ class _EntryEditPageState extends State<entryEdit> {
       ),
     );
   }
-  
+
+  Widget _buildCheckUpsListTile(String checkUp, bool value) {
+    return CheckboxListTile(
+      title: Text(checkUp),
+      value: value,
+      onChanged: (newValue) {
+        setState(() {
+          _checkUpsValues[checkUp] = newValue!;
+        });
+      },
+      controlAffinity: ListTileControlAffinity.leading,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,7 +308,6 @@ class _EntryEditPageState extends State<entryEdit> {
                   ],
                 ),
               ),
-
 
               // Date and Time
               Padding(
@@ -385,21 +396,45 @@ class _EntryEditPageState extends State<entryEdit> {
                 'Please enter after effects',
               ),
 
-              _buildTextFormField(_symptomsController, 'Symptoms', 'Please enter your symptoms'),
+              _buildTextFormField(_symptomsController, 'Symptoms',
+                  'Please enter your symptoms'),
 
-              // checkups
-              _buildTextFormField(
-                _checkUpsController,
-                'Check ups',
-                'Please edit check-ups'
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                      padding: EdgeInsets.all(16.0),
+                      // child: Text(
+                      //   'Check Ups',
+                      //   style: Theme.of(context).textTheme.headline5,
+                      // ),
+                      child: Text(
+                        'Check Ups',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      )),
+                  for (var checkUp in _checkUpsValues.keys)
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _checkUpsValues[checkUp]!,
+                          onChanged: (value) {
+                            setState(() {
+                              _checkUpsValues[checkUp] = value!;
+                            });
+                          },
+                        ),
+                        Text(checkUp),
+                      ],
+                    ),
+                ],
               ),
 
               // additional info
-              _buildTextFormField(
-                _activitiesController,
-                'Additional Info',
-                'Please enter addional info'
-              ),
+              _buildTextFormField(_additionalInfoController, 'Additional Info',
+                  'Please enter addional info'),
 
               // Save Button
               Padding(
@@ -423,10 +458,10 @@ class _EntryEditPageState extends State<entryEdit> {
                           category: _categoryController.text,
                           type: _typeController.text,
                           beforeEffects: _beforeEffectsController.text,
-                          afterEffects: _afterEffectsController.text, 
+                          afterEffects: _afterEffectsController.text,
                           symptoms: _symptomsController.text,
-                          checkUps: new Map(),
-                          additionalInfo: _additionalInfo.text,
+                          checkUps: _checkUpsValues,
+                          additionalInfo: _additionalInfoController.text,
                         );
 
                         EntryManager.update(newEntry, userId);
@@ -453,4 +488,3 @@ class _EntryEditPageState extends State<entryEdit> {
     );
   }
 }
-
