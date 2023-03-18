@@ -1,4 +1,5 @@
-
+import 'package:client/firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenDrawer extends StatefulWidget {
@@ -62,10 +63,14 @@ class _HomeScreenDrawerState extends State<HomeScreenDrawer> {
             ),
             title: const Text('Sign out',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
+            onTap: () async {
+              try {
+                await Auth().signOut();
+              } on FirebaseAuthException catch (e) {
+                setState(() {
+                  print(e.message);
+                });
+              }
               Navigator.pop(context);
             },
           ),

@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:client/firebase/auth.dart';
+import 'package:client/firebase/authenticatedRequest.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -7,6 +12,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  String _errorMsg = '';
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -185,6 +191,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      if (nameController.text.isEmpty) {
+        setState(() {
+          _errorMsg = 'Full Name is empty ';
+        });
+      } else if (passwordController.text != confirmPasswordController.text) {
+        setState(() {
+          _errorMsg = 'Passwords do not match';
+        });
+      } else {
+        await Auth().createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        await AuthenticatedRequest.post(
+            url: Uri.parse(
+                'http://10.0.2.2:8080/user/personal-information/store'),
+            body:
+                jsonEncode(<String, String>{'fullName': nameController.text}));
+        setState(() {
+          _errorMsg = '';
+        });
+        Navigator.pop(context);
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMsg = e.code == 'unknown'
+            ? 'Email and/or password is empty'
+            : e.message ?? 'Invalid email and/or password';
+      });
+    }
+  }
+
   Widget buildSignUpBtn() {
     return Container(
       alignment: Alignment.centerRight,
@@ -202,14 +240,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             )
           ],
         ),
-        onPressed: () => print("name: " +
-            nameController.text +
-            "; email: " +
-            emailController.text +
-            "; password: " +
-            passwordController.text +
-            "; confirm password: " +
-            confirmPasswordController.text),
+        onPressed: createUserWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 238, 238, 232),
             foregroundColor: Colors.black87,
@@ -245,6 +276,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Widget buildErrorMessageText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 0),
+      child: Text(
+        _errorMsg,
+        style: TextStyle(
+            color: Colors.red.withOpacity(1.0),
+            fontSize: 16,
+            fontWeight: FontWeight.normal),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -272,6 +316,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       buildPassword(),
                       SizedBox(height: 30),
                       buildConfirmPassword(),
+                      buildErrorMessageText(),
                       buildSignUpBtn(),
                       buildSignInBtn(),
                     ],

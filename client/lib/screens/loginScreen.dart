@@ -1,3 +1,5 @@
+import 'package:client/firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'signUpScreen.dart';
@@ -8,6 +10,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String _errorMsg = '';
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -128,6 +131,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMsg = e.code == 'unknown'
+            ? 'Email and/or password is empty'
+            : e.message ?? 'Invalid email and/or password';
+      });
+    }
+  }
+
   Widget buildLoginBtn() {
     return Container(
       alignment: Alignment.centerRight,
@@ -145,10 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
             )
           ],
         ),
-        onPressed: () => print("username: " +
-            emailController.text +
-            " password: " +
-            passwordController.text),
+        onPressed: signInWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 238, 238, 232),
             foregroundColor: Colors.black87,
@@ -185,6 +198,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Widget buildErrorMessageText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 0),
+      child: Text(
+        _errorMsg,
+        style: TextStyle(
+            color: Colors.red.withOpacity(1.0),
+            fontSize: 16,
+            fontWeight: FontWeight.normal),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,6 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 50),
                       buildPassword(),
                       buildForgotPassBtn(),
+                      buildErrorMessageText(),
                       buildLoginBtn(),
                       SizedBox(height: 70),
                       buildSignUpBtn(),
