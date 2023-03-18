@@ -167,6 +167,8 @@ class _editState extends State<entryDetail> with AutomaticKeepAliveClientMixin {
                       _gridChildrenContainerValue(entry.afterEffects),
                       _gridChildrenContainerKey("Symptoms:"),
                       _gridChildrenContainerValue(entry.symptoms),
+                      _gridChildrenContainerKey("Additional Info:"),
+                      _gridChildrenContainerValue(entry.additionalInfo),
                       _gridChildrenContainerKey("Check Ups:"),
                     ],
                   ),

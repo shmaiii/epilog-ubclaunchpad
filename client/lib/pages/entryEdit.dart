@@ -411,8 +411,8 @@ class _EntryEditPageState extends State<entryEdit> {
                       child: Text(
                         'Check Ups',
                         style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.normal,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w300,
                         ),
                       )),
                   for (var checkUp in _checkUpsValues.keys)
