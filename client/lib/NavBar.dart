@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/reminder/upcoming': (context) => const UpComingScreen(),
         '/reminder/recent': (context) => const RecentScreen(),
         '/reminder/new': (context) => const NewReminder(),
+        '/reminder/update':(context) => const NewReminder(),
       },
     );
   }

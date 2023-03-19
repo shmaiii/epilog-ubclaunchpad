@@ -77,6 +77,10 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
     //   throw error;
     // }
 
+    if (updateDocFieldInputs.date?.seconds || updateDocFieldInputs.date?.nanoseconds) {
+      updateDocFieldInputs.date = new Timestamp(updateDocFieldInputs.date.seconds, updateDocFieldInputs.date.nanoseconds);
+    } 
+
     await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {

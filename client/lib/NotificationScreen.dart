@@ -36,6 +36,12 @@ class _NotificationState extends State<NotificationScreen> {
     });
   }
 
+  onDeletion() async {
+    int value = 0;
+    setState(() {isLoading = true;});
+    await loadData(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -65,14 +71,16 @@ class _NotificationState extends State<NotificationScreen> {
             ),
           ],
         ),
-        body: const ReminderBody(),
+        body: ReminderBody(onDeletion: onDeletion),
       );
     }
   }
 }
 
 class ReminderBody extends StatelessWidget {
-  const ReminderBody({super.key});
+  final VoidCallback onDeletion;
+
+  const ReminderBody({super.key, required this.onDeletion});
   
   @override
   Widget build(BuildContext context) {
@@ -80,9 +88,9 @@ class ReminderBody extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         child: Column(mainAxisSize: MainAxisSize.max,
-          children: const <Widget>[
-            Expanded(child: UpComing()),
-            Expanded(child: Recent()),
+          children: <Widget>[
+            Expanded(child: UpComing(onDeletion: onDeletion)),
+            Expanded(child: Recent(onDeletion: onDeletion)),
           ],
         ),
       ),
@@ -93,7 +101,9 @@ class ReminderBody extends StatelessWidget {
 //-------------------------------------Upcoming pages------------------------------------//
 // Upcomming widget inside ReminderBody
 class UpComing extends StatelessWidget {
-  const UpComing({super.key});
+  final VoidCallback onDeletion;
+
+  const UpComing({super.key, required this.onDeletion});
   
   @override
   Widget build(BuildContext context) {
@@ -108,7 +118,7 @@ class UpComing extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/reminder/upcoming');
+                Navigator.pushNamed(context, '/reminder/upcoming').then((value) async => await onDeletion);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -126,7 +136,7 @@ class UpComing extends StatelessWidget {
         itemBuilder: (context, index) {
           final testEntry = upcomingEntries[index];
 
-          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime, id: testEntry.id, onDeletion: onDeletion);
         },
         padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       ),
@@ -140,6 +150,9 @@ class UpComingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    onDeletion() {
+      Navigator.pop(context);
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -164,7 +177,7 @@ class UpComingScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final testEntry = upcomingEntries[index];
 
-          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime, id: testEntry.id, onDeletion: onDeletion);
         },
         padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       )
@@ -174,7 +187,8 @@ class UpComingScreen extends StatelessWidget {
 
 //-------------------------------------Recent pages------------------------------------//
 class Recent extends StatelessWidget {
-  const Recent({super.key});
+  final VoidCallback onDeletion;
+  const Recent({super.key, required this.onDeletion});
   
   @override
   Widget build(BuildContext context) {
@@ -189,7 +203,7 @@ class Recent extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/reminder/recent');
+                Navigator.pushNamed(context, '/reminder/recent').then((value) async => await onDeletion);
               },
               child: Container(
                 alignment: Alignment.center,
@@ -207,7 +221,7 @@ class Recent extends StatelessWidget {
         itemBuilder: (context, index) {
           final testEntry = recentEntries[index];
 
-          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime, id: testEntry.id, onDeletion: onDeletion);
         },
         padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       ),
@@ -220,6 +234,9 @@ class RecentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    onDeletion() {
+      Navigator.pop(context);
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -244,7 +261,7 @@ class RecentScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final testEntry = recentEntries[index];
 
-          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime);
+          return ListEntry(title: testEntry.title, type: testEntry.type, notes: testEntry.notes, reminderTime: testEntry.reminderTime, id: testEntry.id, onDeletion: onDeletion);
         },
         padding: const EdgeInsets.only(right: 25.0, left: 25.0),
       )
@@ -256,25 +273,25 @@ class RecentScreen extends StatelessWidget {
 // TODO: Check if global list is ok
 var upcomingEntries = List<EntryInfo>.generate(
   1,
-  (index) => EntryInfo("Take Levetiracetam", "Medication", "Daily·Morning and Night, 2 pills", const TimeOfDay(hour: 10, minute: 0)),
+  (index) => EntryInfo("Take Levetiracetam", "Medication", "Daily·Morning and Night, 2 pills", const TimeOfDay(hour: 10, minute: 0), "id"),
   growable: true,
 );
 
 var recentEntries = List<EntryInfo>.generate(
   1,
-  (index) => EntryInfo("Get Topiramate", "Medication", "Daily·Morning and Night, 2 pills", const TimeOfDay(hour: 10, minute: 0)),
+  (index) => EntryInfo("Get Topiramate", "Medication", "Daily·Morning and Night, 2 pills", const TimeOfDay(hour: 10, minute: 0), "id"),
   growable: true,
 );
 
 // Data type for each reminder
 class EntryInfo {
-  
+  String id;
   String title;
   String type;
   String notes;
   TimeOfDay reminderTime;
 
-  EntryInfo(this.title, this.type, this.notes, this.reminderTime);
+  EntryInfo(this.title, this.type, this.notes, this.reminderTime, this.id);
 
   // TODO: Use these for comparison if needed
   // @override
@@ -301,9 +318,11 @@ class ListEntry extends StatelessWidget {
   final String title;
   final String type;
   final String notes;
+  final String id;
   final TimeOfDay reminderTime;
+  final VoidCallback onDeletion;
 
-  const ListEntry({super.key, required this.title, required this.type, required this.notes, required this.reminderTime});
+  const ListEntry({super.key, required this.title, required this.type, required this.notes, required this.reminderTime, required this.id, required this.onDeletion});
 
   @override
   Widget build(BuildContext context) {
@@ -315,7 +334,7 @@ class ListEntry extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text(title, style: const TextStyle(color: Colors.black),),
-            backgroundColor: const Color.fromARGB(255, 237, 255, 228),
+            backgroundColor: colorMap[type],
             elevation: 0,
             automaticallyImplyLeading: false,
             actions: <Widget>[
@@ -324,15 +343,28 @@ class ListEntry extends StatelessWidget {
                 child: PopupMenuButton<int>(
                   constraints: const BoxConstraints.expand(width: 140, height: 90),
                   icon: const Icon(Icons.more_vert_rounded, color: Colors.black,),
-                  shape:
-                      RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  onSelected: (value) {
+                    if (value == 0) {
+                      Route route = MaterialPageRoute(
+                          builder: (context) => NewReminder(entry: EntryInfo(title, type, notes, reminderTime, id)),
+                        );
+                        Navigator.push(context, route);
+                        onDeletion();
+                    } else {
+                      //TODO: Try to build a alert window before you really delete this!
+                      deleteReminder(id);
+                      onDeletion();
+                    }
+                  },
                   itemBuilder: (context) => [
                     PopupMenuItem(
                       value: 0,
                       height: 30,
                       child: Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: Text(optionText[0]))
+                              child: Text(optionText[0])),
+                      onTap: () {},
                     ),
                     const PopupMenuDivider(),
                     PopupMenuItem(
@@ -340,7 +372,8 @@ class ListEntry extends StatelessWidget {
                       height: 20,
                       child: Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: Text(optionText[1]))
+                              child: Text(optionText[1])),
+                      onTap: () {},
                     ),
                   ],
                 ),
@@ -365,7 +398,7 @@ class ListEntry extends StatelessWidget {
               ),
             ],
           ),
-          backgroundColor: const Color.fromARGB(255, 237, 255, 228),
+          backgroundColor: colorMap[type],
         ),
       ),
     );
@@ -374,7 +407,8 @@ class ListEntry extends StatelessWidget {
 
 //-------------------------------------New Reminder Page------------------------------------//
 class NewReminder extends StatefulWidget {
-  const NewReminder({super.key});
+  final EntryInfo ?entry;
+  const NewReminder({super.key, this.entry});
 
   @override
   NewReminderState createState() => NewReminderState();
@@ -384,10 +418,13 @@ class NewReminderState extends State<NewReminder> {
   String _dateString = "Select Date";
   String _timeString = "Select Time";
   ReminderData tempData = ReminderData(type: "type", title: "title", time: DateTime.now(), notes: "notes");
+  bool update = false;
+  String ?id;
 
   @override
   void initState() {
     super.initState();
+    updateData();
   }
 
   void _setDataFromChild(String data) {
@@ -396,8 +433,22 @@ class NewReminderState extends State<NewReminder> {
     });
   }
 
+  void updateData() {
+    if (widget.entry != null) {
+      update = true;
+      tempData.type = widget.entry!.type;
+      tempData.title = widget.entry!.title;
+      tempData.time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, widget.entry!.reminderTime.hour, widget.entry!.reminderTime.minute);
+      tempData.notes = widget.entry!.notes;
+      _dateString = '${tempData.time.year} - ${tempData.time.month} - ${tempData.time.day}';
+      _timeString = '${tempData.time.hour} : ${tempData.time.minute} : ${tempData.time.second}';
+      id = widget.entry!.id;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    //TODO: Try to put the entry info into the fields, and then deal with the save button function call, and callbacks to update main page
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -432,11 +483,12 @@ class NewReminderState extends State<NewReminder> {
                   )
                 ),
                 Expanded(
-                  child: ReminderTypeDropDown(callback: _setDataFromChild)
+                  child: ReminderTypeDropDown(callback: _setDataFromChild, type: tempData.type)
                 ),
                 const Expanded(child: Text("Title", style: TextStyle(color: Colors.black, fontSize: 20),)),
                 Expanded(
-                  child: TextField(
+                  child: TextFormField(
+                    initialValue: update ? tempData.title : null,
                     onChanged:(text) {
                       tempData.title = text;
                       setState(() {});
@@ -453,8 +505,8 @@ class NewReminderState extends State<NewReminder> {
                           containerHeight: 210.0,
                         ),
                         showTitleActions: true,
-                        minTime: DateTime(2000, 1, 1),
-                        maxTime: DateTime(2022, 12, 31),
+                        minTime: DateTime(2020, 1, 1),
+                        maxTime: DateTime(2025, 12, 31),
                         onConfirm: (date) {
                           print('confirm $date');
                           _dateString = '${date.year} - ${date.month} - ${date.day}';
@@ -462,7 +514,7 @@ class NewReminderState extends State<NewReminder> {
                           tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
                           setState(() {});
                         },
-                        currentTime: DateTime.now(),
+                        currentTime: update ? tempData.time : DateTime.now(),
                         locale: LocaleType.en
                       );
                     },
@@ -513,16 +565,19 @@ class NewReminderState extends State<NewReminder> {
                     style: raisedButtonStyle,
                     onPressed: () {
                       DatePicker.showTimePicker(context,
-                          theme: const DatePickerTheme(
-                            containerHeight: 210.0,
-                          ),
-                          showTitleActions: true, onConfirm: (time) {
-                        print('confirm $time');
-                        _timeString = '${time.hour} : ${time.minute} : ${time.second}';
-                        DateTime newDate = DateTime(tempData.time.year, tempData.time.month, tempData.time.day, time.hour, time.minute, time.second, tempData.time.millisecond, tempData.time.microsecond);
-                        tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
-                        setState(() {});
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+                        theme: const DatePickerTheme(
+                          containerHeight: 210.0,
+                        ),
+                        showTitleActions: true, onConfirm: (time) {
+                          print('confirm $time');
+                          _timeString = '${time.hour} : ${time.minute} : ${time.second}';
+                          DateTime newDate = DateTime(tempData.time.year, tempData.time.month, tempData.time.day, time.hour, time.minute, time.second, tempData.time.millisecond, tempData.time.microsecond);
+                          tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
+                          setState(() {});
+                        },
+                        currentTime: update ? tempData.time : DateTime.now(),
+                        locale: LocaleType.en
+                      );
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -567,8 +622,9 @@ class NewReminderState extends State<NewReminder> {
                 ),
                 const Expanded(child: Text("Notes", style: TextStyle(color: Colors.black, fontSize: 20),)),
                 Expanded(
-                  child: TextField(
+                  child: TextFormField(
                     maxLines: 3, // set the maximum number of lines to 3
+                    initialValue: update ? tempData.notes : null,
                     decoration: const InputDecoration(
                       hintText: 'Enter your notes here', // optional hint text
                       border: OutlineInputBorder(), // optional border decoration
@@ -596,8 +652,13 @@ class NewReminderState extends State<NewReminder> {
                     ),
                     Expanded(child: TextButton(
                         onPressed: () async {
-                          await addReminder(tempData);
-                          Navigator.pop(context);
+                          if (update) {
+                            await updateReminder(tempData, id!);
+                            Navigator.pop(context);
+                          } else {
+                            await addReminder(tempData);
+                            Navigator.pop(context);
+                          }
                           // Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen(),),);
                           // Navigator.pushNamed(context, '/reminder');
                         },
@@ -629,7 +690,14 @@ final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
 );
 
 // List for the reminder types
-const List<String> list = <String>['Medication', 'Appointment', 'Restock'];
+const List<String> list = <String>['medication', 'appointment', 'restock'];
+
+// Map for coloring differnt types of reminders
+const Map<String, Color> colorMap = {
+  'medication': Color.fromARGB(255, 237, 255, 228),
+  'appointment': Color.fromARGB(255, 227, 243, 252),
+  'restock': Color.fromARGB(255, 250, 248, 216),
+};
 
 // Data type for saving user inputs
 class ReminderData {
@@ -647,8 +715,9 @@ var input = ReminderData(type: "Appointment", title: "Meet Aryan", time: DateTim
 // Widget for reminder type dropdown
 class ReminderTypeDropDown extends StatefulWidget {
   final Function(String) callback;
+  String ?type;
   
-  const ReminderTypeDropDown({super.key, required this.callback});
+  ReminderTypeDropDown({super.key, required this.callback, this.type});
 
   @override
   ReminderTypeDropDownState createState() => ReminderTypeDropDownState();
@@ -660,6 +729,9 @@ class ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
 
   @override
   Widget build(BuildContext context) {
+    if (list.contains(widget.type)) {
+      dropdownValue = widget.type;
+    }
     return DropdownButtonHideUnderline(
       child: DropdownButton<String>(
         value: dropdownValue,
@@ -687,9 +759,6 @@ class ReminderTypeDropDownState extends State<ReminderTypeDropDown> {
 //-------------------------------------Helpers for server communication------------------------------------//
 // Helper for post reminders to the server
 Future addReminder(ReminderData reminder) async {
-  print("enter");
-  print(reminder.time);
-
   var newReminder = {"type": reminder.type, "title": reminder.title, "date": {"seconds": Timestamp.fromDate(reminder.time).seconds, "nanoseconds": Timestamp.fromDate(reminder.time).nanoseconds},"notes": reminder.notes};
 
   String jsonString = jsonEncode(newReminder);
@@ -744,7 +813,7 @@ fetchAllReminder() async {
       var timeobj = Timeobj.fromJson(jsonList[i]["date"]);
       var time = DateTime.fromMillisecondsSinceEpoch((timeobj.seconds * 1000) + (timeobj.nanoseconds ~/ 1000000));
       // print(time.hour);
-      var entry = EntryInfo(jsonList[i]["title"], jsonList[i]["type"], jsonList[i]["notes"], TimeOfDay(hour: time.hour, minute: time.minute));
+      var entry = EntryInfo(jsonList[i]["title"], jsonList[i]["type"], jsonList[i]["notes"], TimeOfDay(hour: time.hour, minute: time.minute), jsonList[i]["id"]);
       if (time.compareTo(DateTime.now()) < 0) {
         recentEntries.add(entry);
       } else {
@@ -755,5 +824,47 @@ fetchAllReminder() async {
     // If the server did not return a 200 OK response,
     // then throw an exception.
     throw Exception('failed to fetch reminders');
+  }
+}
+
+// Helper for send http request to server for delete a reminder
+Future<String> deleteReminder(String calendarDocId) async {
+  final response = await http.delete(Uri.parse(
+      'http://10.0.2.2:8080/calendar/Reminder_Test_User/$calendarDocId'));
+
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to delete reminder');
+  }
+}
+
+// Helper for update reminders given document id
+Future updateReminder(ReminderData reminder, String calendarDocId) async {
+  // print("enter");
+  // print(reminder.time);
+
+  var newReminder = {"type": reminder.type, "title": reminder.title, "date": {"seconds": Timestamp.fromDate(reminder.time).seconds, "nanoseconds": Timestamp.fromDate(reminder.time).nanoseconds},"notes": reminder.notes};
+
+  String jsonString = jsonEncode(newReminder);
+
+  var response = await http.put(
+    Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User/$calendarDocId'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonString,
+  );
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    // return "Success";
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('failed to add reminder');
   }
 }
