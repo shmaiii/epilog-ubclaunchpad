@@ -9,7 +9,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:uri_to_file/uri_to_file.dart';
 import 'package:content_resolver/content_resolver.dart';
-import 'VideoPlayback.dart';
+import 'screens/VideoPlayback.dart';
 
 class RecordingPage extends StatelessWidget {
   const RecordingPage({Key? key}) : super(key:key);
