@@ -25,7 +25,7 @@ app.use((error, req, res, next) => {
     return res.status(error.code ?? 400).json({err: error.message})
 });
 
-const PORT = 8080;
+const PORT = process.env.port || 8080;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 });
