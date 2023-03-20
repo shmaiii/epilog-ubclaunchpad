@@ -1,3 +1,4 @@
+import 'package:client/widgets/profile/MultipleButton.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
@@ -14,10 +15,7 @@ class _ProfileState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text(
-          'Profile',
-          style: demotextstyle,
-        ),
+        child: MultipleButton(),
       ),
     );
   }

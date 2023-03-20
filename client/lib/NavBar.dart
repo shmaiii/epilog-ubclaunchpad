@@ -1,3 +1,4 @@
+import 'package:client/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
 import 'screens/EntryScreen.dart';
@@ -5,6 +6,8 @@ import 'screens/HomeScreen.dart';
 import 'screens/NotificationScreen.dart';
 import 'screens/ProfileScreen.dart';
 import 'screens/RecordScreen.dart';
+import 'firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,13 +29,37 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(title: 'Home Page'),
       routes: {
         '/reminder': (context) => const NotificationScreen(),
         '/reminder/upcoming': (context) => const UpComingScreen(),
         '/reminder/recent': (context) => const RecentScreen(),
         '/reminder/new': (context) => const NewReminder(),
         '/reminder/update':(context) => const NewReminder(),
+      },
+      home: EntryController(),
+    );
+  }
+}
+
+class EntryController extends StatelessWidget {
+  const EntryController({super.key});
+
+  // This widget will direct you to Login Screen if you are not signed in. Otherwise
+  // it will direct you to the Home Page.
+  @override
+  Widget build(BuildContext context) {
+    final Stream<User?> authStateChangesStream = Auth().authStateChanges;
+
+    return StreamBuilder(
+      stream: authStateChangesStream,
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final bool signedIn = snapshot.hasData;
+          return signedIn ? const HomePage(title: 'Home Page') : LoginScreen();
+        }
+        return Container(
+          color: Colors.black,
+        );
       },
     );
   }
@@ -68,7 +95,7 @@ class _HomePageState extends State<HomePage> {
     const EntryScreen(),
     const RecordScreen(),
     const NotificationScreen(),
-    const ProfileScreen(),
+    ProfileScreen(),
   ];
 
   // Helper function for change the states
@@ -126,7 +153,7 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.black,
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Color.fromARGB(255, 233, 233, 233),
+        backgroundColor: const Color.fromARGB(255, 233, 233, 233),
         selectedFontSize: 13.5,
         unselectedFontSize: 13.5,
       ),
