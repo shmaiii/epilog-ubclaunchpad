@@ -9,6 +9,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:uri_to_file/uri_to_file.dart';
 import 'package:content_resolver/content_resolver.dart';
+import 'VideoPlayback.dart';
 
 class RecordingPage extends StatelessWidget {
   const RecordingPage({Key? key}) : super(key:key);
@@ -107,6 +108,8 @@ class _RecordScreenState extends State<RecordScreen> {
   }
 }
 
+
+//video testing page pop up right after recording
 class VideoPage extends StatefulWidget {
   final String filePath;
   const VideoPage({Key? key, required this.filePath}): super(key: key);
@@ -202,53 +205,6 @@ class _VideoPageState extends  State<VideoPage> {
               }
             )],
       ),
-      extendBodyBehindAppBar: true,
-      body: FutureBuilder(
-        future: _initVideoPlayer(),
-        builder:(context, state) {
-          if (state.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return VideoPlayer(_videoPlayerController);
-          }
-        }
-      )
-    );
-  }
-}
-
-
-
-class VideoPlaybackPage extends StatefulWidget {
-  final io.File file;
-  const VideoPlaybackPage({Key? key, required this.file}): super(key: key);
-
-  @override
-  State<VideoPlaybackPage> createState() => _VideoPlaybackPageState();
-}
-
-class _VideoPlaybackPageState extends  State<VideoPlaybackPage> {
-  late VideoPlayerController _videoPlayerController;
-  late Future<void> _initializeVideo;
-
-
-  @override 
-  void dispose(){
-    _videoPlayerController.dispose();
-    super.dispose();
-  }
-    Future _initVideoPlayer() async {
-      print('playing back');
-      _videoPlayerController = VideoPlayerController.file(widget.file);
-      await _videoPlayerController.initialize();
-      await _videoPlayerController.setLooping(true); // video will loop
-      await _videoPlayerController.play();
-    }
-
-  @override 
-  Widget build(BuildContext context){
-    return Scaffold(
-      
       extendBodyBehindAppBar: true,
       body: FutureBuilder(
         future: _initVideoPlayer(),
