@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
-import 'EntryScreen.dart';
-import 'HomeScreen.dart';
-import 'NotificationScreen.dart';
-import 'ProfileScreen.dart';
-import 'RecordScreen.dart';
+import 'screens/EntryScreen.dart';
+import 'screens/HomeScreen.dart';
+import 'screens/NotificationScreen.dart';
+import 'screens/ProfileScreen.dart';
+import 'screens/RecordScreen.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
