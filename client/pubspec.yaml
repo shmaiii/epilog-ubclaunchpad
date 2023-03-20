@@ -43,11 +43,9 @@ dependencies:
   intl: ^0.18.0
   flutter_picker: ^2.0.5
   flutter_secure_storage: ^7.0.1
-  cloud_firestore: ^4.3.1
   datepicker_dropdown: ^0.0.7+4
   firebase_core: ^2.7.0
   firebase_auth: ^4.3.0
-  http: ^0.13.5
   jiffy: ^5.0.0
   cloud_firestore: ^4.3.2
 
