@@ -13,6 +13,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   String _errorMsg = '';
+  String selectedLocation = "USA";
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -26,6 +27,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.dispose();
     nameController.dispose();
     super.dispose();
+  }
+
+  Widget buildLocationDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "Location:",
+          style: TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+              fontWeight: FontWeight.normal),
+        ),
+        SizedBox(height: 10),
+        ButtonTheme(
+          alignedDropdown: true,
+          child: DropdownButton(
+            value: selectedLocation,
+            items: [
+              DropdownMenuItem(child: Text("USA"), value: "USA"),
+              DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+            ],
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedLocation = newValue!;
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildCreateAccount() {
@@ -311,6 +343,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       buildCreateAccount(),
                       SizedBox(height: 50),
                       buildName(),
+                      SizedBox(height: 30),
+                      buildLocationDropdown(),
                       SizedBox(height: 30),
                       buildEmail(),
                       SizedBox(height: 30),
