@@ -4,7 +4,7 @@ import { db } from "../firebase/db.js";
 // Note: comments below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUserId
 const getAllCalendarDocuments = async (req, res, next) => {
   try{
-    const queryStatement = query(collection(db, `/users/${req.params.user}/calendar`));
+    const queryStatement = query(collection(db, `/users/${req.firebaseUserId}/calendar`));
     // const queryStatement = query(collection(db, "calendar"), where("user", "==", req.firebaseUserId));
     const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
@@ -53,7 +53,7 @@ const postCalendarDocument = async (req, res, next) => {
     //   throw error;
     // }
 
-    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), addDocFieldInputs); 
+    const addedDocRef = await addDoc(collection(db, `/users/${req.firebaseUserId}/calendar`), addDocFieldInputs); 
     return res.json({id: addedDocRef.id});
   } catch (err) {
     next(err);
@@ -81,7 +81,7 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
       updateDocFieldInputs.date = new Timestamp(updateDocFieldInputs.date.seconds, updateDocFieldInputs.date.nanoseconds);
     } 
 
-    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
+    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {
     next(err);
@@ -120,7 +120,7 @@ const updateCalendarDocumentTakeGivenId = async (req, res, next) => {
 
 const deleteCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    await deleteDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`)); 
+    await deleteDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`)); 
     return res.sendStatus(200);
   } catch (err) {
     next(err);
