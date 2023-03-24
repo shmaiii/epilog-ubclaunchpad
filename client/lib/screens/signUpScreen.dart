@@ -5,6 +5,7 @@ import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   String _errorMsg = '';
-  String selectedLocation = "USA";
+  String selectedLocation = "Canada";
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -41,19 +42,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
               fontWeight: FontWeight.normal),
         ),
         SizedBox(height: 10),
-        ButtonTheme(
-          alignedDropdown: true,
-          child: DropdownButton(
-            value: selectedLocation,
-            items: [
-              DropdownMenuItem(child: Text("USA"), value: "USA"),
-              DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              DropdownButton2(
+                underline: Container(
+                  height: 2,
+                  color: Color(0xff6247AA),
+                ),
+                iconStyleData:
+                    IconStyleData(iconEnabledColor: Color(0xff6247AA)),
+                isExpanded: true,
+                value: selectedLocation,
+                items: [
+                  DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+                  DropdownMenuItem(child: Text("USA"), value: "USA"),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedLocation = newValue!;
+                  });
+                },
+              ),
             ],
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedLocation = newValue!;
-              });
-            },
           ),
         ),
       ],
@@ -239,8 +251,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         await AuthenticatedRequest.post(
             url: Uri.parse(
                 'http://10.0.2.2:8080/user/personal-information/store'),
-            body:
-                jsonEncode(<String, String>{'fullName': nameController.text}));
+            body: jsonEncode(<String, String>{
+              'name': nameController.text,
+              'location': selectedLocation
+            }));
         setState(() {
           _errorMsg = '';
         });
