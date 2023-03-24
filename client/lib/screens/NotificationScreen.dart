@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../calendar__add_icons.dart';
-import '../main.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:datepicker_dropdown/datepicker_dropdown.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import '../firebase/auth.dart';
+import '../firebase/authenticatedRequest.dart';
 
 //-------------------------------------Reminder Main Pages------------------------------------//
 class NotificationScreen extends StatefulWidget {
@@ -270,6 +269,7 @@ class RecentScreen extends StatelessWidget {
 }
 
 //-------------------------------------General reminder list helpers------------------------------------//
+// ignore: todo
 // TODO: Check if global list is ok
 var upcomingEntries = List<EntryInfo>.generate(
   1,
@@ -293,6 +293,7 @@ class EntryInfo {
 
   EntryInfo(this.title, this.type, this.notes, this.reminderTime, this.id);
 
+  // ignore: todo
   // TODO: Use these for comparison if needed
   // @override
   // bool operator ==(Object other) =>
@@ -352,6 +353,7 @@ class ListEntry extends StatelessWidget {
                         Navigator.push(context, route);
                         onDeletion();
                     } else {
+                      // ignore: todo
                       //TODO: Try to build a alert window before you really delete this!
                       deleteReminder(id);
                       onDeletion();
@@ -448,6 +450,7 @@ class NewReminderState extends State<NewReminder> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: todo
     //TODO: Try to put the entry info into the fields, and then deal with the save button function call, and callbacks to update main page
     return Scaffold(
       backgroundColor: Colors.white,
@@ -763,13 +766,7 @@ Future addReminder(ReminderData reminder) async {
 
   String jsonString = jsonEncode(newReminder);
 
-  var response = await http.post(
-    Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonString,
-  );
+  var response = await AuthenticatedRequest.post(url: Uri.parse('http://10.0.2.2:8080/calendar/'), body: jsonString);
 
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
@@ -801,7 +798,8 @@ class Timeobj {
 fetchAllReminder() async {
   upcomingEntries.clear();
   recentEntries.clear();
-  var response = await http.get(Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User'));
+
+  var response = await AuthenticatedRequest.get(url: Uri.parse('http://10.0.2.2:8080/calendar/'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -829,8 +827,7 @@ fetchAllReminder() async {
 
 // Helper for send http request to server for delete a reminder
 Future<String> deleteReminder(String calendarDocId) async {
-  final response = await http.delete(Uri.parse(
-      'http://10.0.2.2:8080/calendar/Reminder_Test_User/$calendarDocId'));
+  final response = await AuthenticatedRequest.delete(url: Uri.parse('http://10.0.2.2:8080/calendar/$calendarDocId'));
 
   if (response.statusCode == 200) {
     return response.body;
@@ -850,13 +847,7 @@ Future updateReminder(ReminderData reminder, String calendarDocId) async {
 
   String jsonString = jsonEncode(newReminder);
 
-  var response = await http.put(
-    Uri.parse('http://10.0.2.2:8080/calendar/Reminder_Test_User/$calendarDocId'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonString,
-  );
+  var response = await AuthenticatedRequest.put(url: Uri.parse('http://10.0.2.2:8080/calendar/$calendarDocId'), body: jsonString);
 
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
