@@ -146,21 +146,42 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
   Widget build(BuildContext context) {
     return SizedBox.expand(
         child: Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 30, left: 30),
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: BackButton(
-            onPressed: () => {_showExitDialog()},
-          ),
-        ),
-      ),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-        Text(
-          pageTitles[formPageInd],
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),
+        const SizedBox(height: 70),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 0, 17, 0),
+              child: CircleAvatar(
+                radius: 21,
+                backgroundColor: const Color(0xFF571F83),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => {
+                    if (formPageInd > 0)
+                      {
+                        setState(() {
+                          formPageInd = max(formPageInd - 1, 0);
+                        })
+                      }
+                    else
+                      {_showExitDialog()}
+                  },
+                ),
+              ),
+            ),
+            Text(
+              pageTitles[formPageInd],
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+            )
+          ],
         )
       ]),
       formPages[formPageInd],
@@ -168,28 +189,6 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
           child: Row(children: [
-            if (formPageInd > 0)
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      formPageInd = max(formPageInd - 1, 0);
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(100, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                  child: const Text('< Back',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
-              ),
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,
