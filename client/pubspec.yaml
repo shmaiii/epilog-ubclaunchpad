@@ -42,6 +42,7 @@ dependencies:
   flutter_picker: ^2.0.5
   flutter_secure_storage: ^7.0.1
   scoped_model: ^2.0.0
+  toggle_switch: ^2.0.1
 
 dev_dependencies:
   flutter_test:

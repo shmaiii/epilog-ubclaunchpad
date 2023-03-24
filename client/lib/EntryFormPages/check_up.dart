@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:client/FormInputs/FormTextInput.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+import 'package:toggle_switch/toggle_switch.dart';
 
 // bool _missedMedicine = false;
 // bool _sufficientSleep = false;
@@ -170,6 +169,49 @@ class _CheckupState extends State<Checkup> {
     );
   }
 
+  List<String> toggleQuestions = [
+    "Have you missed taking medicine?",
+    "Have you had sufficient sleep?",
+    "Have your stress levels been high?",
+    "Have you been in a highly stimulating environment?"
+  ];
+
+  List<Widget> getToggles() {
+    List<Widget> toggles = [];
+
+    for (int i = 0; i < toggleQuestions.length; i++) {
+      String question = toggleQuestions[i];
+
+      Widget title = Text(
+        question,
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
+      );
+
+      Flexible cont = Flexible(child: title);
+
+      Widget toggle = ToggleSwitch(
+        initialLabelIndex: 0,
+        totalSwitches: 2,
+        labels: const ['Yes', 'No'],
+        onToggle: (index) {
+          print('switched to: $index');
+        },
+        inactiveBgColor: const Color(0xFFEBE3FD),
+        activeBgColor: const [Color(0xFF6247AA)],
+        minHeight: 60,
+        fontSize: 20,
+        cornerRadius: 4,
+      );
+
+      Widget box = const SizedBox(height: 40);
+
+      Row row = Row(children: [cont, toggle]);
+      toggles.add(row);
+      toggles.add(box);
+    }
+    return toggles;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -177,65 +219,21 @@ class _CheckupState extends State<Checkup> {
         Form(
           key: widget._formKey,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'All of the following questions refer to the last 24 hours',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SwitchListTile(
-                  title: const Text('Have you missed taking medicine?'),
-                  value: checkUpData['missed_medicine'] ?? false,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      checkUpData['missed_medicine'] = newValue;
-                    });
-                    _saveCheckupData();
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text('Have you had sufficient sleep?'),
-                  value: checkUpData['sufficient_sleep'] ?? false,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      checkUpData['sufficient_sleep'] = newValue;
-                    });
-                    _saveCheckupData();
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text('Have your stress levels been high?'),
-                  value: checkUpData['high_stress'] ?? false,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      checkUpData['high_stress'] = newValue;
-                    });
-                    _saveCheckupData();
-                  },
-                ),
-                SwitchListTile(
-                  title: const Text(
-                      'Have you been in a highly stimulating environment?'),
-                  value: checkUpData['stimulating_environment'] ?? false,
-                  onChanged: (bool newValue) {
-                    setState(() {
-                      checkUpData['stimulating_environment'] = newValue;
-                    });
-                    _saveCheckupData();
-                  },
-                ),
-              ],
-            ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                      "All of the following questions refer to the past 24 hours",
+                      style: TextStyle(fontSize: 18)),
+                  const SizedBox(height: 30),
+                  ...getToggles()
+                ]),
           ),
         ),
       ],
     );
   }
 }
-
-
