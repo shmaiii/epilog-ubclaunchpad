@@ -8,6 +8,7 @@ import 'EntryFormPages/NewEntry.dart';
 import 'dart:math';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:client/model/entries.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 class SeizureLogPage extends StatelessWidget {
   const SeizureLogPage({Key? key, this.title}) : super(key: key);
@@ -50,7 +51,7 @@ List<String> pageTitles = [
   "Category and Type",
   "Symptoms",
   "Check-up",
-  "Additional Information"
+  "Additional Info"
 ];
 
 const storage = FlutterSecureStorage();
@@ -147,7 +148,7 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
     return SizedBox.expand(
         child: Column(children: [
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-        const SizedBox(height: 70),
+        const SizedBox(height: 80),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -187,7 +188,7 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
       formPages[formPageInd],
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
           child: Row(children: [
             const Spacer(),
             Align(
@@ -217,13 +218,14 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(100, 60),
+                  minimumSize: const Size(100, 55),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
+                  backgroundColor: const Color(0xFF571F83),
                 ),
                 child: Text(
-                    (formPageInd < formPages.length - 1) ? 'Next >' : 'Submit',
+                    (formPageInd < formPages.length - 1) ? 'Next >' : 'Finish',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -233,6 +235,17 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
           ]),
         ),
       ),
+      Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+          child: DotsIndicator(
+            dotsCount: formPages.length,
+            position: formPageInd.toDouble(),
+            decorator: const DotsDecorator(
+              color: Color(0xFFD9D9D9),
+              activeColor: Color(0xFFA0A0A0),
+              size: Size.square(10),
+            ),
+          )),
     ]));
   }
 }

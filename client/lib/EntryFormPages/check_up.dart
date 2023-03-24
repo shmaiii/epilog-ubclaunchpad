@@ -220,7 +220,7 @@ class _CheckupState extends State<Checkup> {
           key: widget._formKey,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 15.0, horizontal: 40.0),
+                const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,4 +1,3 @@
-
 import 'package:client/pages/category.dart';
 import 'package:flutter/material.dart';
 import 'package:client/FormInputs/FormTextInput.dart';
@@ -45,6 +44,14 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
     await widget.storage.write(key: 'additional_info', value: notes);
   }
 
+  OutlineInputBorder textBorder = OutlineInputBorder(
+    borderRadius: BorderRadius.circular(10),
+    borderSide: const BorderSide(
+      width: 0,
+      style: BorderStyle.none,
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -55,21 +62,24 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(height: 15.0),
-              Text(
+              const SizedBox(height: 32.0),
+              const Text(
                 'Any additional notes?',
                 style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 15.0),
               TextFormField(
                 controller: _textController,
                 maxLines: 5,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: textBorder,
+                  focusedBorder: textBorder,
                   hintText: 'Additional notes',
+                  fillColor: const Color(0xFFDBC8EE),
+                  filled: true,
                 ),
                 onChanged: (value) {
                   _saveAdditionalNotes(value);
