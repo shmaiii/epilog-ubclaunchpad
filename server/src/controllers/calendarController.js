@@ -4,7 +4,7 @@ import { db } from "../firebase/db.js";
 // Note: comments below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUserId
 const getAllCalendarDocuments = async (req, res, next) => {
   try{
-    const queryStatement = query(collection(db, `/users/${req.params.user}/calendar`));
+    const queryStatement = query(collection(db, `/users/${req.firebaseUserId}/calendar`));
     // const queryStatement = query(collection(db, "calendar"), where("user", "==", req.firebaseUserId));
     const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
@@ -15,7 +15,6 @@ const getAllCalendarDocuments = async (req, res, next) => {
 
     return res.json({userCalendarDocuments});
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -36,7 +35,6 @@ const getCalendarDocumentGivenId = async (req, res, next) => {
 
     return res.status(responseStatusCode).json(documentData);
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -45,16 +43,19 @@ const postCalendarDocument = async (req, res, next) => {
   try {
     const addDocFieldInputs = req.body;
 
+    if (addDocFieldInputs.date?.seconds || addDocFieldInputs.date?.nanoseconds) {
+      addDocFieldInputs.date = new Timestamp(addDocFieldInputs.date.seconds, addDocFieldInputs.date.nanoseconds);
+    } 
+
     // if (addDocFieldInputs.user !== req.firebaseUserId) {
     //   const error = new Error("Cannot create calendar documents for another user");
     //   error.statusCode = 403
     //   throw error;
     // }
 
-    const addedDocRef = await addDoc(collection(db, `/users/${req.params.user}/calendar`), addDocFieldInputs); 
+    const addedDocRef = await addDoc(collection(db, `/users/${req.firebaseUserId}/calendar`), addDocFieldInputs); 
     return res.json({id: addedDocRef.id});
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -76,10 +77,13 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
     //   throw error;
     // }
 
-    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
+    if (updateDocFieldInputs.date?.seconds || updateDocFieldInputs.date?.nanoseconds) {
+      updateDocFieldInputs.date = new Timestamp(updateDocFieldInputs.date.seconds, updateDocFieldInputs.date.nanoseconds);
+    } 
+
+    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
@@ -116,10 +120,9 @@ const updateCalendarDocumentTakeGivenId = async (req, res, next) => {
 
 const deleteCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    await deleteDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`)); 
+    await deleteDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`)); 
     return res.sendStatus(200);
   } catch (err) {
-    err.code = err.code ?? 500;
     next(err);
   }
 };
