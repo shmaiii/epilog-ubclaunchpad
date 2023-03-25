@@ -39,6 +39,16 @@ class _VideoPlaybackPageState extends State<VideoPlaybackPage> {
     //   await _videoPlayerController.play();
     // }
 
+    void _stopPlay() {
+      
+              if (_videoPlayerController.value.isPlaying) {
+              _videoPlayerController.pause();
+            } else {
+              _videoPlayerController.play();
+            }
+          
+    }
+
   @override 
   Widget build(BuildContext context){
     return Scaffold(
@@ -47,7 +57,8 @@ class _VideoPlaybackPageState extends State<VideoPlaybackPage> {
       ),
       
       // extendBodyBehindAppBar: true,
-      body: FutureBuilder(
+      body: Stack(
+        children: [FutureBuilder(
         future: _initializeVideo,
         builder:(context, state) {
           if (state.connectionState == ConnectionState.waiting) {
@@ -60,20 +71,34 @@ class _VideoPlaybackPageState extends State<VideoPlaybackPage> {
           }
         }
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            if (_videoPlayerController.value.isPlaying) {
-              _videoPlayerController.pause();
-            } else {
-              _videoPlayerController.play();
-            }
-          });
-        },
-        child: Icon(
-          _videoPlayerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        )),
+      Positioned(
+        bottom: 0,
+        width: MediaQuery.of(context).size.width,
+        child: VideoProgressIndicator(
+          _videoPlayerController,
+          allowScrubbing: true,)
+      ),
+     
+      Align(
+        alignment: Alignment.bottomCenter,
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              if (_videoPlayerController.value.isPlaying) {
+                _videoPlayerController.pause();
+              } else {
+                _videoPlayerController.play();
+              }
+            });
+          },
+          child: Icon(
+            _videoPlayerController.value.isPlaying ? Icons.pause : Icons.play_arrow,
+          )
+        )
+      ),
+    ]
+        
+    )
     );
   }
 }

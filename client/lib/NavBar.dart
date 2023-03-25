@@ -29,6 +29,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
+      routes: {
+        '/reminder': (context) => const NotificationScreen(),
+        '/reminder/upcoming': (context) => const UpComingScreen(),
+        '/reminder/recent': (context) => const RecentScreen(),
+        '/reminder/new': (context) => const NewReminder(),
+        '/reminder/update':(context) => const NewReminder(),
+      },
       home: EntryController(),
     );
   }
@@ -103,10 +110,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Appbar at the top of the page
-      appBar: AppBar(
-          title: const Center(
-        child: Text('Seizure Tracker'),
-      )),
+      // appBar: AppBar(
+      //     title: const Center(
+      //   child: Text('Seizure Tracker'),
+      // )),
 
       // Body content at the middle of the page
       body: Center(
