@@ -31,6 +31,17 @@ class EntryFields {
 class EntryManager {
   // create EntryModel object from secure storage object
   static buildModel(FlutterSecureStorage storage) async {
+    final checkUpsString = await storage.read(key: EntryFields.checkUps);
+    final checkUpsMap;
+    Map<String, bool> checkUps;
+    try {
+      final checkUpsMap = jsonDecode(checkUpsString!) as Map<String, dynamic>;
+      checkUps = Map<String, bool>.fromEntries(checkUpsMap.entries.map((entry) => MapEntry(entry.key, entry.value as bool)));
+    } catch (e) {
+      // Handle the error here, e.g. print an error message or set checkUps to an empty map.
+      print('Error parsing checkUps string: $e');
+      checkUps = {};
+    }
     EntriesModel entry = EntriesModel(
       title: await storage.read(key: EntryFields.name) ?? "Entry",
       dateTime: DateTime.parse(await storage.read(key: EntryFields.datetime) ??
@@ -43,8 +54,9 @@ class EntryManager {
           await storage.read(key: EntryFields.beforeEffects) ?? "N/A",
       afterEffects: await storage.read(key: EntryFields.afterEffects) ?? "N/A",
       symptoms: await storage.read(key: EntryFields.symptoms) ?? "N/A",
-      checkUps: (await storage.read(key: EntryFields.checkUps)) as Map<String, bool>,
+      checkUps: checkUps,
       additionalInfo: await storage.read(key: EntryFields.additionalInfo) ?? "N/A",
+      videoPath: "NA",
     );
     return entry;
   }

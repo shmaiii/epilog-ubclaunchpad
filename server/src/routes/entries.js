@@ -1,5 +1,5 @@
 import express from 'express';
-import {list_all, create, update} from "../controller/entriesController.js";
+import {list_all, create, update} from "../controllers/entriesController.js";
 
 const router = express.Router();
 

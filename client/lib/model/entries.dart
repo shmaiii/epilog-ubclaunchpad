@@ -14,6 +14,7 @@ class EntriesModel {
   final String symptoms;
   final Map<String, bool> checkUps;
   final String additionalInfo;
+  final String videoPath;
 
   EntriesModel({
     required this.title,
@@ -27,6 +28,7 @@ class EntriesModel {
     required this.symptoms,
     required this.checkUps,
     required this.additionalInfo,
+    required this.videoPath,
   });
 
   factory EntriesModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +47,7 @@ class EntriesModel {
         ? Map<String, bool>.from(json['checkUps'])
         : {},
       additionalInfo: json['additionalInfo'],  
+      videoPath: json['videoPath'],
     );
   }
 

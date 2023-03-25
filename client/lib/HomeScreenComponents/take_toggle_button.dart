@@ -31,7 +31,7 @@ class _TakeToggleButtonState extends State<TakeToggleButton> {
           borderRadius: BorderRadius.circular(20.0),
           color: Colors.blue,
         ),
-        child: FilledButton(
+        child: TextButton(
           onPressed: _toggleButtonText,
           style: widget.take
               ? TextButton.styleFrom(

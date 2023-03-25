@@ -21,6 +21,7 @@ class UserEntryModel {
       symptoms: json['symptoms'],
       checkUps: Map<String, bool>.from(json['checkUps']),
       additionalInfo: json['additionalInfo'],
+      videoPath: json['videoPath'],
     );
     return UserEntryModel(userId: userId, entry: model);
   }

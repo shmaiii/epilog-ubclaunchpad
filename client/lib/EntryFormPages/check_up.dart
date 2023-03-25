@@ -46,11 +46,23 @@ class _CheckupState extends State<Checkup> {
     }
   }
 
+  // void _saveCheckupData() async {
+  //   await widget.storage.write(
+  //     key: 'check_ups',
+  //     value: json.encode(checkUpData),
+  //   );
+  // }
+
   void _saveCheckupData() async {
-    await widget.storage.write(
-      key: 'check_ups',
-      value: json.encode(checkUpData),
-    );
+  await widget.storage.write(
+    key: 'check_ups',
+    value: json.encode({
+      'missed_medicine': checkUpData['missed_medicine'] ?? false,
+      'sufficient_sleep': checkUpData['sufficient_sleep'] ?? false,
+      'high_stress': checkUpData['high_stress'] ?? false,
+      'stimulating_environment': checkUpData['stimulating_environment'] ?? false,
+    }),
+  );
   }
 
   @override

@@ -462,6 +462,7 @@ class _EntryEditPageState extends State<entryEdit> {
                           symptoms: _symptomsController.text,
                           checkUps: _checkUpsValues,
                           additionalInfo: _additionalInfoController.text,
+                          videoPath: widget.entry.videoPath,
                         );
 
                         EntryManager.update(newEntry, userId);
