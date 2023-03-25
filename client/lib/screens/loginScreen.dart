@@ -1,3 +1,5 @@
+import 'package:client/firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'signUpScreen.dart';
@@ -8,6 +10,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String _errorMsg = '';
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -64,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
               prefixIcon: Icon(
                 Icons.email_outlined,
                 size: 30,
-                color: Color.fromARGB(146, 123, 7, 191),
+                color: Color(0xff6247AA),
               ),
               hintText: 'Email',
               hintStyle: TextStyle(color: Colors.black38)),
@@ -101,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
               prefixIcon: Icon(
                 Icons.lock,
                 size: 30,
-                color: Color.fromARGB(146, 123, 7, 191),
+                color: Color(0xff6247AA),
               ),
               hintText: 'Password',
               hintStyle: TextStyle(color: Colors.black38)),
@@ -122,10 +125,22 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () => print("Forgot Password pressed"),
         child: Text('Forgot Password?',
             style: TextStyle(
-                color: Color.fromARGB(146, 123, 7, 191),
-                fontWeight: FontWeight.bold)),
+                color: Color(0xff6247AA), fontWeight: FontWeight.bold)),
       ),
     );
+  }
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await Auth().signInWithEmailAndPassword(
+          email: emailController.text, password: passwordController.text);
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMsg = e.code == 'unknown'
+            ? 'Email and/or password is empty'
+            : e.message ?? 'Invalid email and/or password';
+      });
+    }
   }
 
   Widget buildLoginBtn() {
@@ -137,20 +152,18 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('    LOGIN    '),
-            Icon(
-              Icons.arrow_forward,
-              size: 50,
-              color: Color.fromARGB(146, 123, 7, 191),
-            )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '    LOGIN    ',
+                style: TextStyle(color: Color(0xFFFFFFFF)),
+              ),
+            ),
           ],
         ),
-        onPressed: () => print("username: " +
-            emailController.text +
-            " password: " +
-            passwordController.text),
+        onPressed: signInWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 238, 238, 232),
+            backgroundColor: Color(0xff6247AA),
             foregroundColor: Colors.black87,
             elevation: 5,
             padding: EdgeInsets.all(5),
@@ -177,11 +190,24 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           child: Text('Sign Up',
               style: TextStyle(
-                  color: Color.fromARGB(146, 123, 7, 191),
+                  color: Color(0xff6247AA),
                   fontSize: 14,
                   fontWeight: FontWeight.w500)),
         )
       ],
+    );
+  }
+
+  Widget buildErrorMessageText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 2, bottom: 0),
+      child: Text(
+        _errorMsg,
+        style: TextStyle(
+            color: Colors.red.withOpacity(1.0),
+            fontSize: 16,
+            fontWeight: FontWeight.normal),
+      ),
     );
   }
 
@@ -210,6 +236,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(height: 50),
                       buildPassword(),
                       buildForgotPassBtn(),
+                      buildErrorMessageText(),
                       buildLoginBtn(),
                       SizedBox(height: 70),
                       buildSignUpBtn(),

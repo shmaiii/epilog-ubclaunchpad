@@ -1,3 +1,4 @@
+import 'package:client/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';
 import 'screens/EntryScreen.dart';
@@ -5,6 +6,8 @@ import 'screens/HomeScreen.dart';
 import 'screens/NotificationScreen.dart';
 import 'screens/ProfileScreen.dart';
 import 'screens/RecordScreen.dart';
+import 'firebase/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,7 +29,38 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(title: 'Home Page'),
+      routes: {
+        '/reminder': (context) => const NotificationScreen(),
+        '/reminder/upcoming': (context) => const UpComingScreen(),
+        '/reminder/recent': (context) => const RecentScreen(),
+        '/reminder/new': (context) => const NewReminder(),
+        '/reminder/update':(context) => const NewReminder(),
+      },
+      home: EntryController(),
+    );
+  }
+}
+
+class EntryController extends StatelessWidget {
+  const EntryController({super.key});
+
+  // This widget will direct you to Login Screen if you are not signed in. Otherwise
+  // it will direct you to the Home Page.
+  @override
+  Widget build(BuildContext context) {
+    final Stream<User?> authStateChangesStream = Auth().authStateChanges;
+
+    return StreamBuilder(
+      stream: authStateChangesStream,
+      builder: (context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          final bool signedIn = snapshot.hasData;
+          return signedIn ? const HomePage(title: 'Home Page') : LoginScreen();
+        }
+        return Container(
+          color: Colors.black,
+        );
+      },
     );
   }
 }
@@ -76,10 +110,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // Appbar at the top of the page
-      appBar: AppBar(
-          title: const Center(
-        child: Text('Seizure Tracker'),
-      )),
+      // appBar: AppBar(
+      //     title: const Center(
+      //   child: Text('Seizure Tracker'),
+      // )),
 
       // Body content at the middle of the page
       body: Center(

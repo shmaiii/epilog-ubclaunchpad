@@ -1,4 +1,4 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc } from "firebase/firestore"; 
+import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, setDoc } from "firebase/firestore"; 
 import { db } from "../firebase/db.js";
 
 const getPersonalInformation = async (req, res) => {
@@ -21,6 +21,22 @@ const getPersonalInformation = async (req, res) => {
 
 };
 
+const storePersonalInformation = async(req,res)=>{
+    const docData = {
+        ...req.body
+    }
+    try{
+        const contactDoc = await setDoc(doc(db, 'users', req.firebaseUserId), docData);
+        res.status(200).send(JSON.stringify(contactDoc));
+            
+    } catch (error) {
+        console.log("Got an error");
+        console.log(error);
+        
+    }
+}
+
 export default {
-  getPersonalInformation
+  getPersonalInformation,
+  storePersonalInformation
 };

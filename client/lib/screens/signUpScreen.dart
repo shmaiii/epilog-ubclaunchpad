@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:client/firebase/auth.dart';
+import 'package:client/firebase/authenticatedRequest.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -7,6 +13,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  String _errorMsg = '';
+  String selectedLocation = "Canada";
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -20,6 +28,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.dispose();
     nameController.dispose();
     super.dispose();
+  }
+
+  Widget buildLocationDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "Location:",
+          style: TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+              fontWeight: FontWeight.normal),
+        ),
+        SizedBox(height: 10),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              DropdownButton2(
+                underline: Container(
+                  height: 2,
+                  color: Color(0xff6247AA),
+                ),
+                iconStyleData:
+                    IconStyleData(iconEnabledColor: Color(0xff6247AA)),
+                isExpanded: true,
+                value: selectedLocation,
+                items: [
+                  DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+                  DropdownMenuItem(child: Text("USA"), value: "USA"),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedLocation = newValue!;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildCreateAccount() {
@@ -64,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.person,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -100,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.email_outlined,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -136,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.lock,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -172,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.lock,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -185,6 +235,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      if (nameController.text.isEmpty) {
+        setState(() {
+          _errorMsg = 'Full Name is empty ';
+        });
+      } else if (passwordController.text != confirmPasswordController.text) {
+        setState(() {
+          _errorMsg = 'Passwords do not match';
+        });
+      } else {
+        await Auth().createUserWithEmailAndPassword(
+            email: emailController.text, password: passwordController.text);
+        await AuthenticatedRequest.post(
+            url: Uri.parse(
+                'http://10.0.2.2:8080/user/personal-information/store'),
+            body: jsonEncode(<String, String>{
+              'name': nameController.text,
+              'location': selectedLocation
+            }));
+        setState(() {
+          _errorMsg = '';
+        });
+        Navigator.pop(context);
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMsg = e.code == 'unknown'
+            ? 'Email and/or password is empty'
+            : e.message ?? 'Invalid email and/or password';
+      });
+    }
+  }
+
   Widget buildSignUpBtn() {
     return Container(
       alignment: Alignment.centerRight,
@@ -194,24 +278,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('   SIGN UP   '),
-            Icon(
-              Icons.arrow_forward,
-              size: 50,
-              color: Color.fromARGB(146, 123, 7, 191),
-            )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '   SIGN UP   ',
+                style: TextStyle(color: Color(0xFFFFFFFF)),
+              ),
+            ),
           ],
         ),
-        onPressed: () => print("name: " +
-            nameController.text +
-            "; email: " +
-            emailController.text +
-            "; password: " +
-            passwordController.text +
-            "; confirm password: " +
-            confirmPasswordController.text),
+        onPressed: createUserWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 238, 238, 232),
+            backgroundColor: Color(0xff6247AA),
             foregroundColor: Colors.black87,
             elevation: 5,
             padding: EdgeInsets.all(5),
@@ -237,11 +315,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
           child: Text('Sign In',
               style: TextStyle(
-                  color: Color.fromARGB(146, 123, 7, 191),
+                  color: Color(0xff6247AA),
                   fontSize: 14,
                   fontWeight: FontWeight.w500)),
         )
       ],
+    );
+  }
+
+  Widget buildErrorMessageText() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 0),
+      child: Text(
+        _errorMsg,
+        style: TextStyle(
+            color: Colors.red.withOpacity(1.0),
+            fontSize: 16,
+            fontWeight: FontWeight.normal),
+      ),
     );
   }
 
@@ -267,11 +358,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(height: 50),
                       buildName(),
                       SizedBox(height: 30),
+                      buildLocationDropdown(),
+                      SizedBox(height: 30),
                       buildEmail(),
                       SizedBox(height: 30),
                       buildPassword(),
                       SizedBox(height: 30),
                       buildConfirmPassword(),
+                      buildErrorMessageText(),
                       buildSignUpBtn(),
                       buildSignInBtn(),
                     ],

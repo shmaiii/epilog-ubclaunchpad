@@ -5,7 +5,6 @@ import 'package:getwidget/getwidget.dart';
 
 import 'ProfileSettingsPage.dart';
 import 'setting.dart';
-import 'package:http/http.dart' as http;
 
 import 'FetchProfile.dart';
 
