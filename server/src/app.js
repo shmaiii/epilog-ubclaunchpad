@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import videoRoutes from './routes/videoRoutes.js';
 
 import userRoutes from './routes/userRoutes.js';
 import medicationsRoutes from './routes/medicationsRoutes.js';
