@@ -35,21 +35,28 @@ class _RecordScreenState extends State<RecordScreen> {
   late CameraController _cameraController;
   bool _isLoading = true;
   bool _isRecording = false;
+  late List <CameraDescription> _availableCameras;
 
-  _initCamera() async {
-    final cameras = await availableCameras();
-    final front = cameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front);
-    _cameraController = CameraController(front, ResolutionPreset.max);
-    await _cameraController.initialize();
-    setState(() {
-      _isLoading = false;
-    });
+  _getAvailableCameras() async {
+    _availableCameras = await availableCameras();
+    _initCamera(_availableCameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.front));  
+    }
+
+  _initCamera(CameraDescription description) async {
+    
+    _cameraController = CameraController(description, ResolutionPreset.max, enableAudio: true);
+    try {
+      await _cameraController.initialize();
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) { print(e); }
   }
 
   @override
   void initState(){
     super.initState();
-    _initCamera();  
+    _getAvailableCameras();  
   }
 
   @override
@@ -77,6 +84,22 @@ class _RecordScreenState extends State<RecordScreen> {
       });
     }
   }
+
+  void _switchCamera() {
+    final lensDirection = _cameraController.description.lensDirection;
+    CameraDescription newDescription;
+    if (lensDirection == CameraLensDirection.front) {
+     newDescription = _availableCameras.firstWhere((camera) => camera.lensDirection == CameraLensDirection.back);
+    } else {
+      newDescription = _availableCameras.firstWhere((element) => element.lensDirection == CameraLensDirection.front);
+    }
+
+    if (newDescription != null){
+      _initCamera(newDescription);
+    } else {
+      print('newDescription is null');
+    }
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -101,6 +124,13 @@ class _RecordScreenState extends State<RecordScreen> {
                 onPressed: () => _recordVideo(),
               ),
             ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                child: Icon(Icons.switch_camera),
+                onPressed: () => _switchCamera(),
+              )
+            )
           ],
         ),
       );
