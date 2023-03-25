@@ -49,6 +49,7 @@ dependencies:
   firebase_auth: ^4.3.0
   jiffy: ^5.0.0
   cloud_firestore: ^4.3.2
+  url_launcher: ^6.1.10
 
 # flutter team hasnt updated the flutter_localizations to use intl 0.18 yet, so we have 
 # to use this totally safe workaround LMAOOO. Cant wait for microsoft to replace google.  
@@ -120,7 +121,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:  
-      - assets/profile.png  
+      - assets/profile.png
+      - lib/ResourceImages/  
   
   # Imported font for filled list icon
   fonts:
