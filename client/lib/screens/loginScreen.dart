@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
               prefixIcon: Icon(
                 Icons.email_outlined,
                 size: 30,
-                color: Color.fromARGB(146, 123, 7, 191),
+                color: Color(0xff6247AA),
               ),
               hintText: 'Email',
               hintStyle: TextStyle(color: Colors.black38)),
@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
               prefixIcon: Icon(
                 Icons.lock,
                 size: 30,
-                color: Color.fromARGB(146, 123, 7, 191),
+                color: Color(0xff6247AA),
               ),
               hintText: 'Password',
               hintStyle: TextStyle(color: Colors.black38)),
@@ -125,8 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
         onPressed: () => print("Forgot Password pressed"),
         child: Text('Forgot Password?',
             style: TextStyle(
-                color: Color.fromARGB(146, 123, 7, 191),
-                fontWeight: FontWeight.bold)),
+                color: Color(0xff6247AA), fontWeight: FontWeight.bold)),
       ),
     );
   }
@@ -153,17 +152,18 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('    LOGIN    '),
-            Icon(
-              Icons.arrow_forward,
-              size: 50,
-              color: Color.fromARGB(146, 123, 7, 191),
-            )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '    LOGIN    ',
+                style: TextStyle(color: Color(0xFFFFFFFF)),
+              ),
+            ),
           ],
         ),
         onPressed: signInWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 238, 238, 232),
+            backgroundColor: Color(0xff6247AA),
             foregroundColor: Colors.black87,
             elevation: 5,
             padding: EdgeInsets.all(5),
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
           },
           child: Text('Sign Up',
               style: TextStyle(
-                  color: Color.fromARGB(146, 123, 7, 191),
+                  color: Color(0xff6247AA),
                   fontSize: 14,
                   fontWeight: FontWeight.w500)),
         )

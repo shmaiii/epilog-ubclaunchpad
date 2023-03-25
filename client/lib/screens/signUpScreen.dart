@@ -5,6 +5,7 @@ import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   String _errorMsg = '';
+  String selectedLocation = "Canada";
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -26,6 +28,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
     emailController.dispose();
     nameController.dispose();
     super.dispose();
+  }
+
+  Widget buildLocationDropdown() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          "Location:",
+          style: TextStyle(
+              color: Colors.black87,
+              fontSize: 16,
+              fontWeight: FontWeight.normal),
+        ),
+        SizedBox(height: 10),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              DropdownButton2(
+                underline: Container(
+                  height: 2,
+                  color: Color(0xff6247AA),
+                ),
+                iconStyleData:
+                    IconStyleData(iconEnabledColor: Color(0xff6247AA)),
+                isExpanded: true,
+                value: selectedLocation,
+                items: [
+                  DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+                  DropdownMenuItem(child: Text("USA"), value: "USA"),
+                ],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedLocation = newValue!;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget buildCreateAccount() {
@@ -70,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.person,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -106,7 +150,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.email_outlined,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -142,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.lock,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -178,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             prefixIcon: Icon(
               Icons.lock,
               size: 30,
-              color: Color.fromARGB(146, 123, 7, 191),
+              color: Color(0xff6247AA),
             ),
           ),
         ),
@@ -207,8 +251,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         await AuthenticatedRequest.post(
             url: Uri.parse(
                 'http://10.0.2.2:8080/user/personal-information/store'),
-            body:
-                jsonEncode(<String, String>{'fullName': nameController.text}));
+            body: jsonEncode(<String, String>{
+              'name': nameController.text,
+              'location': selectedLocation
+            }));
         setState(() {
           _errorMsg = '';
         });
@@ -232,17 +278,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('   SIGN UP   '),
-            Icon(
-              Icons.arrow_forward,
-              size: 50,
-              color: Color.fromARGB(146, 123, 7, 191),
-            )
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '   SIGN UP   ',
+                style: TextStyle(color: Color(0xFFFFFFFF)),
+              ),
+            ),
           ],
         ),
         onPressed: createUserWithEmailAndPassword,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 238, 238, 232),
+            backgroundColor: Color(0xff6247AA),
             foregroundColor: Colors.black87,
             elevation: 5,
             padding: EdgeInsets.all(5),
@@ -268,7 +315,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           },
           child: Text('Sign In',
               style: TextStyle(
-                  color: Color.fromARGB(146, 123, 7, 191),
+                  color: Color(0xff6247AA),
                   fontSize: 14,
                   fontWeight: FontWeight.w500)),
         )
@@ -310,6 +357,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       buildCreateAccount(),
                       SizedBox(height: 50),
                       buildName(),
+                      SizedBox(height: 30),
+                      buildLocationDropdown(),
                       SizedBox(height: 30),
                       buildEmail(),
                       SizedBox(height: 30),
