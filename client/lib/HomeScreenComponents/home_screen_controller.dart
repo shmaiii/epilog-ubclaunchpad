@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<List<HomepageReminderDocument>>
     readAllHomepageReminderDocuments() async {
-  final response = await AuthenticatedRequest.get(path: '/calendar/');
+  final response = await AuthenticatedRequest.get(path: '/calendar');
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
