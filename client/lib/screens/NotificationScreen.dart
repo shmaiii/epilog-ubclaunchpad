@@ -36,6 +36,7 @@ class _NotificationState extends State<NotificationScreen> {
   }
 
   onDeletion() async {
+    print("Deletion");
     int value = 0;
     setState(() {isLoading = true;});
     await loadData(value);
@@ -59,7 +60,7 @@ class _NotificationState extends State<NotificationScreen> {
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  Route route = MaterialPageRoute(builder: (context) => const NewReminder());
+                  Route route = MaterialPageRoute(builder: (context) => NewReminder());
                   Navigator.push(context, route).then((value) async {setState(() {isLoading = true;});await loadData(value);});
                 },
                 child: Container(
@@ -117,7 +118,7 @@ class UpComing extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/reminder/upcoming').then((value) async => await onDeletion);
+                Navigator.pushNamed(context, '/reminder/upcoming').then((value) {onDeletion();});
               },
               child: Container(
                 alignment: Alignment.center,
@@ -202,7 +203,7 @@ class Recent extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/reminder/recent').then((value) async => await onDeletion);
+                Navigator.pushNamed(context, '/reminder/recent').then((value) {onDeletion();});
               },
               child: Container(
                 alignment: Alignment.center,
@@ -350,8 +351,7 @@ class ListEntry extends StatelessWidget {
                       Route route = MaterialPageRoute(
                           builder: (context) => NewReminder(entry: EntryInfo(title, type, notes, reminderTime, id)),
                         );
-                        Navigator.push(context, route);
-                        onDeletion();
+                        Navigator.push(context, route).then((value) {onDeletion();});
                     } else {
                       // ignore: todo
                       //TODO: Try to build a alert window before you really delete this!
