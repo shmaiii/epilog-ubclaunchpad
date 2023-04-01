@@ -13,6 +13,7 @@ const getAllCalendarDocuments = async (req, res, next) => {
       userCalendarDocuments.push({id: doc.id, ...doc.data()});
     })
 
+    console.log(userCalendarDocuments);
     return res.json({userCalendarDocuments});
   } catch (err) {
     next(err);

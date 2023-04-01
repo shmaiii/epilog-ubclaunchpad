@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 Future<List<HomepageReminderDocument>>
     readAllHomepageReminderDocuments() async {
   final response = await AuthenticatedRequest.get(
-      url: Uri.parse('http://10.0.2.2:8080/calendar/homepage_test_user'));
+      url: Uri.parse('http://localhost:8080/calendar/homepage_test_user'));
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -45,7 +45,7 @@ Future<String> updateHomepageReminderDate(
     String calendarDocId, String dateTime) async {
   final response = await AuthenticatedRequest.patch(
       url: Uri.parse(
-          'http://10.0.2.2:8080/calendar/homepage_test_user/updateDate/$calendarDocId'),
+          'http://localhost:8080/calendar/homepage_test_user/updateDate/$calendarDocId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -64,7 +64,7 @@ Future<String> updateHomepageReminderTake(
     String calendarDocId, bool take) async {
   final response = await AuthenticatedRequest.patch(
       url: Uri.parse(
-          'http://10.0.2.2:8080/calendar/homepage_test_user/updateTake/$calendarDocId'),
+          'http://localhost:8080/calendar/homepage_test_user/updateTake/$calendarDocId'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -82,7 +82,7 @@ Future<String> updateHomepageReminderTake(
 Future<String> deleteHomepageReminder(String calendarDocId) async {
   final response = await AuthenticatedRequest.delete(
       url: Uri.parse(
-          'http://10.0.2.2:8080/calendar/homepage_test_user/$calendarDocId'));
+          'http://localhost:8080/calendar/homepage_test_user/$calendarDocId'));
 
   if (response.statusCode == 200) {
     return response.body;

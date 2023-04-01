@@ -3,9 +3,5 @@ class Profile {
   String lastName;
   String email;
 
-  Profile(
-    this.firstName,
-    this.lastName,
-    this.email
-  );
+  Profile(this.firstName, this.lastName, this.email);
 }

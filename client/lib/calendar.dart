@@ -1,6 +1,8 @@
 // Copyright 2019 Aleksander Woźniak
 // SPDX-License-Identifier: Apache-2.0
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -22,28 +24,53 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
     super.initState();
 
     _selectedDay = _focusedDay;
-    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+    _selectedEvents = ValueNotifier([]);
+    FutureBuilder<List<Event>>(
+      future: getEventsForDay(_selectedDay!),
+      builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+        if (snapshot.hasData) {
+          _selectedEvents.value = snapshot.data!;
+        } else if (snapshot.hasError) {
+          print('Error fetching events for day: ${snapshot.error}');
+        }
+        return Container();
+      },
+    );
   }
 
   @override
   void dispose() {
     _selectedEvents.dispose();
-    super.dispose();
+    super.dispose(); // Call super class to dispose of inherited resources.
   }
 
-  List<Event> _getEventsForDay(DateTime day) {
-    return kEvents[day] ?? [];
+  Future<List<Event>> getEventsForDay(DateTime day) async {
+    final events = await kEvents;
+    if (events != null && events.containsKey(day)) {
+      return events[day]!;
+    } else {
+      return [];
+    }
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
-      print(kFirstDay);
-      print(kLastDay);
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
       });
-      _selectedEvents.value = _getEventsForDay(selectedDay);
+      _selectedEvents.value = [];
+      FutureBuilder<List<Event>>(
+        future: getEventsForDay(selectedDay),
+        builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
+          if (snapshot.hasData) {
+            _selectedEvents.value = snapshot.data!;
+          } else if (snapshot.hasError) {
+            print('Error fetching events for day: ${snapshot.error}');
+          }
+          return Container();
+        },
+      );
     }
   }
 
@@ -72,7 +99,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
               // the time-part of compared DateTime objects.
               return isSameDay(_selectedDay, day);
             },
-            eventLoader: _getEventsForDay,
+            // eventLoader: await getEventsForDay(day),
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarStyle: const CalendarStyle(
               // Use `CalendarStyle` to customize the UI

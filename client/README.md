@@ -22,7 +22,7 @@ samples, guidance on mobile development, and a full API reference.
 
 ## How to test on a physical device
 
-- *Android*
+**Android**
 
 1. Enable developer options on your phone. Find your device build number in settings (location varies by phone) and click it 7 times
 2. Once that is enabled, Go to `system > developer options` on your phone, and turn on USB debugging
