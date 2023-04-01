@@ -12,9 +12,9 @@ class AuthenticatedRequest {
     'Content-Type': 'application/json; charset=UTF-8',
   };
 
-  static final String _host = defaultTargetPlatform == TargetPlatform.iOS
-      ? 'http://localhost:8080'
-      : 'http://10.0.2.2:8080';
+  static final String _host = defaultTargetPlatform == TargetPlatform.android
+      ? 'http://10.0.2.2:8080'
+      : 'http://localhost:8080';
 
   static Future<http.Response> get(
       {required String path, Map<String, String>? headers}) async {
