@@ -9,10 +9,12 @@ const list_all = async(req, res) => {
     // todo: revert the hardcoded user and add the token that is the id here
     // the id is injected to the req in the middle layer, we can access that using the req.firebaseUserId
     const userId = req.params.id;
+    console.log("------------------------------------------------------------------------")
+    console.log("userId: " + userId)
     try {
         // fetching the list from the database
         const querySnapshot = await getDocs(collection(db, "/users/" + userId + "/entries"));
-        console.log(querySnapshot)
+        // console.log(querySnapshot)
         let all = []
         querySnapshot.forEach((doc) => {
             // console.log(doc.id, " => ", doc.data());
@@ -37,7 +39,7 @@ const create = async (req, res) => {
         const data = req.body;
         const collectionAddress = "users/" + userId + "/entries"
         const {id: docId} = await addDoc(collection(db, collectionAddress), data)
-        console.log("Here is the id", docId)
+        // console.log("Here is the id", docId)
         // we don't need to keep the id in the document, we can pass it in the get response
         // const collectionRef = collection(db, collectionAddress);
         // const entryWithId = { ...data, id: docId };
@@ -57,9 +59,9 @@ const update = async (req, res) => {
     const userId = req.params.id;
     req.query.userId;
     try {
-        console.log("Received an update request: ---------- ", req.body)
+        // console.log("Received an update request: ---------- ", req.body)
         const entryInfo = req.body;
-        console.log("Request body: ", entryInfo)
+        // console.log("Request body: ", entryInfo)
         const docRef = doc(db, "users/" + userId + "/entries", entryInfo.userId)
         await updateDoc(docRef, entryInfo.entry);
         res.status(200).json({
