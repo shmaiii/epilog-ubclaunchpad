@@ -22,9 +22,8 @@ const getPersonalInformation = async (req, res) => {
 };
 
 const storePersonalInformation = async(req,res)=>{
-    const fullName = req.body.fullName;
     const docData = {
-        name : fullName
+        ...req.body
     }
     try{
         const contactDoc = await setDoc(doc(db, 'users', req.firebaseUserId), docData);

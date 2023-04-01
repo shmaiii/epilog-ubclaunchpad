@@ -2,3 +2,4 @@ node_modules/
 package-lock.json
 **/firebaseEnv.js
 **/node_modules
+.env

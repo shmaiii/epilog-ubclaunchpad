@@ -4,8 +4,7 @@ import 'package:client/firebase/authenticatedRequest.dart';
 
 Future<List<Medication>> readMedications() async {
   final response = await AuthenticatedRequest.get(
-      url: Uri.parse(
-          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/read'));
+      path: '/medications/user/pw8swdwzWDz4HrsB1dWC/medications/read');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -25,8 +24,7 @@ Future<List<Medication>> readMedications() async {
 Future<String> addMedication(
     String name, String administrationMethod, String dosage) async {
   final response = await AuthenticatedRequest.post(
-      url: Uri.parse(
-          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/add'),
+      path: '/medications/user/pw8swdwzWDz4HrsB1dWC/medications/add',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -48,8 +46,8 @@ Future<String> addMedication(
 Future<String> editMedication(String name, String administrationMethod,
     String dosage, String medicationId) async {
   final response = await AuthenticatedRequest.post(
-      url: Uri.parse(
-          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit'),
+      path:
+          '/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/edit',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -70,8 +68,8 @@ Future<String> editMedication(String name, String administrationMethod,
 
 Future<String> deleteMedication(String medicationId) async {
   final response = await AuthenticatedRequest.post(
-      url: Uri.parse(
-          'http://10.0.2.2:8080/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete'));
+      path:
+          '/medications/user/pw8swdwzWDz4HrsB1dWC/medications/$medicationId/delete');
 
   if (response.statusCode == 200) {
     return response.body;

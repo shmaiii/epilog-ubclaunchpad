@@ -35,8 +35,17 @@ class _TakeToggleButtonState extends State<TakeToggleButton> {
           onPressed: _toggleButtonText,
           style: widget.take
               ? TextButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 156, 94, 167))
-              : TextButton.styleFrom(backgroundColor: Colors.purple),
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color.fromARGB(255, 156, 94, 167),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ))
+              : TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.purple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  )),
           child: widget.take
               ? const Text('UNTAKE',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12))

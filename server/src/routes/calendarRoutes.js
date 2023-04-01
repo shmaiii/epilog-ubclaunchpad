@@ -4,12 +4,12 @@ import calendarController from '../controllers/calendarController.js';
 
 const router = express.Router();
 
-router.get('/:user', calendarController.getAllCalendarDocuments);
-router.get('/:user/:calendarDocId', calendarController.getCalendarDocumentGivenId);
-router.post('/:user', calendarController.postCalendarDocument);
-router.put('/:user/:calendarDocId', calendarController.updateCalendarDocumentGivenId)
-router.patch('/:user/updateDate/:calendarDocId', calendarController.updateCalendarDocumentDateGivenId);
-router.patch('/:user/updateTake/:calendarDocId', calendarController.updateCalendarDocumentTakeGivenId);
-router.delete('/:user/:calendarDocId', calendarController.deleteCalendarDocumentGivenId)
+router.get('/', calendarController.getAllCalendarDocuments);
+router.get('/:calendarDocId', calendarController.getCalendarDocumentGivenId);
+router.post('/', calendarController.postCalendarDocument);
+router.put('/:calendarDocId', calendarController.updateCalendarDocumentGivenId)
+router.patch('/updateDate/:calendarDocId', calendarController.updateCalendarDocumentDateGivenId);
+router.patch('/updateTake/:calendarDocId', calendarController.updateCalendarDocumentTakeGivenId);
+router.delete('/:calendarDocId', calendarController.deleteCalendarDocumentGivenId)
 
 export default router;

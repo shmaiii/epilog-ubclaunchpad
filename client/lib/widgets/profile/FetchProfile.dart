@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 
 Future<ProfileInfo> fetchProfile() async {
   final response = await AuthenticatedRequest.get(
-      url: Uri.parse(
-          'http://10.0.2.2:8080/user/pw8swdwzWDz4HrsB1dWC/personal-information/read'));
+      path: '/user/pw8swdwzWDz4HrsB1dWC/personal-information/read');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
