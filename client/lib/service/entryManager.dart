@@ -63,12 +63,11 @@ class EntryManager {
     return entry;
   }
 
-  static const String url = "http://localhost:8080/entries";
+  static const String url = "/entries";
   Future<List<UserEntryModel>> load<T>(
       Resource<List<UserEntryModel>> resource) async {
     // final response = await http.get(Uri.parse(resource.url));
-    Uri uri = Uri.parse(url + "/all");
-    final response = await AuthenticatedRequest.get(url: uri);
+    final response = await AuthenticatedRequest.get(path: url + "/all");
     print(response);
     if (response.statusCode == 200) {
       return resource.parse(response);
@@ -79,8 +78,8 @@ class EntryManager {
 
   getAll() async {
     //final response = await http.get(Uri.parse(url + "/all"));
-    Uri uri = Uri.parse(url + "/all");
-    final response = await AuthenticatedRequest.get(url: uri);
+    String uri = url + "/all";
+    final response = await AuthenticatedRequest.get(path: uri);
     print(response);
     if (response.statusCode == 200) {
       return UserEntryModel.getAll(response);
@@ -95,7 +94,7 @@ class EntryManager {
     String requestString = jsonEncode(requestObject);
     Map<String, String> customHeaders = {"content-type": "application/json"};
     print(requestString);
-    final response = await AuthenticatedRequest.put(url: Uri.parse(url),
+    final response = await AuthenticatedRequest.put(path: url,
         headers: customHeaders, body: requestString);
     print(response);
     if (response.statusCode == 200) {
@@ -109,8 +108,8 @@ class EntryManager {
     String requestString = jsonEncode(entry);
     Map<String, String> customHeaders = {"content-type": "application/json"};
     print(requestString);
-    Uri uri = Uri.parse(url + "/create");
-    final response = await AuthenticatedRequest.post(url : uri,
+    String uri =  url + "/create";
+    final response = await AuthenticatedRequest.post(path : uri,
         headers: customHeaders, body: requestString);
     print(response);
     if (response.statusCode == 200) {

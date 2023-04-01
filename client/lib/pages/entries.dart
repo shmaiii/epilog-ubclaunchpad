@@ -21,6 +21,12 @@ class _EntriesState extends State<Entries> {
     _populateEntries();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _populateEntries();
+  }
+
   // Method to fetch the entries from the database
   void _populateEntries() {
     EntryManager().getAll().then((entryModels) => {

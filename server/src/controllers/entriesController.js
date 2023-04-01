@@ -8,7 +8,7 @@ const list_all = async(req, res) => {
     //const userId = req.query.userId;
     // todo: revert the hardcoded user and add the token that is the id here
     // the id is injected to the req in the middle layer, we can access that using the req.firebaseUserId
-    const userId = req.params.id;
+    const userId = req.firebaseUserId;
     console.log("------------------------------------------------------------------------")
     console.log("userId: " + userId)
     try {
@@ -33,8 +33,8 @@ const list_all = async(req, res) => {
 }
 
 const create = async (req, res) => {
-    const userId = req.params.id;
-    req.query.userId;
+    const userId = req.firebaseUserId;
+    // req.query.userId;
     try {
         const data = req.body;
         const collectionAddress = "users/" + userId + "/entries"
@@ -56,8 +56,8 @@ const create = async (req, res) => {
 }
 
 const update = async (req, res) => {
-    const userId = req.params.id;
-    req.query.userId;
+    const userId = req.firebaseUserId;
+    // req.query.userId;
     try {
         // console.log("Received an update request: ---------- ", req.body)
         const entryInfo = req.body;
