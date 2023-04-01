@@ -3,7 +3,7 @@ import { addDoc, collection, doc, getDoc, getFirestore, setDoc, updateDoc } from
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+const firebaseConfigCA = {
   apiKey: "AIzaSyCpoC0dvzTLnNtAE-gdO7RPQwyZ78EBAzQ",
   authDomain: "epilog-1fa6c.firebaseapp.com",
   projectId: "epilog-1fa6c",
@@ -13,9 +13,32 @@ const firebaseConfig = {
   measurementId: "G-7FKJSC1P1L"
 };
 
+const firebaseConfigUS = {
+  apiKey: "AIzaSyCdXGKxluhFglC7c9PDdOwxRiyxguuqu4U",
+  authDomain: "epilog-us.firebaseapp.com",
+  projectId: "epilog-us",
+  storageBucket: "epilog-us.appspot.com",
+  messagingSenderId: "834330198268",
+  appId: "1:834330198268:web:446e4868928031e1a15779",
+  measurementId: "G-MZMVTB3RBQ"
+};
+
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const appCA = initializeApp(firebaseConfigCA, "CA");
+const dbCA = getFirestore(appCA);
+
+const appUS = initializeApp(firebaseConfigUS, "US");
+const dbUS = getFirestore(appUS);
+
+const db = dbCA;
+
+function getDB(country) {
+  if (country == "USA") {
+    return dbUS;
+  }
+  return dbCA;
+}
 
 const testSpecial = doc(db, "hello/world");
 // Write document if it exists, replace document otherwise
@@ -80,4 +103,4 @@ async function testNewDoc() {
 // testGet();
 // console.log("Testing");
 
-export { db };
+export { db, getDB };
