@@ -231,10 +231,12 @@ Widget entriesFAB(context) {
           buttonText: "Track symptoms",
         ),
         ActionButton(
-          onPressed: () => {
-            Navigator.push(context, MaterialPageRoute(builder: (context) {
+          onPressed: () async {
+            final result = await Navigator.push(context, MaterialPageRoute(builder: (context) {
               return const SeizureLogPage();
-            }))
+            }));
+            
+            print("navigator popped");
           },
           icon: Icons.add,
           buttonText: "Add a new seizure log",
