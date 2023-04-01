@@ -71,3 +71,4 @@ class AuthenticatedRequest {
         headers: headersWithAuth, body: body, encoding: encoding);
   }
 }
+
