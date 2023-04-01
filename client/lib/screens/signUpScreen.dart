@@ -249,8 +249,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         await Auth().createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
         await AuthenticatedRequest.post(
-            url: Uri.parse(
-                'http://10.0.2.2:8080/user/personal-information/store'),
+            path: '/user/personal-information/store',
             body: jsonEncode(<String, String>{
               'name': nameController.text,
               'location': selectedLocation

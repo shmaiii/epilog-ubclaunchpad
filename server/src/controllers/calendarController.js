@@ -21,7 +21,7 @@ const getAllCalendarDocuments = async (req, res, next) => {
 
 const getCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    const documentSnapshot = await getDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`));
+    const documentSnapshot = await getDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`));
     let documentData = documentSnapshot.data();
     let responseStatusCode = 200;
 
@@ -95,7 +95,7 @@ const updateCalendarDocumentDateGivenId = async (req, res, next) => {
     if(updateDocFieldInputs.date){
      updateDocFieldInputs.date = Timestamp.fromDate(new Date(updateDocFieldInputs.date));
     }
-    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
+    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {
     err.code = err.code ?? 500;
@@ -107,7 +107,7 @@ const updateCalendarDocumentDateGivenId = async (req, res, next) => {
 const updateCalendarDocumentTakeGivenId = async (req, res, next) => {
   try {
     let updateDocFieldInputs =  req.body;
-    await updateDoc(doc(db, `/users/${req.params.user}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
+    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
     return res.json({id: req.params.calendarDocId});
   } catch (err) {
     err.code = err.code ?? 500;
