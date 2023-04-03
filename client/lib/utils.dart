@@ -81,14 +81,17 @@ Future<LinkedHashMap<DateTime, List<Event>>> getEventList() async {
       key: (item) => item,
       value: (item) =>
           listEvents.where((event) => isSameDay(event.date, item)).toList());
+
   final events = LinkedHashMap<DateTime, List<Event>>(
     equals: isSameDay,
     hashCode: getHashCode,
   );
   //every day of the calendar is a key in the map, and the value is a list of events that occur on that day
   _kEventSource.forEach((key, value) {
+    value.sort((a, b) => a.date.compareTo(b.date));
     events[key] = value;
   });
+  print(events);
   return events;
 }
 

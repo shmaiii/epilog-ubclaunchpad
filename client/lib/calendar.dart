@@ -61,6 +61,64 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
     }
   }
 
+  void _showEventDetails(Event event) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(event.title),
+          content: Column(
+            children: [
+              Row(
+                children: [
+                  Text("Time: "),
+                  SizedBox(width: 50),
+                  Expanded(
+                      child: Text(event.date
+                              .toString()
+                              .split(' ')[1]
+                              .split(':')[0] +
+                          ':' +
+                          event.date.toString().split(' ')[1].split(':')[1]))
+                ],
+              ),
+              Row(
+                children: [
+                  Text("Type: "),
+                  SizedBox(width: 50),
+                  Expanded(child: Text(event.type))
+                ],
+              ),
+              Row(
+                children: [
+                  Text("Notes: "),
+                  SizedBox(width: 50),
+                  Expanded(child: Text(event.notes))
+                ],
+              ),
+              Row(
+                children: [
+                  Text("Status: "),
+                  SizedBox(width: 50),
+                  Expanded(
+                      child: Text(event.type.toUpperCase() == 'MEDICATION'
+                          ? (event.take ? "Taken" : "Not Taken")
+                          : ""))
+                ],
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Close'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +161,8 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
                     _focusedDay = focusedDay;
                   },
                 ),
+                const SizedBox(height: 32.0),
+                Text("Today's events", style: const TextStyle(fontSize: 20)),
                 const SizedBox(height: 8.0),
                 Expanded(
                   child: ValueListenableBuilder<List<Event>>(
@@ -121,8 +181,8 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: ListTile(
-                                onTap: () => print(
-                                    'yo'), //replace this line of code to open a modal that displays the info of the event
+                                onTap: () => _showEventDetails(value[
+                                    index]), //replace this line of code to open a modal that displays the info of the event
                                 title: Row(
                                   children: [
                                     Expanded(
