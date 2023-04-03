@@ -18,24 +18,17 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-
+  late Map<DateTime, List<Event>> allEvents;
   @override
   void initState() {
     super.initState();
-
+    getEvents().then((value) {
+      setState(() {
+        allEvents = value;
+      });
+    });
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier([]);
-    FutureBuilder<List<Event>>(
-      future: getEventsForDay(_selectedDay!),
-      builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
-        if (snapshot.hasData) {
-          _selectedEvents.value = snapshot.data!;
-        } else if (snapshot.hasError) {
-          print('Error fetching events for day: ${snapshot.error}');
-        }
-        return Container();
-      },
-    );
   }
 
   @override
@@ -44,14 +37,19 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
     super.dispose(); // Call super class to dispose of inherited resources.
   }
 
-  Future<List<Event>> getEventsForDay(DateTime day) async {
+  Future<Map<DateTime, List<Event>>> getEvents() async {
     final events = await kEvents;
-    if (events != null && events.containsKey(day)) {
-      return events[day]!;
-    } else {
-      return [];
-    }
+    return events;
   }
+
+  // Future<List<Event>> getEventsForDay(DateTime day) async {
+  //   final events = await getEvents();
+  //   if (events.containsKey(day)) {
+  //     return events[day]!;
+  //   } else {
+  //     return [];
+  //   }
+  // }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     if (!isSameDay(_selectedDay, selectedDay)) {
@@ -59,18 +57,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
       });
-      _selectedEvents.value = [];
-      FutureBuilder<List<Event>>(
-        future: getEventsForDay(selectedDay),
-        builder: (BuildContext context, AsyncSnapshot<List<Event>> snapshot) {
-          if (snapshot.hasData) {
-            _selectedEvents.value = snapshot.data!;
-          } else if (snapshot.hasError) {
-            print('Error fetching events for day: ${snapshot.error}');
-          }
-          return Container();
-        },
-      );
+      _selectedEvents.value = allEvents[selectedDay]!;
     }
   }
 
@@ -87,28 +74,21 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
       body: Column(
         children: [
           TableCalendar<Event>(
-            firstDay: DateTime.utc(2001, 01, 01),
-            lastDay: DateTime.utc(2099, 12, 31),
+            firstDay: kFirstDay,
+            lastDay: kLastDay,
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
             selectedDayPredicate: (day) {
-              // Use `selectedDayPredicate` to determine which day is currently selected.
-              // If this returns true, then `day` will be marked as selected.
-
-              // Using `isSameDay` is recommended to disregard
-              // the time-part of compared DateTime objects.
               return isSameDay(_selectedDay, day);
             },
-            // eventLoader: await getEventsForDay(day),
+            eventLoader: (day) => allEvents[day]!,
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarStyle: const CalendarStyle(
-              // Use `CalendarStyle` to customize the UI
               outsideDaysVisible: false,
             ),
             onDaySelected: _onDaySelected,
             onFormatChanged: (format) {
               if (_calendarFormat != format) {
-                // Call `setState()` when updating calendar format
                 setState(() {
                   _calendarFormat = format;
                 });
@@ -136,9 +116,16 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ListTile(
-                        onTap: () => print('${value[index]}'),
-                        title: Text('${value[index]}'),
-                      ),
+                          onTap: () => print(
+                              'yo'), //replace this line of code to open a modal that displays the info of the event
+                          title: Row(
+                            children: [
+                              Expanded(child: Text('${value[index].title}')),
+                              SizedBox(width: 50),
+                              Text(
+                                  '${value[index].date.toString().split(' ')[1].split(':')[0] + ':' + value[index].date.toString().split(' ')[1].split(':')[1]}')
+                            ],
+                          )),
                     );
                   },
                 );

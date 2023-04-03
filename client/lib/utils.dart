@@ -38,7 +38,7 @@ class Event {
 
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year, kToday.month - 12, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 144, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 12, kToday.day);
 final difference = kLastDay.difference(kFirstDay).inDays;
 
 //gets the list of calendar events from the database
@@ -49,16 +49,13 @@ Future<List<Event>> GetEvents() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     List<Event> result = [];
-    print(response.body);
     var jsonResponse = jsonDecode(response.body);
-
     for (var c in jsonResponse['userCalendarDocuments']) {
       c["date"] =
           Timestamp(c["date"]["seconds"], c["date"]["nanoseconds"]).toDate();
 
       result.add(Event.fromJson(c));
     }
-
     return result;
   } else {
     // If the server did not return a 200 OK response,
