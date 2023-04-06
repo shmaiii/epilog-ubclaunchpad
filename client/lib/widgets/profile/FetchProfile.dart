@@ -6,10 +6,10 @@ import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:flutter/material.dart';
 
 Future<ProfileInfo> fetchProfile() async {
-  String uid = Auth().currentUser?.uid ?? 'none';
-  
-  final response = await AuthenticatedRequest.get(
-      path: '/user/personal-information/read');
+  String uid = AuthObject.currentUser?.uid ?? 'none';
+
+  final response =
+      await AuthenticatedRequest.get(path: '/user/personal-information/read');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,

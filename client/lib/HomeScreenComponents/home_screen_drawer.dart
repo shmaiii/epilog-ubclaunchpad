@@ -64,7 +64,7 @@ class _HomeScreenDrawerState extends State<HomeScreenDrawer> {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             onTap: () async {
               try {
-                await Auth().signOut();
+                await AuthObject.signOut();
               } on FirebaseAuthException catch (e) {
                 setState(() {
                   print(e.message);

@@ -31,7 +31,6 @@ Future<List<HomepageReminderDocument>>
             (entry.date).isBefore(eightHoursLater) &&
             (entry.date).isBefore(midnight))
         .toList();
-
     return result;
   } else {
     // If the server did not return a 200 OK response,
