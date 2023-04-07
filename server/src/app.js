@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-
 import userRoutes from './routes/userRoutes.js';
 import medicationsRoutes from './routes/medicationsRoutes.js';
 import contactsRoutes from './routes/contactsRoutes.js';

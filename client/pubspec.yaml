@@ -74,7 +74,7 @@ dev_dependencies:
   image_gallery_saver: ^1.7.1
   uri_to_file: ^0.2.0
   content_resolver: ^0.3.0
-
+  flutter_secure_storage: ^8.0.0
 
 
 

@@ -10,6 +10,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:uri_to_file/uri_to_file.dart';
 import 'package:content_resolver/content_resolver.dart';
 import 'VideoPlayback.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class RecordingPage extends StatelessWidget {
   const RecordingPage({Key? key}) : super(key:key);
@@ -143,6 +144,7 @@ class _RecordScreenState extends State<RecordScreen> {
 class VideoPage extends StatefulWidget {
   final String filePath;
   const VideoPage({Key? key, required this.filePath}): super(key: key);
+  
 
   @override
   State<VideoPage> createState() => _VideoPageState();
@@ -151,6 +153,7 @@ class VideoPage extends StatefulWidget {
 class _VideoPageState extends  State<VideoPage> {
   late VideoPlayerController _videoPlayerController;
   late Future<void> _initializeVideo;
+  final storage = new FlutterSecureStorage();
 
   // @override
   // void initState() {
@@ -199,8 +202,9 @@ class _VideoPageState extends  State<VideoPage> {
     } else {
       path = result['filePath'];
     }
-    print('video saved');
-    print('saved path: ' + path);
+    // print('video saved');
+    // print('saved path: ' + path);
+    await storage.write(key: 'videoPath', value: path);
     //dispose(); // later changed to link to entry page or sth
 
     // content resolver take persistable permission ? working rn might need this if there's bug
