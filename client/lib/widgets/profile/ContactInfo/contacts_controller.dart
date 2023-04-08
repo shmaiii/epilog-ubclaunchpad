@@ -4,7 +4,7 @@ import 'package:client/firebase/authenticatedRequest.dart';
 
 Future<List<Contact>> readContacts() async {
   final response = await AuthenticatedRequest.get(
-      path: '/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/read');
+      path: '/contacts/read');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -23,7 +23,7 @@ Future<List<Contact>> readContacts() async {
 
 Future<String> addContact(String name, String phoneNumber, String type) async {
   final response = await AuthenticatedRequest.post(
-      path: '/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/add',
+      path: '/contacts/add',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -45,7 +45,7 @@ Future<String> addContact(String name, String phoneNumber, String type) async {
 Future<String> editContact(
     String name, String phoneNumber, String type, String contactId) async {
   final response = await AuthenticatedRequest.post(
-      path: '/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/$contactId/edit',
+      path: '/contacts/$contactId/edit',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -66,7 +66,7 @@ Future<String> editContact(
 
 Future<String> deleteContact(String contactId) async {
   final response = await AuthenticatedRequest.post(
-      path: '/contacts/user/pw8swdwzWDz4HrsB1dWC/contacts/$contactId/delete');
+      path: '/contacts/$contactId/delete');
 
   if (response.statusCode == 200) {
     return response.body;

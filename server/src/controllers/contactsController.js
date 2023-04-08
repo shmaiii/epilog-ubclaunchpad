@@ -14,7 +14,7 @@ import { getDB } from "../firebase/db.js";
 const getContacts = async (req, res) => {
   console.log("getting user's contacts from db");
 
-  const id = req.params.id;
+  const id = req.firebaseUserId;
   const userContactsInfo = collection(
     getDB(req.userLocation),
     "/users/" + id + "/contacts"
@@ -39,7 +39,7 @@ const getContacts = async (req, res) => {
 
 const addContact = async (req, res) => {
   console.log("adding a new contact in db");
-  const id = req.params.id;
+  const id = req.firebaseUserId;
   const docData = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -60,7 +60,7 @@ const addContact = async (req, res) => {
 const editContact = async (req, res) => {
   console.log("editing user's contact in db");
 
-  const uid = req.params.uid;
+  const uid = req.firebaseUserId;
   const cid = req.params.cid;
   const docData = {
     name: req.body.name,
@@ -83,7 +83,7 @@ const editContact = async (req, res) => {
 const deleteContact = async (req, res) => {
   console.log("deleting user's contact in db");
 
-  const uid = req.params.uid;
+  const uid = req.firebaseUserId;
   const cid = req.params.cid;
   try {
     await deleteDoc(

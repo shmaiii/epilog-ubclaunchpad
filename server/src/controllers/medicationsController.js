@@ -14,7 +14,7 @@ import { getDB } from "../firebase/db.js";
 const getMedications = async (req, res) => {
   console.log("getting user's medications from db");
 
-  const id = req.params.id;
+  const id = req.firebaseUserId;
   const userMedications = collection(
     getDB(req.userLocation),
     "/users/" + id + "/medications"
@@ -40,7 +40,7 @@ const getMedications = async (req, res) => {
 const addMedication = async (req, res) => {
   console.log("adding medication in db");
 
-  const id = req.params.id;
+  const id = req.firebaseUserId;
   const docData = {
     name: req.body.name,
     dosage: req.body.dosage,
@@ -62,7 +62,7 @@ const addMedication = async (req, res) => {
 const editMedication = async (req, res) => {
   console.log("editing user's medication in db");
 
-  const uid = req.params.uid;
+  const uid = req.firebaseUserId;
   const mid = req.params.mid;
   const docData = {
     name: req.body.name,
@@ -85,7 +85,7 @@ const editMedication = async (req, res) => {
 const deleteMedication = async (req, res) => {
   console.log("deleting user's medication in db");
 
-  const uid = req.params.uid;
+  const uid = req.firebaseUserId;
   const mid = req.params.mid;
 
   try {
