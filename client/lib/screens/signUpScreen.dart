@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:client/firebase/auth.dart';
 import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -246,14 +245,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
           _errorMsg = 'Passwords do not match';
         });
       } else {
-        await Auth().createUserWithEmailAndPassword(
+        await AuthObject.createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
-        await AuthenticatedRequest.post(
-            path: '/user/personal-information/store',
-            body: jsonEncode(<String, String>{
-              'name': nameController.text,
-              'location': selectedLocation
-            }));
+
+        AuthObject.setLocation(selectedLocation);
+
+        if (selectedLocation == 'Canada') {
+          await AuthenticatedRequest.post(
+              path: '/noLocation/initialize-canada-users',
+              body: jsonEncode(<String, String>{
+                'name': nameController.text,
+                'location': selectedLocation
+              }));
+        }
+
+        if (selectedLocation == 'USA') {
+          await AuthenticatedRequest.post(
+              path: '/noLocation/initialize-usa-users',
+              body: jsonEncode(<String, String>{
+                'name': nameController.text,
+                'location': selectedLocation
+              }));
+        }
+
         setState(() {
           _errorMsg = '';
         });
