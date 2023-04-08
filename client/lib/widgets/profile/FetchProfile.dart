@@ -6,7 +6,7 @@ import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:flutter/material.dart';
 
 Future<ProfileInfo> fetchProfile() async {
-  String uid = AuthObject.currentUser?.uid ?? 'none';
+  // String uid = AuthObject.currentUser?.uid ?? 'none';
 
   final response =
       await AuthenticatedRequest.get(path: '/user/personal-information/read');

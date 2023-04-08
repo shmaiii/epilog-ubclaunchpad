@@ -19,7 +19,7 @@ class AuthenticatedRequest {
       String authorizationHeaderString) async {
     if (AuthObject.getUserLocation == '') {
       final response = await http.get(
-          Uri.parse(_host + '/noLocation/get-user-location'),
+          Uri.parse('$_host/noLocation/get-user-location'),
           headers: {'Authorization': authorizationHeaderString});
       final jsonResponse = jsonDecode(response.body);
       AuthObject.setLocation(jsonResponse['location'] ?? '');
