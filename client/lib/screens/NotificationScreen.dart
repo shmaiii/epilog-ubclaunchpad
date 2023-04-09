@@ -435,253 +435,260 @@ class NewReminderState extends State<NewReminder> {
     });
   }
 
-  void updateData() {
+  Future<void> updateData() async {
     if (widget.entry != null) {
       update = true;
       tempData.type = widget.entry!.type;
       tempData.title = widget.entry!.title;
-      tempData.time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, widget.entry!.reminderTime.hour, widget.entry!.reminderTime.minute);
+      tempData.time = await getReminderGivenID(widget.entry!.id);
+      // tempData.time = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, widget.entry!.reminderTime.hour, widget.entry!.reminderTime.minute);
       tempData.notes = widget.entry!.notes;
       _dateString = '${tempData.time.year} - ${tempData.time.month} - ${tempData.time.day}';
       _timeString = '${tempData.time.hour} : ${tempData.time.minute} : ${tempData.time.second}';
       id = widget.entry!.id;
+
+      setState(() {
+        update = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: todo
-    //TODO: Try to put the entry info into the fields, and then deal with the save button function call, and callbacks to update main page
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(top: 90),
-          child: Text("New Reminder", style: TextStyle(color: Colors.black, fontSize: 35),)
-        ),
+    if (update) {
+      return Center(child: CircularProgressIndicator());
+    } else{
+      return Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        toolbarHeight: 150,
-        leading: IconButton(
-          icon: const Padding(
-            padding: EdgeInsets.only(left: 10.0),
-            child: Icon(Icons.arrow_circle_left_outlined, color: Colors.black, size: 40.0,),
+        appBar: AppBar(
+          title: const Padding(
+            padding: EdgeInsets.only(top: 90),
+            child: Text("New Reminder", style: TextStyle(color: Colors.black, fontSize: 35),)
           ),
-          onPressed: () => Navigator.pop(context),
-        ), 
-      ),
-      body:  Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: SizedBox(
-            width: 300,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                const Expanded(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text("Type", style: TextStyle(color: Colors.black, fontSize: 20),),
-                  )
-                ),
-                Expanded(
-                  child: ReminderTypeDropDown(callback: _setDataFromChild, type: tempData.type)
-                ),
-                const Expanded(child: Text("Title", style: TextStyle(color: Colors.black, fontSize: 20),)),
-                Expanded(
-                  child: TextFormField(
-                    initialValue: update ? tempData.title : null,
-                    onChanged:(text) {
-                      tempData.title = text;
-                      setState(() {});
-                    },
-                  )
-                ),
-                const Expanded(child: Text("Date", style: TextStyle(color: Colors.black, fontSize: 20),)),
-                Expanded(
-                  child: ElevatedButton(
-                    style: raisedButtonStyle,
-                    onPressed: () {
-                      DatePicker.showDatePicker(context,
-                        theme: const DatePickerTheme(
-                          containerHeight: 210.0,
-                        ),
-                        showTitleActions: true,
-                        minTime: DateTime(2020, 1, 1),
-                        maxTime: DateTime(2025, 12, 31),
-                        onConfirm: (date) {
-                          print('confirm $date');
-                          _dateString = '${date.year} - ${date.month} - ${date.day}';
-                          DateTime newDate = DateTime(date.year, date.month, date.day, tempData.time.hour, tempData.time.minute, tempData.time.second, tempData.time.millisecond, tempData.time.microsecond);
-                          tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
-                          setState(() {});
-                        },
-                        currentTime: update ? tempData.time : DateTime.now(),
-                        locale: LocaleType.en
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.date_range,
-                                      size: 18.0,
-                                      color: Colors.teal,
-                                    ),
-                                    Text(
-                                      " $_dateString",
-                                      style: const TextStyle(
-                                          color: Colors.teal,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          toolbarHeight: 150,
+          leading: IconButton(
+            icon: const Padding(
+              padding: EdgeInsets.only(left: 10.0),
+              child: Icon(Icons.arrow_circle_left_outlined, color: Colors.black, size: 40.0,),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ), 
+        ),
+        body:  Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: SizedBox(
+              width: 300,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Expanded(
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Text("Type", style: TextStyle(color: Colors.black, fontSize: 20),),
+                    )
+                  ),
+                  Expanded(
+                    child: ReminderTypeDropDown(callback: _setDataFromChild, type: tempData.type)
+                  ),
+                  const Expanded(child: Text("Title", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: update ? tempData.title : null,
+                      onChanged:(text) {
+                        tempData.title = text;
+                        setState(() {});
+                      },
+                    )
+                  ),
+                  const Expanded(child: Text("Date", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: raisedButtonStyle,
+                      onPressed: () {
+                        DatePicker.showDatePicker(context,
+                          theme: const DatePickerTheme(
+                            containerHeight: 210.0,
                           ),
-                          const Text(
-                            "  Edit",
-                            style: TextStyle(
-                              color: Colors.teal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0
+                          showTitleActions: true,
+                          minTime: DateTime(2020, 1, 1),
+                          maxTime: DateTime(2025, 12, 31),
+                          onConfirm: (date) {
+                            print('confirm $date');
+                            _dateString = '${date.year} - ${date.month} - ${date.day}';
+                            DateTime newDate = DateTime(date.year, date.month, date.day, tempData.time.hour, tempData.time.minute, tempData.time.second, tempData.time.millisecond, tempData.time.microsecond);
+                            tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
+                            setState(() {});
+                          },
+                          currentTime: update ? tempData.time : DateTime.now(),
+                          locale: LocaleType.en
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Icon(
+                                        Icons.date_range,
+                                        size: 18.0,
+                                        color: Colors.teal,
+                                      ),
+                                      Text(
+                                        " $_dateString",
+                                        style: const TextStyle(
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
                             ),
-                          ),
-                        ],
+                            const Text(
+                              "  Edit",
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const Expanded(child: Text("Time", style: TextStyle(color: Colors.black, fontSize: 20),)),
-                Expanded(
-                  child: ElevatedButton(
-                    style: raisedButtonStyle,
-                    onPressed: () {
-                      DatePicker.showTimePicker(context,
-                        theme: const DatePickerTheme(
-                          containerHeight: 210.0,
-                        ),
-                        showTitleActions: true, onConfirm: (time) {
-                          print('confirm $time');
-                          _timeString = '${time.hour} : ${time.minute} : ${time.second}';
-                          DateTime newDate = DateTime(tempData.time.year, tempData.time.month, tempData.time.day, time.hour, time.minute, time.second, tempData.time.millisecond, tempData.time.microsecond);
-                          tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
-                          setState(() {});
-                        },
-                        currentTime: update ? tempData.time : DateTime.now(),
-                        locale: LocaleType.en
-                      );
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: 50.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
-                                child: Row(
-                                  children: <Widget>[
-                                    const Icon(
-                                      Icons.access_time,
-                                      size: 18.0,
-                                      color: Colors.teal,
-                                    ),
-                                    Text(
-                                      " $_timeString",
-                                      style: const TextStyle(
-                                          color: Colors.teal,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.0),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                  const Expanded(child: Text("Time", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: raisedButtonStyle,
+                      onPressed: () {
+                        DatePicker.showTimePicker(context,
+                          theme: const DatePickerTheme(
+                            containerHeight: 210.0,
                           ),
-                          const Text(
-                            "  Edit",
-                            style: TextStyle(
-                              color: Colors.teal,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18.0
+                          showTitleActions: true, onConfirm: (time) {
+                            print('confirm $time');
+                            _timeString = '${time.hour} : ${time.minute} : ${time.second}';
+                            DateTime newDate = DateTime(tempData.time.year, tempData.time.month, tempData.time.day, time.hour, time.minute, time.second, tempData.time.millisecond, tempData.time.microsecond);
+                            tempData.time = DateTime(newDate.year, newDate.month, newDate.day, newDate.hour, newDate.minute, newDate.second, newDate.millisecond, newDate.microsecond);
+                            setState(() {});
+                          },
+                          currentTime: update ? tempData.time : DateTime.now(),
+                          locale: LocaleType.en
+                        );
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 50.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Container(
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Icon(
+                                        Icons.access_time,
+                                        size: 18.0,
+                                        color: Colors.teal,
+                                      ),
+                                      Text(
+                                        " $_timeString",
+                                        style: const TextStyle(
+                                            color: Colors.teal,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            const Text(
+                              "  Edit",
+                              style: TextStyle(
+                                color: Colors.teal,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18.0
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ),
+                  const Expanded(child: Text("Notes", style: TextStyle(color: Colors.black, fontSize: 20),)),
+                  Expanded(
+                    child: TextFormField(
+                      maxLines: 3, // set the maximum number of lines to 3
+                      initialValue: update ? tempData.notes : null,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter your notes here', // optional hint text
+                        border: OutlineInputBorder(), // optional border decoration
+                      ),
+                      onChanged:(text) {
+                        tempData.notes = text;
+                        setState(() {});
+                      },
+                    )
+                  ),
+                  Expanded(child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      Expanded(child: TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Container(
+                            color: Colors.grey,
+                            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: Colors.white, fontSize: 13.0),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  )
-                ),
-                const Expanded(child: Text("Notes", style: TextStyle(color: Colors.black, fontSize: 20),)),
-                Expanded(
-                  child: TextFormField(
-                    maxLines: 3, // set the maximum number of lines to 3
-                    initialValue: update ? tempData.notes : null,
-                    decoration: const InputDecoration(
-                      hintText: 'Enter your notes here', // optional hint text
-                      border: OutlineInputBorder(), // optional border decoration
-                    ),
-                    onChanged:(text) {
-                      tempData.notes = text;
-                      setState(() {});
-                    },
-                  )
-                ),
-                Expanded(child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Expanded(child: TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Container(
-                          color: Colors.grey,
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          child: const Text(
-                            'Cancel',
-                            style: TextStyle(color: Colors.white, fontSize: 13.0),
+                      Expanded(child: TextButton(
+                          onPressed: () async {
+                            if (update) {
+                              await updateReminder(tempData, id!);
+                              Navigator.pop(context);
+                            } else {
+                              await addReminder(tempData);
+                              Navigator.pop(context);
+                            }
+                            // Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen(),),);
+                            // Navigator.pushNamed(context, '/reminder');
+                          },
+                          child: Container(
+                            color: Colors.grey,
+                            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                            child: const Text(
+                              'Save',
+                              style: TextStyle(color: Colors.white, fontSize: 13.0),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Expanded(child: TextButton(
-                        onPressed: () async {
-                          if (update) {
-                            await updateReminder(tempData, id!);
-                            Navigator.pop(context);
-                          } else {
-                            await addReminder(tempData);
-                            Navigator.pop(context);
-                          }
-                          // Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen(),),);
-                          // Navigator.pushNamed(context, '/reminder');
-                        },
-                        child: Container(
-                          color: Colors.grey,
-                          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                          child: const Text(
-                            'Save',
-                            style: TextStyle(color: Colors.white, fontSize: 13.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ])),
-              ],
+                    ])),
+                ],
+              ),
             ),
           ),
-        ),
-      )
-    );
+        )
+      );
+    }
   }
 }
 
@@ -853,6 +860,27 @@ Future updateReminder(ReminderData reminder, String calendarDocId) async {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
     // return "Success";
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('failed to add reminder');
+  }
+}
+
+// Helper to get reminder date and time given id
+Future<DateTime> getReminderGivenID(String calendarDocId) async {
+  var response = await AuthenticatedRequest.get(path: '/calendar/$calendarDocId');
+
+  if (response.statusCode == 200) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    var jsonTime = jsonDecode(response.body)["date"];
+    var timeobj = Timeobj.fromJson(jsonTime);
+    var time = DateTime.fromMillisecondsSinceEpoch((timeobj.seconds * 1000) + (timeobj.nanoseconds ~/ 1000000));
+    
+    print(time);
+
+    return time;
   } else {
     // If the server did not return a 201 CREATED response,
     // then throw an exception.
