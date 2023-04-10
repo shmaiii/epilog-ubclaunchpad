@@ -91,7 +91,6 @@ Future<LinkedHashMap<DateTime, List<Event>>> getEventList() async {
     value.sort((a, b) => a.date.compareTo(b.date));
     events[key] = value;
   });
-  print(events);
   return events;
 }
 

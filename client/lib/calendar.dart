@@ -66,47 +66,100 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(event.title),
-          content: Column(
+          title: Row(
             children: [
-              Row(
-                children: [
-                  Text("Time: "),
-                  SizedBox(width: 50),
-                  Expanded(
-                      child: Text(event.date
-                              .toString()
-                              .split(' ')[1]
-                              .split(':')[0] +
-                          ':' +
-                          event.date.toString().split(' ')[1].split(':')[1]))
-                ],
-              ),
-              Row(
-                children: [
-                  Text("Type: "),
-                  SizedBox(width: 50),
-                  Expanded(child: Text(event.type))
-                ],
-              ),
-              Row(
-                children: [
-                  Text("Notes: "),
-                  SizedBox(width: 50),
-                  Expanded(child: Text(event.notes))
-                ],
-              ),
-              Row(
-                children: [
-                  Text("Status: "),
-                  SizedBox(width: 50),
-                  Expanded(
-                      child: Text(event.type.toUpperCase() == 'MEDICATION'
-                          ? (event.take ? "Taken" : "Not Taken")
-                          : ""))
-                ],
+              Icon(IconData(0xf06bb, fontFamily: 'MaterialIcons')),
+              SizedBox(width: 10),
+              Flexible(
+                flex: 1,
+                fit: FlexFit.loose,
+                child: Text("Details for: ${event.title}",
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(IconData(0xe0c2, fontFamily: 'MaterialIcons')),
+                    SizedBox(width: 10),
+                    Text("Time: ",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 50),
+                    Expanded(
+                        child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '${event.date.toString().split(' ')[1].split(':')[0]}:${event.date.toString().split(' ')[1].split(':')[1]}',
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
+                      ),
+                    )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(IconData(0xe148, fontFamily: 'MaterialIcons')),
+                    SizedBox(width: 10),
+                    Text("Type: ",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 50),
+                    Flexible(
+                        flex: 1,
+                        fit: FlexFit.loose,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            event.type,
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(IconData(0xe44c, fontFamily: 'MaterialIcons')),
+                    SizedBox(width: 10),
+                    Text("Notes: ",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 50),
+                    Flexible(
+                        flex: 1,
+                        fit: FlexFit.loose,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            event.notes,
+                            softWrap: true,
+                            overflow: TextOverflow.visible,
+                          ),
+                        )),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Icon(IconData(0xf0555, fontFamily: 'MaterialIcons')),
+                    SizedBox(width: 10),
+                    Text("Status: ",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 50),
+                    Expanded(
+                        child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                                event.type.toUpperCase() == 'MEDICATION'
+                                    ? (event.take ? "Taken" : "Not Taken")
+                                    : 'Not applicable',
+                                softWrap: true,
+                                overflow: TextOverflow.visible))),
+                  ],
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(
@@ -181,15 +234,13 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
                               borderRadius: BorderRadius.circular(12.0),
                             ),
                             child: ListTile(
-                                onTap: () => _showEventDetails(value[
-                                    index]), //replace this line of code to open a modal that displays the info of the event
+                                onTap: () => _showEventDetails(value[index]),
                                 title: Row(
                                   children: [
-                                    Expanded(
-                                        child: Text('${value[index].title}')),
+                                    Expanded(child: Text(value[index].title)),
                                     SizedBox(width: 50),
                                     Text(
-                                        '${value[index].date.toString().split(' ')[1].split(':')[0] + ':' + value[index].date.toString().split(' ')[1].split(':')[1]}')
+                                        '${value[index].date.toString().split(' ')[1].split(':')[0]}:${value[index].date.toString().split(' ')[1].split(':')[1]}')
                                   ],
                                 )),
                           );
