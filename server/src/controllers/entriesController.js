@@ -1,8 +1,8 @@
 // import {db, doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, setDoc} from "../../config.js"
 import {doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, setDoc} from "firebase/firestore"; 
-import { db } from "../firebase/db.js";
+import { getDB } from "../firebase/db.js";
 
-
+let db = getDB("Canada");
 const list_all = async(req, res) => {
     console.log(req);
     //const userId = req.query.userId;
