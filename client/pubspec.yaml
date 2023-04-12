@@ -49,6 +49,7 @@ dependencies:
   firebase_auth: ^4.3.0
   jiffy: ^5.0.0
   cloud_firestore: ^4.3.2
+  url_launcher: ^6.1.10
 
 # flutter team hasnt updated the flutter_localizations to use intl 0.18 yet, so we have 
 # to use this totally safe workaround LMAOOO. Cant wait for microsoft to replace google.  
@@ -65,7 +66,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
-  http: ^0.13.5
   image_picker: ^0.8.6
   video_player: ^2.4.8
   camera: ^0.10.0+4
@@ -120,7 +120,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:  
-      - assets/profile.png  
+      - assets/profile.png
+      - lib/ResourceImages/  
   
   # Imported font for filled list icon
   fonts:
