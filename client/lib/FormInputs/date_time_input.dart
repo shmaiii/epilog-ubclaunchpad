@@ -1,5 +1,7 @@
+import 'package:client/service/entryManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeInput extends StatefulWidget {
@@ -10,11 +12,13 @@ class DateTimeInput extends StatefulWidget {
     DateTime? minTime,
     DateTime? maxTime,
     required this.label,
+    required this.storage,
   }) : super(key: key);
 
   final String label;
   final LocaleType? localeType = LocaleType.en;
   final Function? onChanged = null;
+  final FlutterSecureStorage storage;
 
   final DateTime? minTime = DateTime(2020, 1, 1);
   final DateTime? maxTime =
@@ -25,11 +29,27 @@ class DateTimeInput extends StatefulWidget {
 }
 
 class _DateTimeInputState extends State<DateTimeInput> {
-  DateTime selectedTime = DateTime.now();
+  DateTime _selectedTime = DateTime.now();
   void updateTime(DateTime date) {
-    debugPrint(date.toString());
     setState(() {
-      selectedTime = date;
+      _selectedTime = date;
+      String encoded = _selectedTime.toString();
+      widget.storage.write(key: EntryFields.datetime, value: encoded);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVal();
+  }
+
+  _loadVal() async {
+    String? encoded = await widget.storage.read(key: EntryFields.datetime);
+    setState(() {
+      if (encoded != null) {
+        _selectedTime = DateTime.parse(encoded);
+      }
     });
   }
 
@@ -56,7 +76,7 @@ class _DateTimeInputState extends State<DateTimeInput> {
                     minTime: widget.minTime,
                     maxTime: widget.maxTime,
                     onConfirm: (date) => updateTime(date),
-                    currentTime: selectedTime,
+                    currentTime: _selectedTime,
                     locale: widget.localeType ?? LocaleType.en);
               },
               child: Row(children: [
@@ -65,7 +85,7 @@ class _DateTimeInputState extends State<DateTimeInput> {
                   color: Colors.black,
                 ),
                 Text(
-                  DateFormat('yyyy-MM-dd').format(selectedTime),
+                  DateFormat('yyyy-MM-dd').format(_selectedTime),
                   style: const TextStyle(
                       color: Colors.black, fontSize: inputFontSize),
                 ),
@@ -78,7 +98,8 @@ class _DateTimeInputState extends State<DateTimeInput> {
                         color: Colors.black,
                       ),
                       Text(
-                        DateFormat('kk:mm').format(selectedTime),
+                        DateFormat(DateFormat.HOUR24_MINUTE)
+                            .format(_selectedTime),
                         style: const TextStyle(
                             color: Colors.black, fontSize: inputFontSize),
                       ),

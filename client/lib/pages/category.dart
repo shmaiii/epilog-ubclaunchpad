@@ -1,10 +1,19 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:client/service/entryManager.dart';
 
 import 'dropdown.dart';
 
-const List<String> list1 = <String>[
+const List<String> types = <String>[
+  'Type1',
+  'Type2',
+  'Type3',
+  'Type4',
+];
+
+const List<String> categories = <String>[
   'Category1',
   'Category2',
   'Category3',
@@ -12,7 +21,12 @@ const List<String> list1 = <String>[
 ];
 
 class Category extends StatefulWidget {
-  const Category({super.key});
+  const Category({
+    super.key,
+    required this.storage,
+  });
+
+  final FlutterSecureStorage storage;
 
   @override
   State<Category> createState() => _Category();
@@ -28,67 +42,37 @@ class _Category extends State<Category> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 25, 10, 20),
-          child: const Text(
-            'Category and Type',
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 10, 0),
+          child: const Text('What category of seizure did this appear to be?',
+              style: TextStyle(
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+              )),
+        ),
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
+          child: DropdownButtonExample(
+            list: categories,
+            storage: widget.storage,
+            id: EntryFields.category,
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-          child: const Text('What category of seizure did this appear to be?',
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.3)),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
-          child: const DropdownButtonExample(list: list1),
-        ),
-        // Container(
-        //     padding: const EdgeInsets.fromLTRB(10, 0, 10, 35),
-        //     child: DropdownButton<String>(
-        //       value: selectedValue,
-        //       items: <String>['A', 'B', 'C', 'D'].map((String value) {
-        //         return DropdownMenuItem<String>(
-        //           value: value,
-        //           child: Text(value),
-        //         );
-        //       }).toList(),
-        //       onChanged: (String? newValue){
-        //         setState(() {
-        //         selectedValue = newValue!;
-        //   });
-        // },
-        // ),
-        // ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
           child: const Text('What type of seizure did this appear to be?',
               style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2.0)),
+                fontSize: 22.0,
+                fontWeight: FontWeight.bold,
+              )),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 30),
-          child: DropdownButtonExample(list: list1),
+          padding: const EdgeInsets.fromLTRB(0, 0, 10, 30),
+          child: DropdownButtonExample(
+            list: types,
+            storage: widget.storage,
+            id: EntryFields.type,
+          ),
         )
-        // Container(
-        // padding: const EdgeInsets.fromLTRB(10, 0, 10, 35),
-        // child: DropdownButton<String>(
-        //   items: <String>['A', 'B', 'C', 'D'].map((String value) {
-        //     return DropdownMenuItem<String>(
-        //       value: value,
-        //       child: Text(value),
-        //     );
-        //   }).toList(),
-        //   onChanged: (_) {},
-        // ),
-        // )
       ],
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/FormInputs/FormTextInput.dart';
-import 'package:client/date_time_input.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:client/service/entryManager.dart';
 
 class Symptoms extends StatelessWidget {
   const Symptoms({
@@ -28,19 +28,19 @@ class Symptoms extends StatelessWidget {
                 label: "Did you experience any before effects?",
                 hintText: "Before effects",
                 storage: storage,
-                id: "before_effects",
+                id: EntryFields.beforeEffects,
               ),
               FormTextInput(
                 label: "Did you experience any after effects?",
                 hintText: "After effects",
                 storage: storage,
-                id: "after_effects",
+                id: EntryFields.afterEffects,
               ),
               FormTextInput(
                 label: "Did you experience any symptoms after the seizure?",
                 hintText: "Symptoms",
                 storage: storage,
-                id: "symptoms",
+                id: EntryFields.symptoms,
               ),
             ],
           ),

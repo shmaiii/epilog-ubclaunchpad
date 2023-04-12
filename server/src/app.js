@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import {router} from './routes/entries.js'
 import noLocationRoutes from "./routes/noLocationRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import medicationsRoutes from "./routes/medicationsRoutes.js";
@@ -68,6 +69,14 @@ app.get("/ping", (req, res) => {
   res.status(200).send("pong");
 });
 
+
+
+app.use('/entries', router)
+
+
+
+app.use('/entries', router)
+
 // Will return error object if error handlers in controllers
 // do not return an error object themselves
 app.use((error, req, res, next) => {
@@ -78,3 +87,4 @@ const PORT = process.env.port || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+

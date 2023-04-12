@@ -1,3 +1,6 @@
+import 'package:client/seizure_log_form.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -219,12 +222,16 @@ class _VideoPageState extends State<VideoPage> {
     // } catch (e) {
     //   print(e);
     // }
-
-    final route = MaterialPageRoute(
-      fullscreenDialog: true,
-      builder: (_) => VideoPlaybackPage(file: file),
-    );
-    Navigator.push(context, route);
+    FlutterSecureStorage secureStorage = new FlutterSecureStorage();
+    secureStorage.write(key: "videoPath", value: path);
+    // final route = MaterialPageRoute(
+    //   fullscreenDialog: true,
+    //   builder: (_) => VideoPlaybackPage(file: file),
+    //   // TODO: CHANGING THIS TO VIDEOPATH AND CHANGING THE CONTEXT TO NEW ENTRY PAGE
+    // );
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const SeizureLogPage();
+    }));
   }
 
   @override
