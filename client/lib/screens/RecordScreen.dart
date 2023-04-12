@@ -153,10 +153,12 @@ class VideoPage extends StatefulWidget {
   State<VideoPage> createState() => _VideoPageState();
 }
 
+const storage = FlutterSecureStorage();
+
 class _VideoPageState extends State<VideoPage> {
   late VideoPlayerController _videoPlayerController;
   late Future<void> _initializeVideo;
-  FlutterSecureStorage storage = const FlutterSecureStorage();
+  
 
   // @override
   // void initState() {
@@ -207,7 +209,7 @@ class _VideoPageState extends State<VideoPage> {
       path = result['filePath'];
     }
     // print('video saved');
-    // print('saved path: ' + path);
+    print('saved path: ' + path);
     //dispose(); // later changed to link to entry page or sth
 
     // content resolver take persistable permission ? working rn might need this if there's bug
@@ -221,7 +223,7 @@ class _VideoPageState extends State<VideoPage> {
     // } catch (e) {
     //   print(e);
     // }
-    storage.write(key: "videoPath", value: path);
+    await storage.write(key: "videoPath", value: path);
     // final route = MaterialPageRoute(
     //   fullscreenDialog: true,
     //   builder: (_) => VideoPlaybackPage(file: file),
