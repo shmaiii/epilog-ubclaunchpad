@@ -62,6 +62,7 @@ class EntriesModel {
       'beforeEffects': beforeEffects,
       'afterEffects': afterEffects,
       'symptoms': symptoms,
+      'videoPath': videoPath ?? "N/A", 
       'checkUps': checkUps,
       'additionalInfo': additionalInfo,
     };
