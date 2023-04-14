@@ -58,7 +58,7 @@ class EntryManager {
       symptoms: await storage.read(key: EntryFields.symptoms) ?? "N/A",
       checkUps: checkUps,
       additionalInfo: await storage.read(key: EntryFields.additionalInfo) ?? "N/A",
-      videoPath: await storage.read(key: EntryFields.videoPath) ?? "NA",
+      videoPath: await storage.read(key: EntryFields.videoPath) ?? "N/A",
     );
     return entry;
   }
