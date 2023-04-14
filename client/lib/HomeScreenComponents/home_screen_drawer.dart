@@ -1,6 +1,7 @@
 import 'package:client/firebase/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:client/screens/ResourcesScreen.dart';
 
 class HomeScreenDrawer extends StatefulWidget {
   const HomeScreenDrawer({super.key});
@@ -38,10 +39,8 @@ class _HomeScreenDrawerState extends State<HomeScreenDrawer> {
             title: const Text('Epilepsy resources',
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ResourcesScreen()));
             },
           ),
           ListTile(
@@ -65,7 +64,7 @@ class _HomeScreenDrawerState extends State<HomeScreenDrawer> {
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
             onTap: () async {
               try {
-                await Auth().signOut();
+                await AuthObject.signOut();
               } on FirebaseAuthException catch (e) {
                 setState(() {
                   print(e.message);

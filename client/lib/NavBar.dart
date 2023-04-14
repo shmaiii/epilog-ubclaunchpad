@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         '/reminder/upcoming': (context) => const UpComingScreen(),
         '/reminder/recent': (context) => const RecentScreen(),
         '/reminder/new': (context) => const NewReminder(),
-        '/reminder/update':(context) => const NewReminder(),
+        '/reminder/update': (context) => const NewReminder(),
       },
       home: EntryController(),
     );
@@ -48,14 +48,14 @@ class EntryController extends StatelessWidget {
   // it will direct you to the Home Page.
   @override
   Widget build(BuildContext context) {
-    final Stream<User?> authStateChangesStream = Auth().authStateChanges;
+    final Stream<User?> authStateChangesStream = AuthObject.authStateChanges;
 
     return StreamBuilder(
       stream: authStateChangesStream,
       builder: (context, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final bool signedIn = snapshot.hasData;
-          return signedIn ? const HomePage(title: 'Home Page') : LoginScreen();
+          return signedIn ? HomePage(title: 'Home Page') : LoginScreen();
         }
         return Container(
           color: Colors.black,
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
   final _screens = [
     const HomeScreen(),
     const EntryScreen(),
-    const RecordScreen(),
+    const RecordingPage(),
     const NotificationScreen(),
     ProfileScreen(),
   ];

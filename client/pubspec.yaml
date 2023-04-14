@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: '>=2.17.0 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -49,6 +49,7 @@ dependencies:
   firebase_auth: ^4.3.0
   jiffy: ^5.0.0
   cloud_firestore: ^4.3.2
+  url_launcher: ^6.1.10
 
 # flutter team hasnt updated the flutter_localizations to use intl 0.18 yet, so we have 
 # to use this totally safe workaround LMAOOO. Cant wait for microsoft to replace google.  
@@ -64,7 +65,18 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
+  image_picker: ^0.8.6
+  video_player: ^2.4.8
+  camera: ^0.10.0+4
+  dio: ^4.0.6
+  gallery_saver: ^2.3.2
+  image_gallery_saver: ^1.7.1
+  uri_to_file: ^0.2.0
+  content_resolver: ^0.3.0
+
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -108,7 +120,8 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:  
-      - assets/profile.png  
+      - assets/profile.png
+      - lib/ResourceImages/  
   
   # Imported font for filled list icon
   fonts:

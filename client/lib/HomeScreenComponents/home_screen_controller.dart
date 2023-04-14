@@ -5,8 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<List<HomepageReminderDocument>>
     readAllHomepageReminderDocuments() async {
-  final response = await AuthenticatedRequest.get(
-      url: Uri.parse('http://localhost:8080/calendar/homepage_test_user'));
+  final response = await AuthenticatedRequest.get(path: '/calendar');
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -32,7 +31,6 @@ Future<List<HomepageReminderDocument>>
             (entry.date).isBefore(eightHoursLater) &&
             (entry.date).isBefore(midnight))
         .toList();
-
     return result;
   } else {
     // If the server did not return a 200 OK response,
@@ -44,8 +42,7 @@ Future<List<HomepageReminderDocument>>
 Future<String> updateHomepageReminderDate(
     String calendarDocId, String dateTime) async {
   final response = await AuthenticatedRequest.patch(
-      url: Uri.parse(
-          'http://localhost:8080/calendar/homepage_test_user/updateDate/$calendarDocId'),
+      path: '/calendar/updateDate/$calendarDocId',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -63,8 +60,7 @@ Future<String> updateHomepageReminderDate(
 Future<String> updateHomepageReminderTake(
     String calendarDocId, bool take) async {
   final response = await AuthenticatedRequest.patch(
-      url: Uri.parse(
-          'http://localhost:8080/calendar/homepage_test_user/updateTake/$calendarDocId'),
+      path: '/calendar/updateTake/$calendarDocId',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -80,9 +76,8 @@ Future<String> updateHomepageReminderTake(
 }
 
 Future<String> deleteHomepageReminder(String calendarDocId) async {
-  final response = await AuthenticatedRequest.delete(
-      url: Uri.parse(
-          'http://localhost:8080/calendar/homepage_test_user/$calendarDocId'));
+  final response =
+      await AuthenticatedRequest.delete(path: '/calendar/$calendarDocId');
 
   if (response.statusCode == 200) {
     return response.body;

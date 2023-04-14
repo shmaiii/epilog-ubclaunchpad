@@ -1,42 +1,44 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, setDoc } from "firebase/firestore"; 
-import { db } from "../firebase/db.js";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { getDB } from "../firebase/db.js";
 
 const getPersonalInformation = async (req, res) => {
-    console.log("getting user's personal info from db");
+  console.log("getting user's personal info from db");
 
-    const id = req.params.id;
-    const testSpecial = doc(db, "/users/" + id);
+  const id = req.firebaseUserId;
+  const location = req.userLocation;
+  const userDB = getDB(location);
+  const testSpecial = doc(userDB, "/users/" + id);
 
-    try {
-        const snapshot = await getDoc(testSpecial);
-        if (snapshot.exists()) {
-            const docData = snapshot.data();
-            res.status(200).send(JSON.stringify(docData));
-            
-        }
-    } catch (error) {
-        console.log("Got an error");
-        console.log(error);
+  try {
+    const snapshot = await getDoc(testSpecial);
+    let returnedData = {};
+    if (snapshot.exists()) {
+      returnedData = snapshot.data();
     }
-
+    res.status(200).send(JSON.stringify(returnedData));
+  } catch (error) {
+    console.log("Got an error");
+    console.log(error);
+  }
 };
 
-const storePersonalInformation = async(req,res)=>{
-    const docData = {
-        ...req.body
-    }
-    try{
-        const contactDoc = await setDoc(doc(db, 'users', req.firebaseUserId), docData);
-        res.status(200).send(JSON.stringify(contactDoc));
-            
-    } catch (error) {
-        console.log("Got an error");
-        console.log(error);
-        
-    }
-}
+const storePersonalInformation = async (req, res) => {
+  const docData = {
+    ...req.body,
+  };
+  try {
+    const contactDoc = await setDoc(
+      doc(getDB(req.userLocation), "users", req.firebaseUserId),
+      docData
+    );
+    res.status(200).send(JSON.stringify(contactDoc));
+  } catch (error) {
+    console.log("Got an error");
+    console.log(error);
+  }
+};
 
 export default {
   getPersonalInformation,
-  storePersonalInformation
+  storePersonalInformation,
 };
