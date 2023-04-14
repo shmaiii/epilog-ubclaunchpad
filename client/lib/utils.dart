@@ -43,8 +43,7 @@ final difference = kLastDay.difference(kFirstDay).inDays;
 
 //gets the list of calendar events from the database
 Future<List<Event>> GetEvents() async {
-  final response = await AuthenticatedRequest.get(
-      url: Uri.parse('http://localhost:8080/calendar/'));
+  final response = await AuthenticatedRequest.get(path: '/calendar');
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.

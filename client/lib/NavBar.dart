@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
     const EntryScreen(),
     const RecordingPage(),
     const NotificationScreen(),
-    ProfileScreen(),
+    const ProfileScreen(),
   ];
 
   // Helper function for change the states
