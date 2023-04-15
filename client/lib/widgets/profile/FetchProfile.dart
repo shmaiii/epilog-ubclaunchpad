@@ -34,11 +34,13 @@ class ProfileInfo {
   });
 
   factory ProfileInfo.fromJson(Map<String, dynamic> json) {
+    // Set default profile values
     return ProfileInfo(
-      fullName: json['Full Name'],
-      address: json['Address'],
-      age: json['Age'],
-    );
+        fullName: json['Full Name'] ?? json['name'] ?? "User",
+        address: json['Address'] ??
+            json['location'] ??
+            "6133 University Blvd, Vancouver, BC V6T 1Z1",
+        age: json['Age'] ?? 20);
   }
 }
 

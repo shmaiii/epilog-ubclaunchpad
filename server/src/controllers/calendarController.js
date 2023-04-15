@@ -73,6 +73,8 @@ const postCalendarDocument = async (req, res, next) => {
         addDocFieldInputs.date.nanoseconds
       );
     }
+    // set default boolean for medicaiton status 
+    addDocFieldInputs.take = false;
 
     // if (addDocFieldInputs.user !== req.firebaseUserId) {
     //   const error = new Error("Cannot create calendar documents for another user");
