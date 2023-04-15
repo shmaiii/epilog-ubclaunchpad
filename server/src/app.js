@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import {router} from './routes/entries.js'
 import noLocationRoutes from "./routes/noLocationRoutes.js";
-import {router} from './routes/entries.js'
 import userRoutes from "./routes/userRoutes.js";
 import medicationsRoutes from "./routes/medicationsRoutes.js";
 import contactsRoutes from "./routes/contactsRoutes.js";
@@ -80,8 +79,14 @@ app.use('/entries', router)
 
 app.use('/entries', router)
 
-// Will return error object if error handlers in controllers
-// do not return an error object themselves
+
+
+app.use('/entries', router)
+
+
+
+app.use('/entries', router)
+
 app.use((error, req, res, next) => {
   return res.status(error.code ?? 500).json({ err: error.message });
 });

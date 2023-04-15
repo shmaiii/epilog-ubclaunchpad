@@ -1,6 +1,9 @@
 import 'package:client/pages/entries.dart';
 import 'package:client/pages/entryDetail.dart';
 import 'package:client/pages/entryEdit.dart';
+import 'package:client/pages/entries.dart';
+import 'package:client/pages/entryDetail.dart';
+import 'package:client/pages/entryEdit.dart';
 import 'package:client/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:client/list_alt_filled_icons.dart';

@@ -1,6 +1,8 @@
 import 'package:client/EntryFormPages/CategoryType.dart';
 import 'package:client/EntryFormPages/additional_info.dart';
 import 'package:client/EntryFormPages/check_up.dart';
+import 'package:client/EntryFormPages/additional_info.dart';
+import 'package:client/EntryFormPages/check_up.dart';
 import 'package:client/EntryFormPages/Symptoms.dart';
 import 'package:client/service/entryManager.dart';
 import 'package:flutter/material.dart';
