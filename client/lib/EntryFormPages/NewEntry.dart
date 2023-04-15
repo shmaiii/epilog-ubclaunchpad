@@ -1,8 +1,9 @@
-import 'package:client/duration_picker.dart';
+import 'package:client/FormInputs/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:client/FormInputs/FormTextInput.dart';
-import 'package:client/date_time_input.dart';
+import 'package:client/FormInputs/date_time_input.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:client/service/entryManager.dart';
 
 class NewEntry extends StatelessWidget {
   const NewEntry({
@@ -29,19 +30,22 @@ class NewEntry extends StatelessWidget {
                 label: "What would you like to name this entry?",
                 hintText: "New Title",
                 storage: storage,
-                id: "entry_name",
+                id: EntryFields.name,
               ),
               DateTimeInput(
-                label: "When did this seizure occur?",
+                label: "When did the seizure happen?",
+                storage: storage,
               ),
-              const DurationPicker(
+              DurationPicker(
                 label: "How long did the seizure last?",
+                id: EntryFields.duration,
+                storage: storage,
               ),
               FormTextInput(
                   label: "What were you doing at the time of the seizure?",
                   hintText: "Activity",
                   storage: storage,
-                  id: "activity"),
+                  id: EntryFields.activity),
             ],
           ),
         ),

@@ -1,3 +1,10 @@
+//import 'dart:js';
+
+import 'package:client/pages/entries.dart';
+import 'package:client/pages/entryDetail.dart';
+import 'package:client/pages/entryEdit.dart';
+import 'package:client/pages/home.dart';
+import 'package:client/pages/loading.dart';
 import 'package:flutter/material.dart';
 import 'NavBar.dart';
 import 'package:firebase_core/firebase_core.dart';

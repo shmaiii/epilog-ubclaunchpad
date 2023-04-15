@@ -66,6 +66,7 @@ class _FormTextInputState extends State<FormTextInput> {
               }
               return null;
             },
+            style: const TextStyle(fontSize: 17),
           )
         ]));
   }

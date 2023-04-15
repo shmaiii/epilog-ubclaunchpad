@@ -1,5 +1,7 @@
+import 'package:client/service/entryManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 
@@ -8,10 +10,14 @@ class DurationPicker extends StatefulWidget {
     Key? key,
     LocaleType? localeType,
     required this.label,
+    required this.storage,
+    required this.id,
   }) : super(key: key);
 
   final LocaleType? localeType = LocaleType.en;
   final String label;
+  final FlutterSecureStorage storage;
+  final String id;
 
   @override
   State<DurationPicker> createState() => _DurationPickerState();
@@ -21,7 +27,28 @@ class _DurationPickerState extends State<DurationPicker> {
   int _currentMinutes = 0;
   int _currentSeconds = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _loadValue();
+  }
+
+  _loadValue() async {
+    String? durationStr = await widget.storage.read(key: widget.id);
+    if (durationStr == null) return;
+    setState(() {
+      int duration = (int.parse(durationStr) / 1000).floor();
+      int minutes = (duration / 60).floor();
+      int seconds = (duration % 60);
+
+      _currentMinutes = minutes;
+      _currentSeconds = seconds;
+    });
+  }
+
   static const double inputFontSize = 20.0;
+
+  static const int jump = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +72,8 @@ class _DurationPickerState extends State<DurationPicker> {
                     onPressed: () => Picker(
                         adapter: NumberPickerAdapter(data: [
                           const NumberPickerColumn(begin: 0, end: 59),
-                          const NumberPickerColumn(begin: 0, end: 59, jump: 5),
+                          const NumberPickerColumn(
+                              begin: 0, end: 59, jump: jump),
                         ]),
                         selecteds: [_currentMinutes, _currentSeconds],
                         delimiter: [
@@ -73,7 +101,7 @@ class _DurationPickerState extends State<DurationPicker> {
                         color: Colors.black,
                       ),
                       Text(
-                        _currentMinutes.toString().padLeft(2, '0'),
+                        _currentMinutes.toString(),
                         style: const TextStyle(
                             color: Colors.black, fontSize: inputFontSize),
                       ),
@@ -107,7 +135,9 @@ class _DurationPickerState extends State<DurationPicker> {
   void updateDuration(List values) {
     setState(() {
       _currentMinutes = values[0];
-      _currentSeconds = values[1];
+      _currentSeconds = values[1] * jump;
+      int durationMs = (_currentMinutes * 60 + _currentSeconds) * 1000;
+      widget.storage.write(key: widget.id, value: durationMs.toString());
     });
     print(values[1]);
   }

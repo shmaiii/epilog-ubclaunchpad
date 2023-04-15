@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
 import noLocationRoutes from "./routes/noLocationRoutes.js";
+import {router} from './routes/entries.js'
 import userRoutes from "./routes/userRoutes.js";
 import medicationsRoutes from "./routes/medicationsRoutes.js";
 import contactsRoutes from "./routes/contactsRoutes.js";
 import calendarRoutes from "./routes/calendarRoutes.js";
 import { auth } from "./firebase/auth.js";
 import { getBearerTokenFromHeader } from "./utils/index.js";
+
 
 const app = express();
 app.use(express.json());
@@ -62,14 +64,13 @@ app.use("/user", userRoutes);
 app.use("/medications", medicationsRoutes);
 app.use("/contacts", contactsRoutes);
 app.use("/calendar", calendarRoutes);
+app.use('/entries', router);
 
 app.get("/ping", (req, res) => {
   console.log("pong");
   res.status(200).send("pong");
 });
 
-// Will return error object if error handlers in controllers
-// do not return an error object themselves
 app.use((error, req, res, next) => {
   return res.status(error.code ?? 500).json({ err: error.message });
 });
@@ -78,3 +79,4 @@ const PORT = process.env.port || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
