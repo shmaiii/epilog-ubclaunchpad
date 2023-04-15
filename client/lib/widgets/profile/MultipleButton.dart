@@ -55,8 +55,11 @@ class MultipleButton extends StatelessWidget {
                                   );
                                 }
 
-                                // By default, show a loading spinner.
-                                return const CircularProgressIndicator();
+                                // By default, show "Hello"
+                                return const Text(
+                                  'Hello',
+                                  style: TextStyle(fontSize: 50.0),
+                                );
                               },
                             ),
                             Text(

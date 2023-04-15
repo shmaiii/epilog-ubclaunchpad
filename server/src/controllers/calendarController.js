@@ -73,7 +73,7 @@ const postCalendarDocument = async (req, res, next) => {
         addDocFieldInputs.date.nanoseconds
       );
     }
-    // set default boolean for medicaiton status 
+    // set default boolean for reminder status: "take or untake"
     addDocFieldInputs.take = false;
 
     // if (addDocFieldInputs.user !== req.firebaseUserId) {
