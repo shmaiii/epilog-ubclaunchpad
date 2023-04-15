@@ -15,7 +15,6 @@ const getPersonalInformation = async (req, res) => {
     if (snapshot.exists()) {
       returnedData = snapshot.data();
     }
-    console.log('What is returnedData', returnedData);
     res.status(200).send(JSON.stringify(returnedData));
   } catch (error) {
     console.log("Got an error");

@@ -67,10 +67,6 @@ class _HomeState extends State<HomeScreen> {
           Row(children: [
             Padding(
               padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              // child: Text(
-              //   "Hi, Julia",
-              //   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
-              // ),
               child: FutureBuilder<ProfileInfo>(
                 future: fetchProfile(),
                 builder: (context, snapshot) {

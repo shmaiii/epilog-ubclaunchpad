@@ -39,11 +39,26 @@ class MultipleButton extends StatelessWidget {
                             scale: 5.1, alignment: Alignment.topLeft),
                         Column(
                           // verticalDirection: VerticalDirection.down,
-                          children: const [
-                            Text(
-                              'Hello Julia',
-                              style: TextStyle(fontSize: 50.0),
-                            ), //
+                          children: [
+                            FutureBuilder<ProfileInfo>(
+                              future: fetchProfile(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    'Hello, ${snapshot.data!.fullName}',
+                                    style: const TextStyle(fontSize: 50.0),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return const Text(
+                                    'Hello Julia',
+                                    style: TextStyle(fontSize: 50.0),
+                                  );
+                                }
+
+                                // By default, show a loading spinner.
+                                return const CircularProgressIndicator();
+                              },
+                            ),
                             Text(
                               'small bio',
                               style: TextStyle(fontSize: 20.0),
