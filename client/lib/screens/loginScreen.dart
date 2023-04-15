@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:client/firebase/auth.dart';
+import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -132,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> signInWithEmailAndPassword() async {
     try {
-      await Auth().signInWithEmailAndPassword(
+      await AuthObject.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -161,7 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         ),
-        onPressed: signInWithEmailAndPassword,
+        onPressed: () async {
+          await signInWithEmailAndPassword();
+        },
         style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xff6247AA),
             foregroundColor: Colors.black87,

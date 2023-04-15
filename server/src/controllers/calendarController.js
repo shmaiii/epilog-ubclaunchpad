@@ -1,19 +1,35 @@
-import { collection, query, where, getDocs, doc, getDoc, addDoc, updateDoc, deleteDoc, Timestamp } from "firebase/firestore"; 
-import { db } from "../firebase/db.js";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  Timestamp,
+} from "firebase/firestore";
+import { getDB } from "../firebase/db.js";
 
 // Note: comments below should be uncommented once we implement authentication and add an identification token attached to req.firebaseUserId
 const getAllCalendarDocuments = async (req, res, next) => {
-  try{
-    const queryStatement = query(collection(db, `/users/${req.firebaseUserId}/calendar`));
-    // const queryStatement = query(collection(db, "calendar"), where("user", "==", req.firebaseUserId));
+  try {
+    const queryStatement = query(
+      collection(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar`
+      )
+    );
+    // const queryStatement = query(collection(getDB(req.userLocation), "calendar"), where("user", "==", req.firebaseUserId));
     const querySnapshot = await getDocs(queryStatement);
     const userCalendarDocuments = [];
 
     querySnapshot.forEach((doc) => {
-      userCalendarDocuments.push({id: doc.id, ...doc.data()});
-    })
+      userCalendarDocuments.push({ id: doc.id, ...doc.data() });
+    });
 
-    return res.json({userCalendarDocuments});
+    return res.json({ userCalendarDocuments });
   } catch (err) {
     next(err);
   }
@@ -21,7 +37,12 @@ const getAllCalendarDocuments = async (req, res, next) => {
 
 const getCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    const documentSnapshot = await getDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`));
+    const documentSnapshot = await getDoc(
+      doc(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`
+      )
+    );
     let documentData = documentSnapshot.data();
     let responseStatusCode = 200;
 
@@ -43,9 +64,17 @@ const postCalendarDocument = async (req, res, next) => {
   try {
     const addDocFieldInputs = req.body;
 
-    if (addDocFieldInputs.date?.seconds || addDocFieldInputs.date?.nanoseconds) {
-      addDocFieldInputs.date = new Timestamp(addDocFieldInputs.date.seconds, addDocFieldInputs.date.nanoseconds);
-    } 
+    if (
+      addDocFieldInputs.date?.seconds ||
+      addDocFieldInputs.date?.nanoseconds
+    ) {
+      addDocFieldInputs.date = new Timestamp(
+        addDocFieldInputs.date.seconds,
+        addDocFieldInputs.date.nanoseconds
+      );
+    }
+    // set default boolean for reminder status: "take or untake"
+    addDocFieldInputs.take = false;
 
     // if (addDocFieldInputs.user !== req.firebaseUserId) {
     //   const error = new Error("Cannot create calendar documents for another user");
@@ -53,8 +82,14 @@ const postCalendarDocument = async (req, res, next) => {
     //   throw error;
     // }
 
-    const addedDocRef = await addDoc(collection(db, `/users/${req.firebaseUserId}/calendar`), addDocFieldInputs); 
-    return res.json({id: addedDocRef.id});
+    const addedDocRef = await addDoc(
+      collection(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar`
+      ),
+      addDocFieldInputs
+    );
+    return res.json({ id: addedDocRef.id });
   } catch (err) {
     next(err);
   }
@@ -63,7 +98,7 @@ const postCalendarDocument = async (req, res, next) => {
 const updateCalendarDocumentGivenId = async (req, res, next) => {
   try {
     const updateDocFieldInputs = req.body;
-    // const documentSnapshot = await getDoc(doc(db, "calendar", req.firebaseUserId));
+    // const documentSnapshot = await getDoc(doc(getDB(req.userLocation), "calendar", req.firebaseUserId));
     // const documentData = documentSnapshot.data();
 
     // if (documentData.user !== req.firebaseUserId){
@@ -77,12 +112,24 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
     //   throw error;
     // }
 
-    if (updateDocFieldInputs.date?.seconds || updateDocFieldInputs.date?.nanoseconds) {
-      updateDocFieldInputs.date = new Timestamp(updateDocFieldInputs.date.seconds, updateDocFieldInputs.date.nanoseconds);
-    } 
+    if (
+      updateDocFieldInputs.date?.seconds ||
+      updateDocFieldInputs.date?.nanoseconds
+    ) {
+      updateDocFieldInputs.date = new Timestamp(
+        updateDocFieldInputs.date.seconds,
+        updateDocFieldInputs.date.nanoseconds
+      );
+    }
 
-    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
-    return res.json({id: req.params.calendarDocId});
+    await updateDoc(
+      doc(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`
+      ),
+      updateDocFieldInputs
+    );
+    return res.json({ id: req.params.calendarDocId });
   } catch (err) {
     next(err);
   }
@@ -90,37 +137,52 @@ const updateCalendarDocumentGivenId = async (req, res, next) => {
 
 const updateCalendarDocumentDateGivenId = async (req, res, next) => {
   try {
-    let updateDocFieldInputs =  req.body;
- 
-    if(updateDocFieldInputs.date){
-     updateDocFieldInputs.date = Timestamp.fromDate(new Date(updateDocFieldInputs.date));
+    let updateDocFieldInputs = req.body;
+
+    if (updateDocFieldInputs.date) {
+      updateDocFieldInputs.date = Timestamp.fromDate(
+        new Date(updateDocFieldInputs.date)
+      );
     }
-    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
-    return res.json({id: req.params.calendarDocId});
+    await updateDoc(
+      doc(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`
+      ),
+      updateDocFieldInputs
+    );
+    return res.json({ id: req.params.calendarDocId });
   } catch (err) {
     err.code = err.code ?? 500;
     next(err);
   }
 };
-
 
 const updateCalendarDocumentTakeGivenId = async (req, res, next) => {
   try {
-    let updateDocFieldInputs =  req.body;
-    await updateDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`), updateDocFieldInputs); 
-    return res.json({id: req.params.calendarDocId});
+    let updateDocFieldInputs = req.body;
+    await updateDoc(
+      doc(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`
+      ),
+      updateDocFieldInputs
+    );
+    return res.json({ id: req.params.calendarDocId });
   } catch (err) {
     err.code = err.code ?? 500;
     next(err);
   }
 };
 
-
-
-
 const deleteCalendarDocumentGivenId = async (req, res, next) => {
   try {
-    await deleteDoc(doc(db, `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`)); 
+    await deleteDoc(
+      doc(
+        getDB(req.userLocation),
+        `/users/${req.firebaseUserId}/calendar/${req.params.calendarDocId}`
+      )
+    );
     return res.sendStatus(200);
   } catch (err) {
     next(err);
@@ -134,5 +196,5 @@ export default {
   updateCalendarDocumentGivenId,
   updateCalendarDocumentDateGivenId,
   updateCalendarDocumentTakeGivenId,
-  deleteCalendarDocumentGivenId
+  deleteCalendarDocumentGivenId,
 };

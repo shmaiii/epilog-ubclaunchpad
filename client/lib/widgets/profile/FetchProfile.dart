@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:client/firebase/auth.dart';
 import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:flutter/material.dart';
 
 Future<ProfileInfo> fetchProfile() async {
-  final response = await AuthenticatedRequest.get(
-      path: '/user/pw8swdwzWDz4HrsB1dWC/personal-information/read');
+  // String uid = AuthObject.currentUser?.uid ?? 'none';
+
+  final response =
+      await AuthenticatedRequest.get(path: '/user/personal-information/read');
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -31,11 +34,13 @@ class ProfileInfo {
   });
 
   factory ProfileInfo.fromJson(Map<String, dynamic> json) {
+    // Set default profile values
     return ProfileInfo(
-      fullName: json['Full Name'],
-      address: json['Address'],
-      age: json['Age'],
-    );
+        fullName: json['Full Name'] ?? json['name'] ?? "User",
+        address: json['Address'] ??
+            json['location'] ??
+            "6133 University Blvd, Vancouver, BC V6T 1Z1",
+        age: json['Age'] ?? 20);
   }
 }
 

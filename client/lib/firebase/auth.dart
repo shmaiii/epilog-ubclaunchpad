@@ -1,7 +1,14 @@
+import 'dart:convert';
+
+import 'package:client/firebase/authenticatedRequest.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class Auth {
+class _auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  String _locationOfUser = '';
+
+  void setLocation(String location) => _locationOfUser = location;
+  String get getUserLocation => _locationOfUser;
 
   User? get currentUser => _firebaseAuth.currentUser;
 
@@ -25,5 +32,8 @@ class Auth {
 
   Future<void> signOut() async {
     await _firebaseAuth.signOut();
+    AuthObject.setLocation('');
   }
 }
+
+final AuthObject = _auth();

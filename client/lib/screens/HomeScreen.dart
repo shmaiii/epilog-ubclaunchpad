@@ -5,6 +5,7 @@ import 'package:client/calendar_container.dart';
 import '../HomeScreenComponents/delete_alert_dialog.dart';
 import '../HomeScreenComponents/home_screen_drawer.dart';
 import '../HomeScreenComponents/reminder_entry.dart';
+import '../widgets/profile/FetchProfile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -63,12 +64,32 @@ class _HomeState extends State<HomeScreen> {
           iconTheme: const IconThemeData(color: Colors.black),
         ),
         body: Column(children: [
-          Row(children: const [
+          Row(children: [
             Padding(
-              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: Text(
-                "Hi, Julia",
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: FutureBuilder<ProfileInfo>(
+                future: fetchProfile(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      "Hi, ${snapshot.data!.fullName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 30.0),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Text(
+                      "Hi, Julia",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700, fontSize: 30.0),
+                    );
+                  }
+                  // By default, show "Hi"
+                  return const Text(
+                    "Hi",
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 30.0),
+                  );
+                },
               ),
             )
           ]),
