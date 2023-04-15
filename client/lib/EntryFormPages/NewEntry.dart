@@ -33,7 +33,7 @@ class NewEntry extends StatelessWidget {
                 id: EntryFields.name,
               ),
               DateTimeInput(
-                label: "When did this seizure occur?",
+                label: "When did the seizure happen?",
                 storage: storage,
               ),
               DurationPicker(

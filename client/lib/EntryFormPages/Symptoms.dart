@@ -25,19 +25,19 @@ class Symptoms extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               FormTextInput(
-                label: "Did you experience any before effects?",
+                label: "Did you have any before effects?",
                 hintText: "Before effects",
                 storage: storage,
                 id: EntryFields.beforeEffects,
               ),
               FormTextInput(
-                label: "Did you experience any after effects?",
+                label: "Did you have any after effects?",
                 hintText: "After effects",
                 storage: storage,
                 id: EntryFields.afterEffects,
               ),
               FormTextInput(
-                label: "Did you experience any symptoms after the seizure?",
+                label: "Did you have any symptoms during the seizure?",
                 hintText: "Symptoms",
                 storage: storage,
                 id: EntryFields.symptoms,
