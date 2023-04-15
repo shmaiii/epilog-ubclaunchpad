@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateRoute: (RouteSettings settings) {
-        switch (settings.name) {          
+        switch (settings.name) {
           case '/entries':
             return MaterialPageRoute(builder: (context) => Entries());
           case '/entry':
@@ -33,9 +33,9 @@ class MyApp extends StatelessWidget {
             return MaterialPageRoute(
                 builder: (context) => entryEdit(
                     userId: arguments["userId"], entry: arguments["entry"]));
-          }
-          return null;
-        },
+        }
+        return null;
+      },
       title: 'Seizure Tracker',
       theme: ThemeData(
         // This is the theme of your application.
@@ -112,10 +112,7 @@ class _HomePageState extends State<HomePage> {
   // List of screens for the naviagation bar to choose from, contents are in other files
   final _screens = [
     const HomeScreen(),
-
     Entries(),
-    const RecordScreen(),
-    const EntryScreen(),
     const RecordingPage(),
     const NotificationScreen(),
     const ProfileScreen(),

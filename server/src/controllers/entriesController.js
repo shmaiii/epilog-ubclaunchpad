@@ -13,7 +13,7 @@ const list_all = async(req, res) => {
     console.log("userId: " + userId)
     try {
         // fetching the list from the database
-        const querySnapshot = await getDocs(collection(db, "/users/" + userId + "/entries"));
+        const querySnapshot = await getDocs(collection(getDB(req.userLocation), "/users/" + userId + "/entries"));
         // console.log(querySnapshot)
         let all = []
         querySnapshot.forEach((doc) => {
@@ -38,7 +38,7 @@ const create = async (req, res) => {
     try {
         const data = req.body;
         const collectionAddress = "users/" + userId + "/entries"
-        const {id: docId} = await addDoc(collection(db, collectionAddress), data)
+        const {id: docId} = await addDoc(collection(getDB(req.userLocation), collectionAddress), data)
         // console.log("Here is the id", docId)
         // we don't need to keep the id in the document, we can pass it in the get response
         // const collectionRef = collection(db, collectionAddress);
@@ -62,7 +62,7 @@ const update = async (req, res) => {
         // console.log("Received an update request: ---------- ", req.body)
         const entryInfo = req.body;
         // console.log("Request body: ", entryInfo)
-        const docRef = doc(db, "users/" + userId + "/entries", entryInfo.userId)
+        const docRef = doc(getDB(req.userLocation), "users/" + userId + "/entries", entryInfo.userId)
         await updateDoc(docRef, entryInfo.entry);
         res.status(200).json({
             msg: "User Updated"
