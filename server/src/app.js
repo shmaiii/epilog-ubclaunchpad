@@ -2,12 +2,14 @@ import express from "express";
 import cors from "cors";
 import {router} from './routes/entries.js'
 import noLocationRoutes from "./routes/noLocationRoutes.js";
+import {router} from './routes/entries.js'
 import userRoutes from "./routes/userRoutes.js";
 import medicationsRoutes from "./routes/medicationsRoutes.js";
 import contactsRoutes from "./routes/contactsRoutes.js";
 import calendarRoutes from "./routes/calendarRoutes.js";
 import { auth } from "./firebase/auth.js";
 import { getBearerTokenFromHeader } from "./utils/index.js";
+
 
 const app = express();
 app.use(express.json());
@@ -63,6 +65,7 @@ app.use("/user", userRoutes);
 app.use("/medications", medicationsRoutes);
 app.use("/contacts", contactsRoutes);
 app.use("/calendar", calendarRoutes);
+app.use('/entries', router);
 
 app.get("/ping", (req, res) => {
   console.log("pong");

@@ -223,14 +223,16 @@ class _VideoPageState extends State<VideoPage> {
     // } catch (e) {
     //   print(e);
     // }
+
     await storage.write(key: "videoPath", value: path);
+
     // final route = MaterialPageRoute(
     //   fullscreenDialog: true,
     //   builder: (_) => VideoPlaybackPage(file: file),
     //   // TODO: CHANGING THIS TO VIDEOPATH AND CHANGING THE CONTEXT TO NEW ENTRY PAGE
     // );
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const SeizureLogPage();
+      return SeizureLogPage(path: path);
     }));
   }
 

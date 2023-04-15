@@ -16,14 +16,14 @@ class NewEntry extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
   final FlutterSecureStorage storage;
 
-  void printPath() async {
-    await storage.read(key: "videoPath").then((value) => value==null ? print(value) : print("no path found"));
-  }
+  // void printPath() async {
+  //   await storage.read(key: "videoPath").then((value) => value==null ? print(value) : print("no path found"));
+  // }
 
   
   @override
   Widget build(BuildContext context) {
-    printPath();
+    // printPath();
     return Column(children: [
       Form(
         key: _formKey,
@@ -39,7 +39,7 @@ class NewEntry extends StatelessWidget {
                 id: EntryFields.name,
               ),
               DateTimeInput(
-                label: "When did this seizure occur?",
+                label: "When did the seizure happen?",
                 storage: storage,
               ),
               DurationPicker(

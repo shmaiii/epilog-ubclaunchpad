@@ -8,19 +8,22 @@ import 'EntryFormPages/NewEntry.dart';
 import 'dart:math';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:client/model/entries.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 
 class SeizureLogPage extends StatelessWidget {
-  const SeizureLogPage({Key? key, this.title}) : super(key: key);
+  const SeizureLogPage({Key? key, this.title, this.path}) : super(key: key);
   final String? title;
+  final String? path;
  
-
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    print(path);
+
+    return Scaffold(
       body: Center(
         child: Scaffold(
-          body: SeizureLogForm(),
+          body: SeizureLogForm(videoPath: path),
         ),
       ),
     );
@@ -28,7 +31,8 @@ class SeizureLogPage extends StatelessWidget {
 }
 
 class SeizureLogForm extends StatefulWidget {
-  const SeizureLogForm({super.key});
+  const SeizureLogForm({Key? key, this.videoPath}): super(key: key);
+  final String? videoPath;
 
   @override
   State<SeizureLogForm> createState() => _SeizureLogFormState();
@@ -52,7 +56,7 @@ List<String> pageTitles = [
   "Category and Type",
   "Symptoms",
   "Check-up",
-  "Additional Information"
+  "Additional Info"
 ];
 
 const storage = FlutterSecureStorage();
@@ -63,12 +67,18 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
   @override
   void initState() {
     super.initState();
-    printPath();
+    // storePath();
+    // printPath();
   }
 
-  void printPath() async {
-    await storage.read(key: "videoPath").then((value) => print(value));
-  }
+  // void storePath() async {
+  //   await storage.write(key: "videoPath", value: widget.videoPath);
+  // }
+
+  // void printPath() async {
+  //   await storage.read(key: "videoPath").then((value) => value==null? print(value) : print('no path fOUnd'));
+  //   print(widget.videoPath);
+  // }
 
 
   _exitForm(BuildContext context) {
@@ -160,50 +170,49 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
   Widget build(BuildContext context) {
     return SizedBox.expand(
         child: Column(children: [
-      Padding(
-        padding: const EdgeInsets.only(top: 30, left: 30),
-        child: Align(
-          alignment: Alignment.topLeft,
-          child: BackButton(
-            onPressed: () => {_showExitDialog()},
-          ),
-        ),
-      ),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-        Text(
-          pageTitles[formPageInd],
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 35.0),
+        const SizedBox(height: 80),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(28, 0, 17, 0),
+              child: CircleAvatar(
+                radius: 21,
+                backgroundColor: const Color(0xFF571F83),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => {
+                    if (formPageInd > 0)
+                      {
+                        setState(() {
+                          formPageInd = max(formPageInd - 1, 0);
+                        })
+                      }
+                    else
+                      {_showExitDialog()}
+                  },
+                ),
+              ),
+            ),
+            Text(
+              pageTitles[formPageInd],
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
+            )
+          ],
         )
       ]),
       formPages[formPageInd],
       Expanded(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
           child: Row(children: [
-            if (formPageInd > 0)
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      formPageInd = max(formPageInd - 1, 0);
-                    });
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(100, 60),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                  child: const Text('< Back',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      )),
-                ),
-              ),
             const Spacer(),
             Align(
               alignment: Alignment.bottomRight,
@@ -232,13 +241,14 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(100, 60),
+                  minimumSize: const Size(100, 55),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
+                  backgroundColor: const Color(0xFF571F83),
                 ),
                 child: Text(
-                    (formPageInd < formPages.length - 1) ? 'Next >' : 'Submit',
+                    (formPageInd < formPages.length - 1) ? 'Next >' : 'Finish',
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -248,6 +258,17 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
           ]),
         ),
       ),
+      Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+          child: DotsIndicator(
+            dotsCount: formPages.length,
+            position: formPageInd.toDouble(),
+            decorator: const DotsDecorator(
+              color: Color(0xFFD9D9D9),
+              activeColor: Color(0xFFA0A0A0),
+              size: Size.square(10),
+            ),
+          )),
     ]));
   }
 }
