@@ -16,8 +16,14 @@ class NewEntry extends StatelessWidget {
   final GlobalKey<FormState> _formKey;
   final FlutterSecureStorage storage;
 
+  void printPath() async {
+    await storage.read(key: "videoPath").then((value) => value==null ? print(value) : print("no path found"));
+  }
+
+  
   @override
   Widget build(BuildContext context) {
+    printPath();
     return Column(children: [
       Form(
         key: _formKey,

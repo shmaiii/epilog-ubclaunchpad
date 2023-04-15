@@ -9,9 +9,11 @@ import 'dart:math';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:client/model/entries.dart';
 
+
 class SeizureLogPage extends StatelessWidget {
   const SeizureLogPage({Key? key, this.title}) : super(key: key);
   final String? title;
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,17 @@ const storage = FlutterSecureStorage();
 
 class _SeizureLogFormState extends State<SeizureLogForm> {
   int formPageInd = 0;
+  
+  @override
+  void initState() {
+    super.initState();
+    printPath();
+  }
+
+  void printPath() async {
+    await storage.read(key: "videoPath").then((value) => print(value));
+  }
+
 
   _exitForm(BuildContext context) {
     Navigator.of(context).pop();
@@ -101,6 +114,7 @@ class _SeizureLogFormState extends State<SeizureLogForm> {
   }
 
   _showSuccessDialog() async {
+    
     showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!

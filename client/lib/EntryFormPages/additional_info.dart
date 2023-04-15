@@ -15,12 +15,18 @@ class AdditionalInfo extends StatefulWidget {
   final GlobalKey<FormState> _formKey;
   final FlutterSecureStorage storage;
 
+
   @override
   _AdditionalInfoState createState() => _AdditionalInfoState();
 }
 
 class _AdditionalInfoState extends State<AdditionalInfo> {
   final _textController = TextEditingController();
+  
+
+  void printPath() async {
+    await widget.storage.read(key: "videoPath").then((value) => value==null ? print(value) : print("no path found"));
+  }
 
   @override
   void dispose() {
@@ -32,6 +38,7 @@ class _AdditionalInfoState extends State<AdditionalInfo> {
   void initState() {
     super.initState();
     _loadAdditionalNotes();
+    printPath(); // test videopath
   }
 
   void _loadAdditionalNotes() async {
