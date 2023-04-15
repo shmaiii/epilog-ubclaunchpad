@@ -1,6 +1,6 @@
 // import {db, doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, setDoc} from "../../config.js"
 import {doc, collection, addDoc, getDoc, query, where, getDocs, updateDoc, setDoc} from "firebase/firestore"; 
-import { db } from "../firebase/db.js";
+import { getDB } from "../firebase/db.js";
 
 
 const list_all = async(req, res) => {
